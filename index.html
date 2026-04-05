@@ -110,7 +110,7 @@
   .priv-pill svg{width:11px;height:11px;stroke:var(--warn-text);fill:none;stroke-width:2;flex-shrink:0}
 
   /* ── Top tab bar ── */
-  #tabbar{display:flex;border-bottom:0.5px solid var(--border);padding:0 14px;gap:1px;background:var(--bg);flex-shrink:0;overflow-x:auto}
+  #tabbar{display:flex;border-bottom:0.5px solid var(--border);padding:0 14px;gap:1px;background:var(--bg);flex-shrink:0;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}#tabbar::-webkit-scrollbar{display:none}
   .tab{padding:10px 13px;font-size:12px;color:var(--text2);border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;font-weight:500;transition:color .12s}
   .tab:hover{color:var(--text)}
   .tab.active{color:var(--text);font-weight:600;border-bottom-color:var(--gold)}
@@ -419,13 +419,19 @@
   </div>
   <div class="sidebar-bottom">
     <div id="user-pill-wrap" style="display:none">
-      <div class="user-pill">
+      <div class="user-pill" onclick="nav(document.querySelector('[onclick*=\'profile\']'),'profile')" style="cursor:pointer" title="Click to edit your profile">
         <div class="user-avatar" id="user-avatar-initials">?</div>
         <div class="user-info">
           <div class="user-name" id="user-display-name">—</div>
           <div class="user-role" id="user-display-role">User</div>
         </div>
-        <button class="signout-btn" onclick="doSignOut()" title="Sign out"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+        <button class="signout-btn" onclick="event.stopPropagation();doSignOut()" title="Sign out"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+      </div>
+      <div style="padding:4px 8px 0">
+        <button class="nav-btn" onclick="nav(this,'profile')" style="width:100%;font-size:11px;color:var(--gold);font-weight:600">
+          <svg viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Edit My Profile
+        </button>
       </div>
     </div>
     <div class="jur-box">
