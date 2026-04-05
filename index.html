@@ -1892,13 +1892,22 @@ async function adminCreateUser(){
 
 
 // ── PROFILE PAGE ─────────────────────────────
-function loadProfilePage(){
-  if(!currentProfile||!currentUser)return;
+async function loadProfilePage(){
+  if(!currentUser)return;
+  // Always fetch fresh profile from Supabase
+  if(sbClient){
+    try{
+      const {data}=await sbClient.from('profiles').select('*').eq('id',currentUser.id).single();
+      if(data) currentProfile=data;
+    }catch(e){console.warn('Profile fetch:',e);}
+  }
+  if(!currentProfile)return;
   const name=currentProfile.full_name||'';
   const email=currentUser.email||'';
   const firm=currentProfile.firm||'Dennis Kimani Mutonga Advocate';
-  const role=currentProfile.role==='admin'?'Administrator':'Staff';
-  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+  const isAdmin=String(currentProfile.role).trim().toLowerCase()==='admin';
+  const role=isAdmin?'Administrator':'Staff';
+  const initials=name.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2)||email[0].toUpperCase();
 
   document.getElementById('prof-avatar').textContent=initials;
   document.getElementById('prof-hero-name').textContent=name||email;
@@ -1909,8 +1918,13 @@ function loadProfilePage(){
   document.getElementById('prof-firm').value=firm;
 
   // Show add-user section for admins only
-  document.getElementById('prof-admin-section').style.display=
-    currentProfile.role==='admin'?'block':'none';
+  document.getElementById('prof-admin-section').style.display=isAdmin?'block':'none';
+
+  // Also refresh admin tab visibility in case it changed
+  if(isAdmin){
+    document.getElementById('admin-nav-section').style.display='block';
+    document.getElementById('tab-admin').style.display='flex';
+  }
 
   // Clear password fields
   document.getElementById('prof-newpass').value='';
