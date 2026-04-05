@@ -1727,15 +1727,18 @@ function hideAuthOverlay(){
 
 function updateUserPill(){
   if(!currentProfile)return;
-  const name=currentProfile.full_name||currentUser?.email||'User';
-  const role=currentProfile.role==='admin'?'Administrator':currentProfile.firm||'User';
-  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const isAdmin=String(currentProfile.role).trim().toLowerCase()==='admin';
+  const rawName=currentProfile.full_name||'';
+  // If full_name is missing or looks like an email, show email but flag it
+  const name=(rawName&&!rawName.includes('@'))?rawName:(currentUser?.email||'User');
+  const roleLabel=isAdmin?'Administrator':'Staff';
+  const firm=currentProfile.firm||'Dennis Kimani Mutonga Advocate';
+  const initials=name.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
   document.getElementById('user-avatar-initials').textContent=initials;
   document.getElementById('user-display-name').textContent=name;
-  document.getElementById('user-display-role').textContent=role;
+  document.getElementById('user-display-role').textContent=roleLabel+' · '+firm;
   document.getElementById('user-pill-wrap').style.display='block';
-  // Show admin elements if admin
-  if(currentProfile.role==='admin'){
+  if(isAdmin){
     document.getElementById('admin-nav-section').style.display='block';
     document.getElementById('tab-admin').style.display='flex';
   }
