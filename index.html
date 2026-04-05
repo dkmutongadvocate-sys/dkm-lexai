@@ -411,6 +411,7 @@
     <button class="nav-btn" onclick="nav(this,'comp')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compliance check</button>
     <button class="nav-btn" onclick="nav(this,'docgen')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Document generator</button>
     <button class="nav-btn" onclick="nav(this,'fees')"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Fee calculator</button>
+    <button class="nav-btn" onclick="nav(this,'review')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="3"/><path d="M13.27 16.27L15 18"/></svg>Doc Review</button>
     <button class="nav-btn" onclick="nav(this,'profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</button>
   </div>
   <div id="admin-nav-section" class="nav-section" style="display:none">
@@ -452,6 +453,7 @@
     <button class="tab" id="tab-comp" onclick="switchTab('comp')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compliance</button>
     <button class="tab" id="tab-docgen" onclick="switchTab('docgen')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Doc generator</button>
     <button class="tab" id="tab-fees" onclick="switchTab('fees')"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Fee calculator</button>
+    <button class="tab" id="tab-review" onclick="switchTab('review')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="3"/><path d="M13.27 16.27L15 18"/></svg>Doc Review</button>
     <button class="tab" id="tab-profile" onclick="switchTab('profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
     <button class="tab" id="tab-users" onclick="switchTab('users')" style="display:none"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users</button>
     <button class="tab" id="tab-admin" onclick="switchTab('admin')" style="display:none"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Activity Log</button>
@@ -836,6 +838,69 @@
         <div id="admin-log-body"><div style="padding:14px;font-size:12px;color:var(--text3)">Loading…</div></div>
       </div>
     </div><!-- /v-admin -->
+
+
+    <!-- ════ DOCUMENT REVIEW ════ -->
+    <div id="v-review" class="view" style="display:none;flex-direction:column;overflow:hidden">
+
+      <!-- Top: upload area -->
+      <div id="review-top" style="flex-shrink:0;border-bottom:0.5px solid var(--border);background:var(--bg);padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">📄 Document Review Assistant</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:1px">Upload a document — contracts, letters, pleadings, agreements — and chat with the AI about it</div>
+          </div>
+          <button id="review-clear-btn" onclick="clearReview()" style="display:none;font-size:11px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;white-space:nowrap">✕ Clear document</button>
+        </div>
+
+        <!-- Upload zone -->
+        <div id="review-dropzone" onclick="document.getElementById('review-file-input').click()"
+          style="border:1.5px dashed var(--border2);border-radius:var(--radius-lg);padding:20px;text-align:center;cursor:pointer;transition:border-color .15s;background:var(--bg2)"
+          ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+          ondragleave="this.style.borderColor='var(--border2)'"
+          ondrop="handleReviewDrop(event)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" style="margin-bottom:6px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <div style="font-size:13px;font-weight:600;color:var(--text)">Click to upload or drag &amp; drop</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF, Word (.docx), or plain text (.txt) — max 5MB</div>
+          <input type="file" id="review-file-input" accept=".pdf,.docx,.txt,.doc" style="display:none" onchange="handleReviewFile(this.files[0])"/>
+        </div>
+
+        <!-- Loaded doc info bar -->
+        <div id="review-doc-info" style="display:none;background:var(--success-bg);border:0.5px solid #97c459;border-radius:var(--radius);padding:9px 12px;display:none;align-items:center;gap:8px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success-text)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div style="flex:1;min-width:0">
+            <div id="review-doc-name" style="font-size:12px;font-weight:600;color:var(--success-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
+            <div id="review-doc-meta" style="font-size:10px;color:var(--success-text);opacity:.75">—</div>
+          </div>
+          <div id="review-quick-btns" style="display:flex;gap:5px;flex-wrap:wrap">
+            <button onclick="quickReview('summarise')" class="chip" style="font-size:10px;padding:2px 8px">Summarise</button>
+            <button onclick="quickReview('risks')" class="chip" style="font-size:10px;padding:2px 8px">Key risks</button>
+            <button onclick="quickReview('obligations')" class="chip" style="font-size:10px;padding:2px 8px">Obligations</button>
+            <button onclick="quickReview('advice')" class="chip" style="font-size:10px;padding:2px 8px">Advise client</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chat messages -->
+      <div id="review-msgs" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div class="msg">
+          <div class="av ai">⚖</div>
+          <div class="bub">Upload a document above and I will act as your legal assistant — summarising, identifying risks, extracting obligations, advising on Kenyan law, or answering any specific questions you have about it.</div>
+        </div>
+      </div>
+
+      <!-- Chat input -->
+      <div style="border-top:0.5px solid var(--border);padding:10px 14px;background:var(--bg);flex-shrink:0">
+        <div class="input-row">
+          <textarea id="review-input" class="txt-input" placeholder="Ask anything about the document… e.g. 'What are my client's obligations?' or 'Is clause 5 enforceable in Kenya?'" onkeydown="reviewChatKey(event)" style="height:40px"></textarea>
+          <button class="btn-gold" onclick="sendReviewChat()">Send</button>
+        </div>
+      </div>
+
+    </div><!-- /v-review -->
 
     <!-- ════ PROFILE ════ -->
     <div id="v-profile" class="view" style="display:none;flex-direction:column;overflow-y:auto;padding:16px;gap:14px;max-width:580px;margin:0 auto;width:100%">
@@ -2102,6 +2167,201 @@ async function deleteUser(uid, name){
     alert('Error: '+e.message);
   }
 }
+
+
+// ══════════════════════════════════════════════
+// DOCUMENT REVIEW
+// ══════════════════════════════════════════════
+let reviewDocText = '';
+let reviewDocName = '';
+let reviewBusy = false;
+
+const REVIEW_SYS = `You are the personal legal assistant of Advocate Dennis Kimani Mutonga, a Kenyan advocate. You have been given a document to review. Your job is to assist the advocate by:
+- Summarising the document clearly and concisely
+- Identifying legal risks, ambiguities and problematic clauses under Kenyan law
+- Flagging obligations of each party
+- Citing relevant Kenyan statutes and case law where applicable
+- Giving practical legal advice as a qualified Kenyan advocate would
+- Answering specific questions about the document
+Use [KE] before Kenyan law citations, [WARN] before risk flags. Be precise and practitioner-focused.`;
+
+function handleReviewDrop(e){
+  e.preventDefault();
+  document.getElementById('review-dropzone').style.borderColor='var(--border2)';
+  const file=e.dataTransfer.files[0];
+  if(file)handleReviewFile(file);
+}
+
+async function handleReviewFile(file){
+  if(!file)return;
+  const maxSize=5*1024*1024;
+  if(file.size>maxSize){alert('File too large. Please upload a file under 5MB.');return;}
+
+  const allowed=['application/pdf','application/vnd.openxmlformats-officedocument.wordprocessingml.document','text/plain','application/msword'];
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(!['pdf','docx','txt','doc'].includes(ext)){alert('Unsupported file type. Please upload PDF, Word, or text files.');return;}
+
+  // Show loading state
+  const dz=document.getElementById('review-dropzone');
+  dz.innerHTML='<div style="font-size:13px;color:var(--text2);padding:10px">Reading document…</div>';
+
+  try{
+    let text='';
+    if(ext==='txt'){
+      text=await file.text();
+    } else if(ext==='pdf'){
+      text=await readPDF(file);
+    } else if(ext==='docx'||ext==='doc'){
+      text=await readDOCX(file);
+    }
+
+    if(!text||text.trim().length<10){
+      throw new Error('Could not extract text from this document. Try copying the text manually.');
+    }
+
+    reviewDocText=text.trim();
+    reviewDocName=file.name;
+
+    // Update UI
+    dz.style.display='none';
+    const info=document.getElementById('review-doc-info');
+    info.style.display='flex';
+    document.getElementById('review-doc-name').textContent=file.name;
+    document.getElementById('review-doc-meta').textContent=
+      Math.round(file.size/1024)+'KB · '+reviewDocText.split(' ').length.toLocaleString()+' words extracted';
+    document.getElementById('review-clear-btn').style.display='block';
+
+    // Auto-start with a summary
+    addReviewMsg('ai','✅ Document loaded: <strong>'+file.name+'</strong><br>I have read the document. Use the quick buttons above or ask me anything about it.');
+
+  }catch(e){
+    dz.innerHTML=`<div style="color:var(--danger-text);font-size:13px;padding:10px">❌ ${e.message}</div><div style="font-size:11px;color:var(--text3);margin-top:6px">Try a .txt file or paste the text into the Clause Extractor tab.</div>`;
+    setTimeout(()=>resetDropzone(),4000);
+  }
+}
+
+async function readPDF(file){
+  // Use PDF.js CDN to extract text
+  if(!window.pdfjsLib){
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  const arrayBuffer=await file.arrayBuffer();
+  const pdf=await window.pdfjsLib.getDocument({data:arrayBuffer}).promise;
+  let text='';
+  for(let i=1;i<=Math.min(pdf.numPages,30);i++){
+    const page=await pdf.getPage(i);
+    const content=await page.getTextContent();
+    text+=content.items.map(s=>s.str).join(' ')+'
+';
+  }
+  return text;
+}
+
+async function readDOCX(file){
+  // Use mammoth.js CDN for DOCX
+  if(!window.mammoth){
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+  }
+  const arrayBuffer=await file.arrayBuffer();
+  const result=await window.mammoth.extractRawText({arrayBuffer});
+  return result.value;
+}
+
+function loadScript(src){
+  return new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src=src;s.onload=resolve;s.onerror=reject;
+    document.head.appendChild(s);
+  });
+}
+
+function resetDropzone(){
+  const dz=document.getElementById('review-dropzone');
+  dz.style.display='';
+  dz.innerHTML=`<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" style="margin-bottom:6px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+    <div style="font-size:13px;font-weight:600;color:var(--text)">Click to upload or drag & drop</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF, Word (.docx), or plain text (.txt) — max 5MB</div>
+    <input type="file" id="review-file-input" accept=".pdf,.docx,.txt,.doc" style="display:none" onchange="handleReviewFile(this.files[0])"/>`;
+}
+
+function clearReview(){
+  reviewDocText='';reviewDocName='';
+  document.getElementById('review-doc-info').style.display='none';
+  document.getElementById('review-dropzone').style.display='';
+  document.getElementById('review-clear-btn').style.display='none';
+  document.getElementById('review-msgs').innerHTML=`<div class="msg"><div class="av ai">⚖</div><div class="bub">Upload a document above and I will act as your legal assistant — summarising, identifying risks, extracting obligations, advising on Kenyan law, or answering any specific questions you have about it.</div></div>`;
+  resetDropzone();
+}
+
+function addReviewMsg(role,html){
+  const c=document.getElementById('review-msgs');
+  const d=document.createElement('div');
+  d.className='msg '+(role==='ai'?'':'user');
+  d.innerHTML=`<div class="av ${role==='ai'?'ai':'user'}">${role==='ai'?'⚖':'ME'}</div><div class="bub">${html}</div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+
+function showReviewTyping(){
+  reviewBusy=true;
+  const c=document.getElementById('review-msgs');
+  const t=document.createElement('div');
+  t.className='msg';t.id='review-typing';
+  t.innerHTML='<div class="av ai">⚖</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';
+  c.appendChild(t);c.scrollTop=c.scrollHeight;
+}
+function rmReviewTyping(){
+  reviewBusy=false;
+  const t=document.getElementById('review-typing');
+  if(t)t.remove();
+}
+
+function quickReview(type){
+  if(!reviewDocText){alert('Please upload a document first.');return;}
+  const prompts={
+    summarise:'Please provide a clear executive summary of this document — the parties, purpose, key terms and duration.',
+    risks:'Identify all legal risks, red flags and problematic clauses in this document under Kenyan law. Flag anything that could expose my client to liability.',
+    obligations:'List all obligations of each party in this document clearly and precisely.',
+    advice:'As my legal assistant, what advice would you give to my client based on this document? What should they be aware of before signing?'
+  };
+  document.getElementById('review-input').value=prompts[type];
+  sendReviewChat();
+}
+
+async function sendReviewChat(){
+  if(reviewBusy)return;
+  const el=document.getElementById('review-input');
+  const question=el.value.trim();
+  if(!question)return;
+  if(!reviewDocText){
+    addReviewMsg('ai','⚠️ Please upload a document first before asking questions.');
+    return;
+  }
+  el.value='';
+  addReviewMsg('user',question);
+  showReviewTyping();
+
+  try{
+    // Truncate doc to avoid token limits — take first 3000 words
+    const docSnippet=reviewDocText.split(' ').slice(0,3000).join(' ');
+    const prompt=`DOCUMENT NAME: ${reviewDocName}
+
+DOCUMENT CONTENT:
+${docSnippet}
+
+---
+ADVOCATE'S QUESTION: ${question}`;
+    const response=await callAI(prompt, REVIEW_SYS, 900);
+    rmReviewTyping();
+    addReviewMsg('ai',fmt(response));
+    logActivity('doc_review', reviewDocName+': '+question.slice(0,80));
+  }catch(e){
+    rmReviewTyping();
+    addReviewMsg('ai','<span style="color:var(--danger-text)">Error: '+e.message+'</span>');
+  }
+}
+
+function reviewChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReviewChat();}}
 
 // ── BOOTSTRAP ─────────────────────────────────
 document.addEventListener('DOMContentLoaded', initSupabase);
