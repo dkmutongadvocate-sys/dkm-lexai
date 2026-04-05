@@ -1696,21 +1696,25 @@ async function doSignOut(){
 
 async function onAuthSuccess(user){
   currentUser=user;
-  // Fetch profile
+  // Always fetch fresh profile from Supabase — no caching
   if(sbClient){
     try{
-      const {data,error}=await sbClient.from('profiles').select('*').eq('id',user.id).single();
-      if(error&&(error.code==='42P01'||String(error.message).includes('does not exist'))){
-        console.error('DKM: profiles table missing. Run SQL setup in Supabase SQL Editor.');
-        currentProfile={full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'admin'};
+      // Small delay to ensure DB trigger has written the profile row
+      await new Promise(r=>setTimeout(r,600));
+      const {data,error}=await sbClient.from('profiles').select('id,full_name,firm,role,created_at').eq('id',user.id).single();
+      if(error){
+        console.warn('Profile fetch error:',error.code, error.message);
+        currentProfile={full_name:'',firm:'Dennis Kimani Mutonga Advocate',role:'user'};
       } else {
-        currentProfile=data||{full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'user'};
+        currentProfile=data;
+        console.log('Profile loaded:',data.full_name, '| role:',data.role);
       }
     }catch(e){
-      currentProfile={full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'user'};
+      console.warn('Profile exception:',e);
+      currentProfile={full_name:'',firm:'Dennis Kimani Mutonga Advocate',role:'user'};
     }
   } else {
-    currentProfile={full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'admin'};
+    currentProfile={full_name:'Dennis Kimani Mutonga',firm:'Dennis Kimani Mutonga Advocate',role:'admin'};
   }
   hideAuthOverlay();
   updateUserPill();
