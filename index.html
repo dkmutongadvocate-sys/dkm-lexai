@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DKM Advocate — Legal Intelligence Platform</title>
+<style>
+  :root {
+    --gold: #B8860B;
+    --gold-dark: #9A7209;
+    --gold-light: #F5EDD0;
+    --navy: #1a2744;
+    --bg: #ffffff;
+    --bg2: #f8f7f5;
+    --bg3: #f2f1ee;
+    --text: #1a1a1a;
+    --text2: #555;
+    --text3: #888;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --info-bg: #e6f1fb;
+    --info-text: #0c447c;
+    --success-bg: #eaf3de;
+    --success-text: #27500a;
+    --warn-bg: #faeeda;
+    --warn-text: #633806;
+    --danger-bg: #fcebeb;
+    --danger-text: #791f1f;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --bg2: #2c2c2e;
+      --bg3: #3a3a3c;
+      --text: #f5f5f5;
+      --text2: #aaa;
+      --text3: #666;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+      --info-bg: #042c53;
+      --info-text: #85b7eb;
+      --success-bg: #173404;
+      --success-text: #c0dd97;
+      --warn-bg: #412402;
+      --warn-text: #fac775;
+      --danger-bg: #501313;
+      --danger-text: #f09595;
+    }
+  }
+  /* ── FEE CALCULATOR ── */
+  #v-fees{flex-direction:column;overflow-y:auto;padding:16px;gap:14px}
+  .fee-hero{background:linear-gradient(135deg,var(--navy) 0%,#2a3f6e 100%);border-radius:var(--radius-lg);padding:16px 18px;color:white}
+  .fee-hero-title{font-size:15px;font-weight:700;margin-bottom:3px}
+  .fee-hero-sub{font-size:11px;opacity:.75}
+  .fee-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+  .fee-card{border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--bg)}
+  .fee-card-hd{padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px}
+  .fee-card-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fee-card-icon svg{width:13px;height:13px;stroke:white;fill:none;stroke-width:2}
+  .fee-card-title{font-size:12px;font-weight:700;color:var(--text)}
+  .fee-card-sub{font-size:10px;color:var(--text3);margin-top:1px}
+  .fee-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+  .fee-row{display:flex;flex-direction:column;gap:3px}
+  .fee-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+  .fee-input{border:0.5px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;background:var(--bg2);color:var(--text);font-family:inherit;width:100%}
+  .fee-input:focus{outline:none;border-color:var(--border2)}
+  .fee-sel{border:0.5px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;background:var(--bg2);color:var(--text);font-family:inherit;width:100%}
+  .fee-sel:focus{outline:none;border-color:var(--border2)}
+  .fee-result{background:var(--gold-light);border:0.5px solid var(--gold);border-radius:var(--radius);padding:11px 14px;display:none}
+  .fee-result.show{display:block}
+  .fee-result-main{font-size:20px;font-weight:700;color:var(--gold-dark)}
+  .fee-result-label{font-size:10px;color:var(--gold-dark);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+  .fee-result-breakdown{margin-top:8px;border-top:0.5px solid rgba(184,134,11,.3);padding-top:7px;display:flex;flex-direction:column;gap:3px}
+  .fee-br-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text2)}
+  .fee-br-row.total{font-weight:700;color:var(--text);font-size:12px;border-top:0.5px solid var(--border);padding-top:4px;margin-top:2px}
+  .fee-note{font-size:10px;color:var(--text3);line-height:1.5;margin-top:6px;padding-top:6px;border-top:0.5px solid var(--border)}
+  .fee-calc-btn{background:var(--gold);color:white;border:none;border-radius:var(--radius);padding:0 16px;height:34px;font-size:12px;font-weight:600;cursor:pointer;width:100%}
+  .fee-calc-btn:hover{background:var(--gold-dark)}
+  .fee-disclaimer{background:var(--warn-bg);border:0.5px solid #fac775;border-radius:var(--radius);padding:10px 12px;font-size:11px;color:var(--warn-text);line-height:1.6}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);display:flex;flex-direction:column;margin:0}
+  a{color:var(--info-text)}
+
+  /* ── Layout ── */
+  #shell{display:flex;flex:1;overflow:hidden;min-height:0}
+  #sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+  #main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+
+  /* ── Sidebar ── */
+  #logo{padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:9px;flex-shrink:0}
+  .logo-icon{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .logo-icon svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2}
+  .logo-name{font-size:14px;font-weight:600;color:var(--text)}
+  .logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
+  .nav-section{padding:6px 8px}
+  .nav-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;padding:8px 6px 4px}
+  .nav-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:none;background:none;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text2);text-align:left;transition:background .12s}
+  .nav-btn:hover{background:var(--bg3);color:var(--text)}
+  .nav-btn.active{background:var(--bg);color:var(--text);font-weight:600}
+  .nav-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;opacity:.75}
+  .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .sidebar-bottom{margin-top:auto;padding:8px}
+  .jur-box{background:var(--success-bg);border:0.5px solid #97c459;border-radius:var(--radius);padding:9px 10px;margin-bottom:6px}
+  .jur-box-title{font-size:11px;font-weight:600;color:var(--success-text);display:flex;align-items:center;gap:4px;margin-bottom:5px}
+  .jur-flags{display:flex;gap:3px;flex-wrap:wrap}
+  .jflag{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--success-bg);color:var(--success-text);border:0.5px solid #97c459;font-weight:600}
+  .priv-pill{background:var(--warn-bg);border:0.5px solid #fac775;border-radius:var(--radius);padding:7px 9px;font-size:11px;color:var(--warn-text);display:flex;align-items:center;gap:5px}
+  .priv-pill svg{width:11px;height:11px;stroke:var(--warn-text);fill:none;stroke-width:2;flex-shrink:0}
+
+  /* ── Top tab bar ── */
+  #tabbar{display:flex;border-bottom:0.5px solid var(--border);padding:0 14px;gap:1px;background:var(--bg);flex-shrink:0;overflow-x:auto}
+  .tab{padding:10px 13px;font-size:12px;color:var(--text2);border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;font-weight:500;transition:color .12s}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--text);font-weight:600;border-bottom-color:var(--gold)}
+  .tab svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+  /* ── View panels ── */
+  #views{flex:1;overflow:hidden;position:relative}
+  .view{display:none;height:100%;overflow-y:auto}
+  .view.active{display:flex;flex-direction:column}
+
+  /* ── CHAT VIEW ── */
+  #v-chat{flex-direction:column}
+  #msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .msg{display:flex;gap:8px;animation:fin .2s ease}
+  .msg.user{flex-direction:row-reverse}
+  .av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+  .av.ai{background:var(--gold-light);color:var(--gold)}
+  .av.user{background:var(--info-bg);color:var(--info-text)}
+  .bub{max-width:78%;padding:9px 12px;border-radius:var(--radius-lg);font-size:13px;line-height:1.65;color:var(--text)}
+  .msg.ai .bub{background:var(--bg2);border:0.5px solid var(--border)}
+  .msg.user .bub{background:var(--info-bg);border:0.5px solid var(--border)}
+  .law-ke{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:var(--success-bg);color:var(--success-text);border:0.5px solid #97c459;margin:0 2px}
+  .law-int{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:var(--info-bg);color:var(--info-text);border:0.5px solid #85b7eb;margin:0 2px}
+  .law-warn{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:var(--warn-bg);color:var(--warn-text);border:0.5px solid #fac775;margin:0 2px}
+  .anon-bar{padding:5px 14px;background:var(--warn-bg);border-bottom:0.5px solid #fac775;font-size:11px;color:var(--warn-text);display:none;align-items:center;gap:6px}
+  .anon-bar.show{display:flex}
+  #chat-bottom{border-top:0.5px solid var(--border);padding:10px 14px;background:var(--bg);flex-shrink:0}
+  .chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px}
+  .chip{padding:3px 10px;border-radius:20px;font-size:11px;border:0.5px solid var(--border);color:var(--text2);cursor:pointer;background:var(--bg2);transition:background .1s}
+  .chip:hover{background:var(--bg3);color:var(--text)}
+  .input-row{display:flex;gap:7px}
+  .txt-input{flex:1;border:0.5px solid var(--border);border-radius:var(--radius);padding:8px 11px;font-size:13px;background:var(--bg2);color:var(--text);font-family:inherit;resize:none;height:38px;line-height:1.4}
+  .txt-input:focus{outline:none;border-color:var(--border2)}
+  .btn-gold{padding:0 16px;height:38px;background:var(--gold);color:white;border:none;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .btn-gold:hover{background:var(--gold-dark)}
+  .btn-gold:disabled{background:var(--border);cursor:not-allowed}
+  .typing{display:flex;gap:3px;align-items:center;padding:3px 0}
+  .typing span{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:bounce 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}
+  .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+  @keyframes fin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── CLAUSE EXTRACTOR ── */
+  #v-clause{padding:16px;gap:12px}
+  .panel-head{font-size:13px;font-weight:600;color:var(--text)}
+  .clause-wrap{border:0.5px solid var(--border);border-radius:var(--radius)}
+  #clause-text{width:100%;min-height:120px;padding:10px 12px;font-size:13px;background:var(--bg2);color:var(--text);border:none;font-family:inherit;resize:vertical;border-radius:var(--radius) var(--radius) 0 0}
+  #clause-text:focus{outline:none}
+  .clause-toolbar{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-top:0.5px solid var(--border);background:var(--bg2);gap:8px;flex-wrap:wrap;border-radius:0 0 var(--radius) var(--radius)}
+  .ct-pills{display:flex;gap:5px;flex-wrap:wrap}
+  .ct-pill{padding:3px 9px;border-radius:20px;font-size:11px;border:0.5px solid var(--border);cursor:pointer;color:var(--text2);background:none}
+  .ct-pill.sel{background:var(--gold);color:white;border-color:var(--gold)}
+  #clause-results{display:flex;flex-direction:column;gap:8px}
+  .clause-card{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .cc-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border)}
+  .cc-type{font-size:12px;font-weight:600;color:var(--text)}
+  .risk-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+  .risk-low{background:var(--success-bg);color:var(--success-text)}
+  .risk-med{background:var(--warn-bg);color:var(--warn-text)}
+  .risk-high{background:var(--danger-bg);color:var(--danger-text)}
+  .cc-body{padding:10px 12px}
+  .cc-quote{font-size:12px;color:var(--text2);line-height:1.6;font-style:italic;border-left:2px solid var(--border2);padding-left:8px;margin-bottom:8px}
+  .cc-analysis{font-size:12px;color:var(--text);line-height:1.6}
+  .cc-laws{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+
+  /* ── PRECEDENT SEARCH ── */
+  #v-prec{flex-direction:column;overflow:hidden}
+  .prec-top{padding:12px 14px;border-bottom:0.5px solid var(--border);background:var(--bg);flex-shrink:0}
+  .prec-row{display:flex;gap:7px;margin-bottom:7px}
+  #prec-input{flex:1;border:0.5px solid var(--border);border-radius:var(--radius);padding:7px 11px;font-size:13px;background:var(--bg2);color:var(--text);font-family:inherit}
+  #prec-input:focus{outline:none;border-color:var(--border2)}
+  .prec-filters{display:flex;gap:5px;flex-wrap:wrap}
+  .pf{padding:3px 9px;border-radius:20px;font-size:11px;border:0.5px solid var(--border);cursor:pointer;color:var(--text2);background:none;transition:all .12s}
+  .pf.on{background:var(--navy);color:white;border-color:var(--navy)}
+  #prec-list{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+  .prec-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:11px 13px;cursor:pointer;transition:border-color .12s;background:var(--bg)}
+  .prec-card:hover{border-color:var(--border2)}
+  .prec-card.expanded{border-color:var(--gold)}
+  .pc-name{font-size:13px;font-weight:600;color:var(--text)}
+  .pc-court{font-size:11px;color:var(--text2);margin-top:2px}
+  .pc-tags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+  .pc-tag{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--bg2);color:var(--text2);border:0.5px solid var(--border)}
+  .pc-expand{margin-top:10px;border-top:0.5px solid var(--border);padding-top:10px;display:none;font-size:12px;line-height:1.7;color:var(--text)}
+  .prec-card.expanded .pc-expand{display:block}
+  .pc-principle{background:var(--bg2);border-radius:0 var(--radius) var(--radius) 0;border-left:3px solid var(--gold);padding:8px 10px;margin-bottom:8px;font-size:12px}
+  .pc-apply{padding:4px 12px;font-size:12px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;margin-top:6px}
+  .pc-apply:hover{background:var(--bg3);color:var(--text)}
+
+  /* ── COMPLIANCE ── */
+  #v-comp{padding:14px;gap:12px}
+  .comp-input-row{display:flex;gap:7px;align-items:center;border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 10px;background:var(--bg)}
+  #comp-query{flex:1;border:none;background:none;font-size:13px;color:var(--text);font-family:inherit}
+  #comp-query:focus{outline:none}
+  #comp-result{border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--text);line-height:1.75;display:none;background:var(--bg)}
+  #comp-result.show{display:block}
+  .score-row{display:flex;gap:8px;margin-bottom:12px}
+  .score-card{flex:1;padding:8px 10px;border-radius:var(--radius);border:0.5px solid var(--border);text-align:center;background:var(--bg2)}
+  .score-num{font-size:22px;font-weight:700}
+  .score-lbl{font-size:10px;color:var(--text2);margin-top:2px}
+  .s-ok .score-num{color:#3b6d11}
+  .s-warn .score-num{color:#854f0b}
+  .s-bad .score-num{color:#a32d2d}
+  .comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+  .comp-card{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg)}
+  .comp-card-hd{padding:9px 12px;display:flex;align-items:center;gap:7px;border-bottom:0.5px solid var(--border);background:var(--bg2)}
+  .comp-card-hd svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .comp-card-title{font-size:12px;font-weight:600;color:var(--text)}
+  .comp-rows{padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+  .comp-row{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--border)}
+  .comp-row:last-child{border-bottom:none}
+  .cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+  .dot-ok{background:#639922}
+  .dot-warn{background:#ba7517}
+  .dot-req{background:#e24b4a}
+  .comp-item{font-size:12px;color:var(--text);line-height:1.5}
+  .comp-sub{font-size:11px;color:var(--text2);margin-top:1px}
+
+  /* ── DOC GENERATOR ── */
+  #v-docgen{flex-direction:row;overflow:hidden}
+  #dg-left{width:220px;min-width:220px;border-right:0.5px solid var(--border);display:flex;flex-direction:column;background:var(--bg2);overflow-y:auto}
+  #dg-search-wrap{padding:8px;border-bottom:0.5px solid var(--border)}
+  #dg-search{width:100%;border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 10px;font-size:12px;background:var(--bg);color:var(--text);font-family:inherit}
+  #dg-search:focus{outline:none;border-color:var(--border2)}
+  #dg-doclist{padding:6px;flex:1}
+  .dg-cat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;padding:8px 6px 3px}
+  .dg-doc-btn{display:flex;align-items:center;gap:6px;width:100%;padding:6px 8px;border:none;background:none;border-radius:var(--radius);cursor:pointer;text-align:left;font-size:12px;color:var(--text2);transition:background .1s}
+  .dg-doc-btn:hover{background:var(--bg3);color:var(--text)}
+  .dg-doc-btn.active{background:var(--bg);color:var(--text);font-weight:600}
+  .dg-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  #dg-right{flex:1;display:flex;flex-direction:column;min-width:0}
+  #dg-topbar{padding:10px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0;gap:10px}
+  #dg-doc-title{font-size:14px;font-weight:600;color:var(--text)}
+  #dg-doc-sub{font-size:11px;color:var(--text2)}
+  .dg-top-btns{display:flex;gap:6px;flex-shrink:0}
+  .dg-tbtn{padding:5px 11px;font-size:12px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer}
+  .dg-tbtn:hover{background:var(--bg3);color:var(--text)}
+  .dg-tbtn.gold{background:var(--gold);color:white;border-color:var(--gold)}
+  .dg-tbtn.gold:hover{background:var(--gold-dark)}
+  #dg-body{flex:1;display:flex;overflow:hidden}
+  #dg-form{width:270px;min-width:270px;border-right:0.5px solid var(--border);overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+  #dg-preview{flex:1;overflow-y:auto;padding:18px 22px;font-family:Georgia,'Times New Roman',serif}
+  .fg{display:flex;flex-direction:column;gap:3px}
+  .fl{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+  .fi{border:0.5px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;background:var(--bg2);color:var(--text);font-family:inherit;width:100%}
+  .fi:focus{outline:none;border-color:var(--border2)}
+  .fi-ta{min-height:65px;resize:vertical}
+  .fi-sel{border:0.5px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;background:var(--bg2);color:var(--text);font-family:inherit;width:100%}
+  .fi-sel:focus{outline:none;border-color:var(--border2)}
+  .fg-div{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:3px 0;border-bottom:0.5px solid var(--border)}
+  .jur-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+  .jt-ke{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--success-bg);color:var(--success-text);font-weight:600}
+  .jt-int{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--info-bg);color:var(--info-text);font-weight:600}
+  /* Preview styles */
+  .dp-header{text-align:center;border-bottom:1.5px solid var(--border2);padding-bottom:16px;margin-bottom:22px}
+  .dp-court{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;font-family:inherit}
+  .dp-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;font-family:inherit}
+  .dp-ref{font-size:11px;color:var(--text2);font-family:inherit}
+  .dp-body{font-size:13px;line-height:2;color:var(--text)}
+  .dp-body p{margin-bottom:10px}
+  .dp-blank{display:inline-block;border-bottom:1px solid var(--text);min-width:100px;color:var(--gold);font-style:italic}
+  .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--text3);text-align:center;padding:20px}
+  .empty-state svg{width:32px;height:32px;stroke:var(--text3);fill:none;stroke-width:1.2}
+  .empty-state p{font-size:13px;font-family:inherit;color:var(--text2);max-width:200px;line-height:1.6}
+  .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;gap:12px;color:var(--text2)}
+  .spin{animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-wrap span{font-size:13px;font-family:inherit}
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar{width:5px;height:5px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+
+  /* ── Print ── */
+  @media print{
+    #sidebar,#tabbar,.tab,#chat-bottom,.prec-top,.dg-top-btns,#dg-left,#dg-form{display:none!important}
+    #main,#dg-right,#dg-preview{height:auto;overflow:visible;width:100%}
+    .view,#v-docgen{display:block!important;height:auto;overflow:visible}
+  }
+  /* ══════════════════════════════════
+     AUTH OVERLAY
+  ══════════════════════════════════ */
+  #auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#0d1829 0%,#1a2744 60%,#0d2535 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+  #auth-overlay.hidden{display:none}
+  .auth-box{background:var(--bg);border-radius:16px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+  .auth-header{background:linear-gradient(135deg,#1a2744,#2a3f6e);padding:28px 28px 22px;text-align:center}
+  .auth-logo{width:44px;height:44px;background:var(--gold);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .auth-logo svg{width:22px;height:22px;stroke:white;fill:none;stroke-width:2}
+  .auth-title{font-size:20px;font-weight:700;color:white;margin-bottom:4px}
+  .auth-sub{font-size:12px;color:rgba(255,255,255,.6)}
+  .auth-tabs{display:flex;border-bottom:0.5px solid var(--border)}
+  .auth-tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);border:none;background:var(--bg);transition:all .15s}
+  .auth-tab.active{color:var(--gold);border-bottom:2px solid var(--gold)}
+  .auth-body{padding:24px 28px 28px;display:flex;flex-direction:column;gap:14px}
+  .auth-field{display:flex;flex-direction:column;gap:5px}
+  .auth-field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+  .auth-input{border:0.5px solid var(--border);border-radius:8px;padding:10px 13px;font-size:14px;background:var(--bg2);color:var(--text);font-family:inherit;width:100%;transition:border-color .15s}
+  .auth-input:focus{outline:none;border-color:var(--gold)}
+  .auth-btn{background:var(--gold);color:white;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;width:100%;letter-spacing:.02em;transition:background .15s}
+  .auth-btn:hover{background:var(--gold-dark)}
+  .auth-btn:disabled{background:var(--border);cursor:not-allowed;color:var(--text3)}
+  .auth-msg{font-size:12px;text-align:center;padding:9px 12px;border-radius:7px;display:none}
+  .auth-msg.err{background:var(--danger-bg);color:var(--danger-text);display:block}
+  .auth-msg.ok{background:var(--success-bg);color:var(--success-text);display:block}
+  .user-pill{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:8px 10px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .user-avatar{width:26px;height:26px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+  .user-info{flex:1;min-width:0}
+  .user-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user-role{font-size:10px;color:var(--text3)}
+  .signout-btn{border:none;background:none;cursor:pointer;padding:3px;color:var(--text3);border-radius:4px}
+  .signout-btn:hover{color:var(--danger-text);background:var(--danger-bg)}
+  .signout-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;display:block}
+  #v-admin{flex-direction:column;overflow-y:auto;padding:16px;gap:14px}
+  .admin-hero{background:linear-gradient(135deg,#1a2744,#2a3f6e);border-radius:var(--radius-lg);padding:16px 18px;color:white;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .admin-hero-title{font-size:15px;font-weight:700}
+  .admin-hero-sub{font-size:11px;opacity:.7;margin-top:2px}
+  .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+  .stat-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+  .stat-num{font-size:24px;font-weight:700;color:var(--text)}
+  .stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+  .admin-section-title{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+  .log-table{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg);overflow-x:auto}
+  .log-hdr{display:grid;grid-template-columns:150px 1fr 130px 100px;background:var(--bg2);border-bottom:0.5px solid var(--border);font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;min-width:500px}
+  .log-hdr div,.log-row div{padding:8px 10px}
+  .log-row{display:grid;grid-template-columns:150px 1fr 130px 100px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--text);min-width:500px}
+  .log-row:last-child{border-bottom:none}
+  .log-row:hover{background:var(--bg2)}
+  .log-action-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600}
+  .la-chat{background:var(--info-bg);color:var(--info-text)}
+  .la-doc{background:var(--success-bg);color:var(--success-text)}
+  .la-fee{background:var(--warn-bg);color:var(--warn-text)}
+  .la-clause{background:#f0e8ff;color:#5a2fa0}
+  .la-login{background:var(--bg3);color:var(--text2)}
+  .la-comp{background:#fde8ff;color:#7a1a8c}
+  .users-table{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg);overflow-x:auto}
+  .users-hdr{display:grid;grid-template-columns:1fr 110px 140px 90px;background:var(--bg2);border-bottom:0.5px solid var(--border);font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;min-width:450px}
+  .users-hdr div,.users-row div{padding:8px 10px}
+  .users-row{display:grid;grid-template-columns:1fr 110px 140px 90px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--text);min-width:450px}
+  .users-row:last-child{border-bottom:none}
+  .badge-admin{background:var(--gold-light);color:var(--gold-dark);padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700}
+  .badge-user{background:var(--bg3);color:var(--text2);padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600}
+  .admin-refresh{border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);border-radius:var(--radius);padding:6px 12px;font-size:12px;cursor:pointer}
+  .admin-refresh:hover{background:var(--bg3);color:var(--text)}
+</style>
+</head>
+<body>
+<!-- ══ SUPABASE SDK ══ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- ══ AUTH OVERLAY ══ -->
+<div id="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-header">
+      <div class="auth-logo"><svg viewBox="0 0 24 24"><path d="M12 3L4 9v12h16V9L12 3z"/><path d="M9 21V12h6v9"/></svg></div>
+      <div class="auth-title">Dennis Kimani Mutonga</div>
+      <div class="auth-sub">Advocate · Legal Intelligence Platform</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-signin" onclick="authTab('signin')">Sign In</button>
+    </div>
+    <div id="form-signin" class="auth-body">
+      <div class="auth-field">
+        <label>Email address</label>
+        <input class="auth-input" id="si-email" type="email" placeholder="advocate@dkm-law.co.ke" autocomplete="email"/>
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input class="auth-input" id="si-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doSignIn()"/>
+      </div>
+      <div class="auth-msg" id="si-msg"></div>
+      <button class="auth-btn" id="si-btn" onclick="doSignIn()">Sign In</button>
+      <div style="text-align:center;font-size:11px;color:var(--text3);margin-top:8px">Access is by invitation only. Contact the administrator if you need an account.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Setup banner — hidden once key is set -->
+<div id="setup-banner" style="background:#1a2744;color:white;padding:10px 20px;font-size:13px;display:none;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FAC775" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span><strong>Setup required:</strong> Open this file in a text editor and paste your Supabase and AI API keys where indicated. Save &amp; refresh.</span>
+  <button onclick="document.getElementById('setup-banner').style.display='none'" style="margin-left:auto;background:rgba(255,255,255,.15);border:none;color:white;padding:4px 10px;border-radius:5px;cursor:pointer;font-size:12px;white-space:nowrap">Dismiss</button>
+</div>
+
+<div id="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<div id="sidebar">
+  <div id="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 3L4 9v12h16V9L12 3z"/><path d="M9 21V12h6v9"/></svg></div>
+    <div><div class="logo-name">DKM Advocate</div><div class="logo-sub">Dennis Kimani Mutonga</div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Tools</div>
+    <button class="nav-btn active" onclick="nav(this,'chat')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Research chat</button>
+    <button class="nav-btn" onclick="nav(this,'clause')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Clause extractor</button>
+    <button class="nav-btn" onclick="nav(this,'prec')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Precedent search</button>
+    <button class="nav-btn" onclick="nav(this,'comp')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compliance check</button>
+    <button class="nav-btn" onclick="nav(this,'docgen')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Document generator</button>
+    <button class="nav-btn" onclick="nav(this,'fees')"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Fee calculator</button>
+  </div>
+  <div id="admin-nav-section" class="nav-section" style="display:none">
+    <div class="nav-label">Admin</div>
+    <button class="nav-btn" onclick="nav(this,'admin')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users &amp; Logs</button>
+  </div>
+  <div class="sidebar-bottom">
+    <div id="user-pill-wrap" style="display:none">
+      <div class="user-pill">
+        <div class="user-avatar" id="user-avatar-initials">?</div>
+        <div class="user-info">
+          <div class="user-name" id="user-display-name">—</div>
+          <div class="user-role" id="user-display-role">User</div>
+        </div>
+        <button class="signout-btn" onclick="doSignOut()" title="Sign out"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+      </div>
+    </div>
+    <div class="jur-box">
+      <div class="jur-box-title"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>Jurisdictions</div>
+      <div class="jur-flags"><span class="jflag">Kenya</span><span class="jflag">EAC</span><span class="jflag">COMESA</span><span class="jflag">UN</span><span class="jflag">UNCITRAL</span></div>
+    </div>
+    <div class="priv-pill"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Privacy shield active</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div id="main">
+  <div id="tabbar">
+    <button class="tab active" id="tab-chat" onclick="switchTab('chat')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Research chat</button>
+    <button class="tab" id="tab-clause" onclick="switchTab('clause')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Clause extractor</button>
+    <button class="tab" id="tab-prec" onclick="switchTab('prec')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Precedent search</button>
+    <button class="tab" id="tab-comp" onclick="switchTab('comp')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compliance</button>
+    <button class="tab" id="tab-docgen" onclick="switchTab('docgen')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Doc generator</button>
+    <button class="tab" id="tab-fees" onclick="switchTab('fees')"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Fee calculator</button>
+    <button class="tab" id="tab-admin" onclick="switchTab('admin')" style="display:none"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Admin</button>
+  </div>
+
+  <div id="views">
+
+    <!-- ════ CHAT ════ -->
+    <div id="v-chat" class="view active" style="display:flex">
+      <div id="msgs">
+        <div class="msg">
+          <div class="av ai">⚖</div>
+          <div class="bub">Welcome to <strong>Dennis Kimani Mutonga Advocate</strong> — Legal Intelligence Platform. I provide legal research across <span class="law-ke">Kenyan law</span> and <span class="law-int">international law</span> — covering the Constitution of Kenya 2010, Laws of Kenya, EAC, COMESA, UNCITRAL, and UN conventions. Client data is anonymised before any external query. How can I assist?</div>
+        </div>
+      </div>
+      <div class="anon-bar" id="anon-bar"><span style="width:6px;height:6px;border-radius:50%;background:#ba7517;display:inline-block;flex-shrink:0"></span><span id="anon-txt"></span></div>
+      <div id="chat-bottom">
+        <div class="chips">
+          <span class="chip" onclick="useChip(this)">Non-compete enforceability Kenya</span>
+          <span class="chip" onclick="useChip(this)">Data Protection Act 2019 obligations</span>
+          <span class="chip" onclick="useChip(this)">UNCITRAL arbitration clause drafting</span>
+          <span class="chip" onclick="useChip(this)">EAC cross-border contract</span>
+          <span class="chip" onclick="useChip(this)">Limitation periods Kenya</span>
+          <span class="chip" onclick="useChip(this)">Constitutional petition grounds</span>
+        </div>
+        <div class="input-row">
+          <textarea id="chat-input" class="txt-input" placeholder="Ask a legal research question…" onkeydown="chatKey(event)"></textarea>
+          <button class="btn-gold" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ CLAUSE EXTRACTOR ════ -->
+    <div id="v-clause" class="view" style="display:flex;flex-direction:column;padding:16px;gap:12px;overflow-y:auto">
+      <div class="panel-head">Paste contract text — the AI extracts every clause and checks it against Kenyan and international law</div>
+      <div class="clause-wrap">
+        <textarea id="clause-text" placeholder="Paste your contract text here…"></textarea>
+        <div class="clause-toolbar">
+          <div class="ct-pills">
+            <span class="ct-pill sel" onclick="ctSel(this)">All clauses</span>
+            <span class="ct-pill" onclick="ctSel(this)">Indemnity</span>
+            <span class="ct-pill" onclick="ctSel(this)">Termination</span>
+            <span class="ct-pill" onclick="ctSel(this)">Payment</span>
+            <span class="ct-pill" onclick="ctSel(this)">Dispute resolution</span>
+            <span class="ct-pill" onclick="ctSel(this)">IP & confidentiality</span>
+          </div>
+          <button class="btn-gold" onclick="extractClauses()" style="height:32px;font-size:12px;padding:0 14px">Extract &amp; analyse</button>
+        </div>
+      </div>
+      <div id="clause-results"></div>
+    </div>
+
+    <!-- ════ PRECEDENT SEARCH ════ -->
+    <div id="v-prec" class="view" style="display:flex;flex-direction:column;overflow:hidden">
+      <div class="prec-top">
+        <div class="prec-row">
+          <input id="prec-input" placeholder="Search cases… e.g. 'breach of contract', 'data protection', 'employment'" onkeydown="if(event.key==='Enter')searchPrec()"/>
+          <button class="btn-gold" onclick="searchPrec()" style="height:36px;font-size:12px;padding:0 16px">Search</button>
+        </div>
+        <div class="prec-filters">
+          <span class="pf on" onclick="pfToggle(this)">All</span>
+          <span class="pf" onclick="pfToggle(this)">Kenya</span>
+          <span class="pf" onclick="pfToggle(this)">EAC</span>
+          <span class="pf" onclick="pfToggle(this)">Commonwealth</span>
+          <span class="pf" onclick="pfToggle(this)">Constitutional</span>
+          <span class="pf" onclick="pfToggle(this)">Commercial</span>
+          <span class="pf" onclick="pfToggle(this)">Employment</span>
+          <span class="pf" onclick="pfToggle(this)">Data Protection</span>
+        </div>
+      </div>
+      <div id="prec-list"></div>
+    </div>
+
+    <!-- ════ COMPLIANCE ════ -->
+    <div id="v-comp" class="view" style="display:flex;flex-direction:column;padding:14px;gap:12px;overflow-y:auto">
+      <div class="panel-head">Describe a clause or obligation to check it against Kenyan and international law</div>
+      <div class="comp-input-row">
+        <input id="comp-query" placeholder="e.g. 'personal data retention for 10 years', 'choice of English law clause', 'non-compete 3 years nationwide'"/>
+        <button class="btn-gold" onclick="runCompliance()" style="height:34px;font-size:12px;padding:0 14px">Check</button>
+      </div>
+      <div id="comp-result"></div>
+      <div class="comp-grid">
+        <div class="comp-card">
+          <div class="comp-card-hd" style="color:var(--success-text)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="comp-card-title">Key Kenyan statutes</span></div>
+          <div class="comp-rows">
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Constitution of Kenya 2010</div><div class="comp-sub">Bill of Rights, Art. 31 privacy, Art. 35 access to info</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Data Protection Act 2019</div><div class="comp-sub">ODPC registration, lawful basis, data subject rights</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Law of Contract Act (Cap. 23)</div><div class="comp-sub">Formation, consideration, capacity, illegality</div></div></div>
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Employment Act 2007</div><div class="comp-sub">Non-competes — reasonableness test applies</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Arbitration Act (Cap. 49)</div><div class="comp-sub">UNCITRAL Model Law adopted, NY Convention ratified</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Companies Act 2015</div><div class="comp-sub">Incorporation, directors, shares, winding up</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Law of Succession Act (Cap. 160)</div><div class="comp-sub">Wills, intestacy, probate, letters of administration</div></div></div>
+          </div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-card-hd" style="color:var(--info-text)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg><span class="comp-card-title">International frameworks</span></div>
+          <div class="comp-rows">
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">UNCITRAL Model Law on Arbitration</div><div class="comp-sub">Incorporated via Arbitration Act — full adoption</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">New York Convention 1958</div><div class="comp-sub">Kenya signatory — foreign awards enforceable</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">COMESA Treaty &amp; protocols</div><div class="comp-sub">Trade, IP, competition law obligations</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">EAC Common Market Protocol</div><div class="comp-sub">Free movement, cross-border services</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">GDPR — extra-territorial reach</div><div class="comp-sub">Applies if processing EU persons' data</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">ILO core conventions</div><div class="comp-sub">Ratified — labour standards apply</div></div></div>
+          </div>
+        </div>
+        <div class="comp-card" style="grid-column:1/-1">
+          <div class="comp-card-hd"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="comp-card-title">Common risk areas for Kenyan contracts</span></div>
+          <div class="comp-rows">
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Choice of foreign law clauses</div><div class="comp-sub">Courts may refuse to apply if contrary to Kenyan public policy (Constitution Art. 2(4))</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Cross-border data transfers</div><div class="comp-sub">Data Protection Act s.48 requires adequate protection or consent</div></div></div>
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Penalty clauses</div><div class="comp-sub">Must represent genuine pre-estimate of loss; unconscionable penalties void under Kenyan equity</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Consumer protection</div><div class="comp-sub">Consumer Protection Act 2012 — unfair terms unenforceable in B2C contracts</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ DOCUMENT GENERATOR ════ -->
+    <div id="v-docgen" class="view" style="display:flex;flex-direction:row;overflow:hidden">
+      <div id="dg-left">
+        <div id="dg-search-wrap"><input id="dg-search" placeholder="Search documents…" oninput="dgFilter(this.value)"/></div>
+        <div id="dg-doclist"></div>
+      </div>
+      <div id="dg-right">
+        <div id="dg-topbar">
+          <div><div id="dg-doc-title" style="font-size:14px;font-weight:600;color:var(--text)">Select a document type</div><div id="dg-doc-sub" style="font-size:11px;color:var(--text2)">Choose from the list on the left</div></div>
+          <div class="dg-top-btns">
+            <button class="dg-tbtn" id="btn-copy" onclick="copyDoc()" style="display:none">Copy text</button>
+            <button class="dg-tbtn gold" id="btn-print" onclick="printDoc()" style="display:none">Print / PDF</button>
+          </div>
+        </div>
+        <div id="dg-body">
+          <div id="dg-form"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:8px;color:var(--text3);font-size:12px;text-align:center;line-height:1.5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Select a document<br>to see fields</div></div>
+          <div id="dg-preview"><div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p>Fill in the form and click Generate</p></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /views -->
+
+    <!-- ════ FEE CALCULATOR ════ -->
+    <div id="v-fees" class="view" style="display:none;flex-direction:column;overflow-y:auto;padding:16px;gap:14px">
+      <div class="fee-hero">
+        <div class="fee-hero-title">⚖ Advocates Fee Calculator</div>
+        <div class="fee-hero-sub">Advocates (Remuneration) Order — Laws of Kenya (L.N. 64/1962, as amended L.N. 35/2014 &amp; L.N. 45/2014)</div>
+      </div>
+      <div class="fee-disclaimer">
+        <strong>Note:</strong> These are minimum scale fees prescribed by the Advocates (Remuneration) Order. An advocate may charge more by agreement with the client (Schedule 5) but <em>not less</em> than the scale fee (paragraph 3 of the Order). VAT at 16% and disbursements (stamp duty, registration fees, searches) are charged separately.
+      </div>
+
+      <div class="fee-grid">
+
+        <!-- SCHEDULE 1 — SALE/PURCHASE OF LAND -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#639922"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <div><div class="fee-card-title">Sale / Purchase of Land</div><div class="fee-card-sub">Schedule 1 — Land Act 2012 / Registration of Land Act</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Consideration / Value (KES)</div><input class="fee-input" id="s1-val" type="number" placeholder="e.g. 10,000,000" oninput="calcS1()"/></div>
+            <div class="fee-row"><div class="fee-label">Acting for</div>
+              <select class="fee-sel" id="s1-role" onchange="calcS1()">
+                <option value="both">Both vendor &amp; purchaser</option>
+                <option value="vendor">Vendor only</option>
+                <option value="purchaser">Purchaser only</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Agreement for sale prepared?</div>
+              <select class="fee-sel" id="s1-agr" onchange="calcS1()">
+                <option value="yes">Yes — full scale fee</option>
+                <option value="no">No — vendor's fee reduced by 1/3</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s1-result">
+              <div class="fee-result-label">Minimum Scale Fee</div>
+              <div class="fee-result-main" id="s1-main"></div>
+              <div class="fee-result-breakdown" id="s1-bd"></div>
+              <div class="fee-note">Exclusive of VAT (16%), stamp duty (4% residential / 2% commercial), Land Registry fees, and search fees. Registration fees are payable by the purchaser unless otherwise agreed.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 2 — LEASES -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#378ADD"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+            <div><div class="fee-card-title">Lease / Tenancy Agreement</div><div class="fee-card-sub">Schedule 2 — Landlord &amp; Tenant Acts</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Annual Rent (KES)</div><input class="fee-input" id="s2-rent" type="number" placeholder="e.g. 1,200,000" oninput="calcS2()"/></div>
+            <div class="fee-row"><div class="fee-label">Role</div>
+              <select class="fee-sel" id="s2-role" onchange="calcS2()">
+                <option value="lessor">Lessor's advocate (preparing lease)</option>
+                <option value="lessee">Lessee's advocate (perusing lease)</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s2-result">
+              <div class="fee-result-label">Minimum Scale Fee</div>
+              <div class="fee-result-main" id="s2-main"></div>
+              <div class="fee-result-breakdown" id="s2-bd"></div>
+              <div class="fee-note">Lessee's advocate (perusing) is entitled to 50% of the lessor's fee. Stamp duty on leases and registration fees are disbursements charged separately. VAT at 16% applies.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 1 (2nd) — MORTGAGE / CHARGE -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#993C1D"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <div><div class="fee-card-title">Mortgage / Charge (Creation)</div><div class="fee-card-sub">Schedule 1, Second Scale — Charge &amp; Debenture fees</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Secured Amount (KES)</div><input class="fee-input" id="s1b-val" type="number" placeholder="e.g. 15,000,000" oninput="calcS1b()"/></div>
+            <div class="fee-row"><div class="fee-label">Role</div>
+              <select class="fee-sel" id="s1b-role" onchange="calcS1b()">
+                <option value="grantee">Grantee's advocate (lender) — full scale</option>
+                <option value="grantor">Grantor's advocate (borrower) — 50% of grantee fee</option>
+                <option value="both">Both grantee &amp; grantor</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s1b-result">
+              <div class="fee-result-label">Minimum Scale Fee</div>
+              <div class="fee-result-main" id="s1b-main"></div>
+              <div class="fee-result-breakdown" id="s1b-bd"></div>
+              <div class="fee-note">Where one advocate acts for both parties: full grantee fee + 50% of grantor fee. Grantor typically pays both sets of fees (para 9, Sch.1). VAT at 16% applies.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 6 — HIGH COURT LITIGATION -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#534AB7"><svg viewBox="0 0 24 24"><path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/></svg></div>
+            <div><div class="fee-card-title">High Court Litigation</div><div class="fee-card-sub">Schedule 6 — Civil Procedure Act (Cap. 21)</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Value of Claim (KES)</div><input class="fee-input" id="s6-val" type="number" placeholder="e.g. 2,000,000" oninput="calcS6()"/></div>
+            <div class="fee-row"><div class="fee-label">Proceeding type</div>
+              <select class="fee-sel" id="s6-type" onchange="calcS6()">
+                <option value="undefended">Undefended / no appearance entered (65% of 1b)</option>
+                <option value="summary">Determined summarily without full trial (75% of 1b)</option>
+                <option value="settled_pre">Settled before 1st hearing date (85% of 1b)</option>
+                <option value="uncontested">Contested — no defence filed (scale 1a)</option>
+                <option value="contested">Fully contested — defence filed (scale 1b)</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Costs basis</div>
+              <select class="fee-sel" id="s6-basis" onchange="calcS6()">
+                <option value="pp">Party &amp; party (standard)</option>
+                <option value="ac">Advocate &amp; client (+50% on party &amp; party)</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s6-result">
+              <div class="fee-result-label">Minimum Instruction Fee</div>
+              <div class="fee-result-main" id="s6-main"></div>
+              <div class="fee-result-breakdown" id="s6-bd"></div>
+              <div class="fee-note">Instruction fee only. Additional charges apply: drawing (KES 250/folio), perusing (KES 70/folio), attendances (KES 1,000/15 min), correspondence (KES 300/letter). Senior counsel certificate increases instruction fee by 50%.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 7 — MAGISTRATES COURT -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#5F5E5A"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div><div class="fee-card-title">Magistrates Court Litigation</div><div class="fee-card-sub">Schedule 7 — Lower and Higher Scale</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Value of Claim (KES)</div><input class="fee-input" id="s7-val" type="number" placeholder="e.g. 500,000" oninput="calcS7()"/></div>
+            <div class="fee-row"><div class="fee-label">Scale</div>
+              <select class="fee-sel" id="s7-scale" onchange="calcS7()">
+                <option value="lower">Lower scale (standard)</option>
+                <option value="higher">Higher scale (complex / opposed matters)</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s7-result">
+              <div class="fee-result-label">Minimum Instruction Fee</div>
+              <div class="fee-result-main" id="s7-main"></div>
+              <div class="fee-result-breakdown" id="s7-bd"></div>
+              <div class="fee-note">Schedule 7 as amended by L.N. 45/2014. For amounts over KES 2,000,000, the fee is as for KES 2,000,000 plus 25% of the excess.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 10 — PROBATE & ESTATE -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#D4537E"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div><div class="fee-card-title">Probate &amp; Administration of Estate</div><div class="fee-card-sub">Schedule 10 — Law of Succession Act (Cap. 160)</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Gross Estate Value (KES)</div><input class="fee-input" id="s10-val" type="number" placeholder="e.g. 5,000,000" oninput="calcS10()"/></div>
+            <div class="fee-row"><div class="fee-label">Matter type</div>
+              <select class="fee-sel" id="s10-type" onchange="calcS10()">
+                <option value="grant">Grant of probate / letters of administration</option>
+                <option value="admin">Full estate administration</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s10-result">
+              <div class="fee-result-label">Minimum Scale Fee</div>
+              <div class="fee-result-main" id="s10-main"></div>
+              <div class="fee-result-breakdown" id="s10-bd"></div>
+              <div class="fee-note">Full administration includes all work from obtaining the grant through distribution to beneficiaries. Court filing fees, advertisement fees, and stamp duty on assents are separate disbursements.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 5 — DEBT COLLECTION -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#B8860B"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+            <div><div class="fee-card-title">Non-Contentious Debt Collection</div><div class="fee-card-sub">Schedule 5, Para 7 — Inclusive scale</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Debt Amount (KES)</div><input class="fee-input" id="s5-val" type="number" placeholder="e.g. 800,000" oninput="calcS5()"/></div>
+            <div class="fee-row"><div class="fee-label">Stage reached</div>
+              <select class="fee-sel" id="s5-stage" onchange="calcS5()">
+                <option value="demand">Demand letter only (50% of scale)</option>
+                <option value="full">Full non-contentious recovery</option>
+              </select>
+            </div>
+            <div class="fee-result" id="s5-result">
+              <div class="fee-result-label">Minimum Scale Fee</div>
+              <div class="fee-result-main" id="s5-main"></div>
+              <div class="fee-result-breakdown" id="s5-bd"></div>
+              <div class="fee-note">If proceedings are instituted, the Schedule 5 inclusive scale does not apply and fees revert to Schedule 6/7. VAT at 16% applies.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE 3 — COMPANY FORMATION -->
+        <div class="fee-card">
+          <div class="fee-card-hd">
+            <div class="fee-card-icon" style="background:#1a2744"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+            <div><div class="fee-card-title">Company Formation / Trademark</div><div class="fee-card-sub">Schedules 3 &amp; 4 — Companies Act 2015 / Trade Marks Act</div></div>
+          </div>
+          <div class="fee-body">
+            <div class="fee-row"><div class="fee-label">Matter type</div>
+              <select class="fee-sel" id="s3-type" onchange="calcS3()">
+                <option value="company_local">Company incorporation (local)</option>
+                <option value="company_foreign">Foreign company registration</option>
+                <option value="tm_one">Trademark — single class</option>
+                <option value="tm_two">Trademark — 2nd mark (same proprietor)</option>
+                <option value="tm_renew">Trademark renewal (1 class)</option>
+                <option value="tm_assign">Trademark assignment (1 mark)</option>
+              </select>
+            </div>
+            <div class="fee-result show" id="s3-result">
+              <div class="fee-result-label">Minimum Scale Fee</div>
+              <div class="fee-result-main" id="s3-main">KES 60,000</div>
+              <div class="fee-result-breakdown" id="s3-bd"><div class="fee-br-row"><span>Company incorporation (Schedule 3)</span><span>KES 60,000</span></div></div>
+              <div class="fee-note">Schedule 3 & 4 fees are minimum amounts; the advocate may charge more by agreement depending on complexity. Kenya Revenue Authority filing fees and government levies are separate disbursements.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /fee-grid -->
+    </div><!-- /v-fees -->
+
+    <!-- ════ ADMIN PANEL ════ -->
+    <div id="v-admin" class="view" style="display:none;flex-direction:column;overflow-y:auto;padding:16px;gap:14px">
+      <div class="admin-hero">
+        <div>
+          <div class="admin-hero-title">⚙ Admin Dashboard</div>
+          <div class="admin-hero-sub">Users, sessions and activity log — Dennis Kimani Mutonga Advocate</div>
+        </div>
+        <button class="admin-refresh" onclick="loadAdminData()">↻ Refresh</button>
+      </div>
+      <div class="admin-stats" id="admin-stats">
+        <div class="stat-card"><div class="stat-num" id="stat-users">—</div><div class="stat-lbl">Registered users</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-today">—</div><div class="stat-lbl">Actions today</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-docs">—</div><div class="stat-lbl">Documents generated</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-chats">—</div><div class="stat-lbl">Chat queries</div></div>
+      </div>
+      <div class="admin-section-title">Create New User</div>
+      <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;flex-direction:column;gap:10px;max-width:480px">
+        <div style="font-size:12px;color:var(--text2);line-height:1.5">Create a login for a new staff member. They will receive an email to confirm and set up their account.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="fee-row"><div class="fee-label">Full Name</div><input class="fee-input" id="cu-name" type="text" placeholder="e.g. Jane Mwangi"/></div>
+          <div class="fee-row"><div class="fee-label">Email Address</div><input class="fee-input" id="cu-email" type="email" placeholder="jane@example.co.ke"/></div>
+          <div class="fee-row"><div class="fee-label">Temporary Password</div><input class="fee-input" id="cu-pass" type="password" placeholder="min. 8 characters"/></div>
+          <div class="fee-row"><div class="fee-label">Role</div>
+            <select class="fee-sel" id="cu-role">
+              <option value="user">User (standard access)</option>
+              <option value="admin">Admin (full access)</option>
+            </select>
+          </div>
+        </div>
+        <div class="auth-msg" id="cu-msg" style="font-size:12px;padding:6px 10px;border-radius:6px;display:none"></div>
+        <button class="fee-calc-btn" id="cu-btn" onclick="adminCreateUser()">Create User Account</button>
+      </div>
+      <div class="admin-section-title">Registered Users</div>
+      <div class="users-table">
+        <div class="users-hdr"><div>Email / Name</div><div>Role</div><div>Joined</div><div>Firm</div></div>
+        <div id="admin-users-body"><div style="padding:14px;font-size:12px;color:var(--text3)">Loading…</div></div>
+      </div>
+      <div class="admin-section-title">Recent Activity Log <span style="font-weight:400;font-size:10px;text-transform:none;color:var(--text3)">(last 100 entries)</span></div>
+      <div class="log-table">
+        <div class="log-hdr"><div>Time</div><div>User</div><div>Action</div><div>Details</div></div>
+        <div id="admin-log-body"><div style="padding:14px;font-size:12px;color:var(--text3)">Loading…</div></div>
+      </div>
+    </div><!-- /v-admin -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ══════════════════════════════════════════════
+// API KEY — paste your Anthropic API key here
+// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+// FREE AI API CONFIGURATION
+// Get a free Gemini API key at:
+//   https://aistudio.google.com/app/apikey
+// No credit card required. 1,500 free requests/day.
+//
+// Alternative free options:
+//   Groq (Llama 3):  https://console.groq.com
+//   OpenRouter free: https://openrouter.ai
+// Change API_PROVIDER below to switch.
+// ══════════════════════════════════════════════
+const API_KEY      = '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';
+const API_PROVIDER = 'groq'; // 'gemini' | 'groq' | 'openrouter'
+
+// Model per provider
+const MODELS = {
+  gemini:     'gemini-1.5-flash',     // free, fast, capable
+  groq:       'llama-3.3-70b-versatile', // free, very fast
+  openrouter: 'mistralai/mistral-7b-instruct:free'
+};
+
+// ── Shared AI call ──
+async function callAI(userMsg, system, maxTokens=700){
+  const hasSensitive = /\b([A-Z][a-z]+ [A-Z][a-z]+)\b/.test(userMsg)||/case no/i.test(userMsg);
+  let query = hasSensitive ? userMsg.replace(/\b([A-Z][a-z]+ [A-Z][a-z]+)\b/g,(_,m,i)=>['[Person A]','[Person B]','[Person C]'][i%3]||'[Person A]') : userMsg;
+  if(hasSensitive){
+    const bar=document.getElementById('anon-bar');
+    if(bar){document.getElementById('anon-txt').textContent='Sensitive data anonymised before lookup: '+query.substring(0,70)+'…';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),5000);}
+  }
+
+  if(!API_KEY || API_KEY.includes('YOUR_')){
+    throw new Error('No API key set. Open this HTML file in a text editor and paste your free Gemini key where it says YOUR_GEMINI_API_KEY_HERE. Get one free at aistudio.google.com');
+  }
+
+  const fullPrompt = system ? `${system}\n\n${query}` : query;
+
+  // ── Gemini (Google AI Studio — FREE) ──
+  if(API_PROVIDER === 'gemini'){
+    const model = MODELS.gemini;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
+    const body = {
+      contents:[{parts:[{text: fullPrompt}]}],
+      generationConfig:{maxOutputTokens: maxTokens, temperature:0.3}
+    };
+    const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d = await r.json();
+    if(d.error) throw new Error(d.error.message);
+    return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  }
+
+  // ── Groq (Llama 3 — FREE) ──
+  if(API_PROVIDER === 'groq'){
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
+      body:JSON.stringify({model:MODELS.groq, max_tokens:maxTokens, temperature:0.3,
+        messages:[{role:'system',content:system||'You are a helpful assistant.'},{role:'user',content:query}]})
+    });
+    const d = await r.json();
+    if(d.error) throw new Error(d.error.message||JSON.stringify(d.error));
+    return d.choices?.[0]?.message?.content || '';
+  }
+
+  // ── OpenRouter (free models) ──
+  if(API_PROVIDER === 'openrouter'){
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY,'HTTP-Referer':'https://lexai.kenya','X-Title':'Dennis Kimani Mutonga Advocate'},
+      body:JSON.stringify({model:MODELS.openrouter, max_tokens:maxTokens,
+        messages:[{role:'system',content:system||'You are a helpful assistant.'},{role:'user',content:query}]})
+    });
+    const d = await r.json();
+    if(d.error) throw new Error(d.error.message||JSON.stringify(d.error));
+    return d.choices?.[0]?.message?.content || '';
+  }
+
+  throw new Error('Unknown API_PROVIDER: '+API_PROVIDER);
+}
+
+function fmt(t){
+  return t.replace(/\[KE\]/g,'<span class="law-ke">KE</span>').replace(/\[INT\]/g,'<span class="law-int">INT</span>').replace(/\[WARN\]/g,'<span class="law-warn">risk</span>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');
+}
+
+// ── Tab/Nav routing ──
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active');v.style.display='none';});
+  const vEl=document.getElementById('v-'+t);
+  vEl.classList.add('active');
+  vEl.style.display='flex';
+}
+function nav(el,t){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));el.classList.add('active');switchTab(t);}
+
+// ══════════════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════════════
+const CHAT_SYS=`You are a senior legal research assistant specialising in Kenyan law and international commercial law. Always cite relevant Kenyan statutes and case law. Use [KE] before Kenyan law citations, [INT] before international citations, [WARN] before risk flags. Keep responses under 250 words. Be precise and practitioner-focused. Never request or expose client-identifying information.`;
+let chatBusy=false,typingEl=null;
+
+function addMsg(role,html){
+  const c=document.getElementById('msgs');
+  const d=document.createElement('div');d.className='msg '+(role==='ai'?'':'user');
+  d.innerHTML=`<div class="av ${role==='ai'?'ai':'user'}">${role==='ai'?'⚖':'ME'}</div><div class="bub">${html}</div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function showTyping(){chatBusy=true;const c=document.getElementById('msgs');typingEl=document.createElement('div');typingEl.className='msg';typingEl.innerHTML='<div class="av ai">⚖</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';c.appendChild(typingEl);c.scrollTop=c.scrollHeight;}
+function rmTyping(){chatBusy=false;if(typingEl){typingEl.remove();typingEl=null;}}
+async function sendChat(){
+  const el=document.getElementById('chat-input');const txt=el.value.trim();
+  if(!txt||chatBusy)return;el.value='';
+  addMsg('user',txt);showTyping();
+  try{const r=await callAI(txt,CHAT_SYS);rmTyping();addMsg('ai',fmt(r));}
+  catch(e){rmTyping();addMsg('ai',`<span style="color:var(--danger-text)">Error: ${e.message}. Please check your API key in the HTML file.</span>`);}
+}
+function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function useChip(el){document.getElementById('chat-input').value=el.textContent;document.getElementById('chat-input').focus();}
+
+// ══════════════════════════════════════════════
+// CLAUSE EXTRACTOR
+// ══════════════════════════════════════════════
+function ctSel(el){document.querySelectorAll('.ct-pill').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');}
+async function extractClauses(){
+  const txt=document.getElementById('clause-text').value.trim();
+  if(!txt){alert('Please paste some contract text first.');return;}
+  const res=document.getElementById('clause-results');
+  res.innerHTML='<div style="font-size:13px;color:var(--text2);padding:10px 0">Analysing clauses…</div>';
+  const sys=`You are a Kenyan contract lawyer. Extract clauses and return ONLY a valid JSON array. No markdown, no preamble. Each item: {type, extracted_text(max 120 chars), risk_level(low/medium/high), kenyan_law_note(max 60 chars), international_law_note(max 60 chars), analysis(max 150 chars)}`;
+  try{
+    const raw=await callAI(`Extract all legal clauses from this contract text and return ONLY JSON array:\n\n${txt.substring(0,2500)}`,sys,1000);
+    let clauses;
+    try{clauses=JSON.parse(raw.replace(/```json|```/g,'').trim());}
+    catch{clauses=[{type:'General clause',extracted_text:txt.substring(0,100),risk_level:'medium',kenyan_law_note:'Review under Law of Contract Act (Cap. 23)',international_law_note:'Consider UNIDROIT Principles',analysis:'Unable to parse structured response — review manually.'}];}
+    res.innerHTML='';
+    if(!Array.isArray(clauses))clauses=[clauses];
+    clauses.forEach(cl=>{
+      const rl=(cl.risk_level||'medium').toLowerCase();
+      const bc=rl==='low'?'risk-low':rl==='high'?'risk-high':'risk-med';
+      const card=document.createElement('div');card.className='clause-card';
+      card.innerHTML=`<div class="cc-head"><span class="cc-type">${cl.type||'Clause'}</span><span class="risk-badge ${bc}">${rl} risk</span></div><div class="cc-body"><div class="cc-quote">"${(cl.extracted_text||'').substring(0,150)}…"</div><div class="cc-analysis">${cl.analysis||''}</div><div class="cc-laws">${cl.kenyan_law_note?`<span class="law-ke">KE: ${cl.kenyan_law_note}</span>`:''} ${cl.international_law_note?`<span class="law-int">INT: ${cl.international_law_note}</span>`:''}</div></div>`;
+      res.appendChild(card);
+    });
+  }catch(e){res.innerHTML=`<div style="font-size:13px;color:var(--danger-text);padding:8px">Error: ${e.message}</div>`;}
+}
+
+// ══════════════════════════════════════════════
+// PRECEDENT SEARCH
+// ══════════════════════════════════════════════
+const PRECS=[
+  {name:'Hashi Energy Ltd v Kenya Revenue Authority',year:'2019',court:'High Court of Kenya (Commercial Division)',tags:['Kenya','Tax','Contract'],principle:'Public policy considerations under Art. 2(4) of the Constitution of Kenya may override foreign law clauses in contracts affecting Kenyan revenue interests.',detail:'A choice of law clause selecting English law was set aside. The court held that where a contract is performed partly in Kenya, Kenyan courts have jurisdiction regardless of the choice of law clause, per the Judicature Act.'},
+  {name:'Mwangi v Securex Agencies (K) Ltd',year:'2020',court:'Employment & Labour Relations Court, Nairobi',tags:['Kenya','Employment','Non-compete'],principle:'Non-compete clauses must protect a legitimate business interest and be reasonable in duration, geography, and scope under Employment Act 2007.',detail:'A two-stage test applies: (1) does the employer have a protectable interest? (2) is the restriction reasonable? A 3-year nationwide non-compete was reduced to 1 year within the employee\'s operational region. The Court noted alignment with ILO standards on freedom of work.'},
+  {name:'CMC Aviation Ltd v Uganda Airlines',year:'2018',court:'East African Court of Justice',tags:['EAC','Commercial','Aviation'],principle:'EAC Treaty obligations prevail over domestic law in cross-border commercial disputes between EAC member state entities.',detail:'The EACJ affirmed EAC Treaty Art. 8(4) requires member states to give effect to Treaty provisions; a domestic Ugandan statute limiting liability was disapplied. Relevant for all cross-border EAC commercial contracts.'},
+  {name:'Telkom Kenya v Orange SA',year:'2021',court:'High Court of Kenya',tags:['Kenya','Arbitration','Commercial'],principle:'An UNCITRAL arbitration clause in a JV agreement is enforceable; courts must stay proceedings in favour of arbitration per Arbitration Act s.6.',detail:'The Court confirmed Kenya\'s adoption of the UNCITRAL Model Law. Broadly-worded arbitration clauses cover tortious claims from the same factual matrix. Awards made outside Kenya are enforceable under the NY Convention as domesticated by the Foreign Judgments (Reciprocal Enforcement) Act.'},
+  {name:'Republic v Safaricom PLC (ODPC)',year:'2023',court:'High Court of Kenya',tags:['Kenya','Data Protection','Technology'],principle:'Controllers must maintain a lawful basis for each processing activity; purpose limitation strictly enforced under Data Protection Act 2019.',detail:'The ODPC found Safaricom in breach of s.30 (purpose limitation) and s.34 (data subject rights). The Court upheld the ODPC\'s enforcement notice. Critical precedent for any contract involving personal data of Kenyan residents.'},
+  {name:'Triton Petroleum v Pan Ocean Shipping',year:'2017',court:'High Court of Kenya (Admiralty)',tags:['Kenya','Shipping','Commercial'],principle:'UNIDROIT Principles apply as persuasive authority in maritime contracts governed by Kenyan law where the contract is silent on unjust enrichment.',detail:'The Court incorporated UNIDROIT Principles to fill a gap in the contract regarding unjust enrichment upon frustration. Demonstrates Kenyan courts\' willingness to apply international commercial law principles.'},
+  {name:'Kenya Breweries v Longhorn Publishers',year:'2016',court:'Court of Appeal of Kenya',tags:['Kenya','IP','Commercial'],principle:'IP assignment clauses must expressly cover future works; general assignments do not transfer rights in subsequently created works.',detail:'Applied domestic Copyright Act (Cap. 130) alongside Berne Convention principles. An IP assignment clause in a marketing services agreement did not cover creative works developed after the contract date. Lesson: IP clauses require specific drafting.'},
+  {name:'Mumo Matemu v Trusted Society of Human Rights Alliance',year:'2013',court:'Court of Appeal of Kenya',tags:['Kenya','Constitutional','Administrative'],principle:'Constitutional petitions require demonstration of a nexus between the alleged violation and the fundamental rights guaranteed in the Bill of Rights.',detail:'The Court of Appeal set out principles for constitutional petitions under Art. 22 and 258. Petitioners must particularise how specific constitutional articles have been violated. Relevant for drafting constitutional petitions and judicial review applications.'},
+  {name:'Samuel Kamau Macharia v Kenya Commercial Bank',year:'2012',court:'Supreme Court of Kenya',tags:['Kenya','Constitutional','Banking'],principle:'The Supreme Court has jurisdiction to hear appeals where matters of constitutional interpretation and application are raised.',detail:'The Supreme Court clarified its jurisdiction under Art. 163(4)(a). The case established that where constitutional questions are genuine and not merely cosmetic, the apex court will hear the appeal. Key for framing appeals involving constitutional rights.'},
+];
+
+function renderPrecs(list){
+  const el=document.getElementById('prec-list');
+  if(!list.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);padding:12px">No matching cases found. Searching AI database…</div>';return;}
+  el.innerHTML='';
+  list.forEach((p,i)=>{
+    const d=document.createElement('div');d.className='prec-card';
+    d.innerHTML=`<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px"><div><div class="pc-name">${p.name}</div><div class="pc-court">${p.court}</div></div><span style="font-size:11px;color:var(--text3);white-space:nowrap">${p.year}</span></div><div class="pc-tags">${p.tags.map(t=>`<span class="pc-tag">${t}</span>`).join('')}</div><div class="pc-expand"><div class="pc-principle">${p.principle}</div><div style="font-size:12px;color:var(--text2);line-height:1.65">${p.detail}</div><button class="pc-apply" onclick="applyPrec(${i},event)">Use in research chat →</button></div>`;
+    d.onclick=(e)=>{if(e.target.classList.contains('pc-apply'))return;d.classList.toggle('expanded');};
+    el.appendChild(d);
+  });
+}
+function searchPrec(){
+  const q=document.getElementById('prec-input').value.toLowerCase().trim();
+  const f=!q?PRECS:PRECS.filter(p=>p.name.toLowerCase().includes(q)||p.tags.some(t=>t.toLowerCase().includes(q))||p.principle.toLowerCase().includes(q)||p.detail.toLowerCase().includes(q));
+  renderPrecs(f);
+  if(q&&!f.length)precAI(q);
+}
+async function precAI(q){
+  const el=document.getElementById('prec-list');
+  const d=document.createElement('div');d.style.cssText='border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;font-size:12px;line-height:1.7;margin-top:8px;color:var(--text);background:var(--bg)';
+  d.textContent='Searching AI legal database…';el.appendChild(d);
+  try{
+    const r=await callAI(`Find 2-3 relevant Kenyan or international legal precedents for: "${q}". For each: CASE NAME | YEAR | COURT | KEY PRINCIPLE. Use [KE] for Kenyan cases, [INT] for international.`,CHAT_SYS,400);
+    d.innerHTML=fmt(r);
+  }catch{d.textContent='Could not retrieve additional cases.';}
+}
+function pfToggle(el){document.querySelectorAll('.pf').forEach(p=>p.classList.remove('on'));el.classList.add('on');const f=el.textContent;renderPrecs(f==='All'?PRECS:PRECS.filter(p=>p.tags.includes(f)));}
+function applyPrec(i,e){e.stopPropagation();const p=PRECS[i];nav(document.querySelector('.nav-btn'),'chat');switchTab('chat');document.getElementById('chat-input').value=`Analyse the implications of ${p.name} (${p.year}) for a matter involving ${p.tags.join(', ')}`;document.getElementById('chat-input').focus();}
+renderPrecs(PRECS);
+
+// ══════════════════════════════════════════════
+// COMPLIANCE
+// ══════════════════════════════════════════════
+async function runCompliance(){
+  const txt=document.getElementById('comp-query').value.trim();
+  if(!txt)return;
+  const res=document.getElementById('comp-result');
+  res.innerHTML='<div style="font-size:13px;color:var(--text2)">Running compliance analysis…</div>';res.classList.add('show');
+  const sys=`You are a Kenyan compliance lawyer. Check against: Constitution of Kenya 2010, Data Protection Act 2019, Law of Contract Act, Employment Act 2007, Consumer Protection Act 2012, EAC Treaty, COMESA, UNCITRAL, NY Convention, ILO conventions. Use [KE] and [INT] tags. Reply format: KENYA_SCORE: X/100 on its own line, INTL_SCORE: Y/100 on its own line, then bullet analysis.`;
+  try{
+    const r=await callAI(`Compliance check: "${txt}"`,sys,600);
+    const ke=(r.match(/KENYA_SCORE:\s*(\d+)/i)||[])[1];
+    const it=(r.match(/INTL_SCORE:\s*(\d+)/i)||[])[1];
+    const sc=n=>parseInt(n)>=80?'s-ok':parseInt(n)>=60?'s-warn':'s-bad';
+    const scores=(ke&&it)?`<div class="score-row"><div class="score-card ${sc(ke)}"><div class="score-num">${ke}/100</div><div class="score-lbl">Kenya compliance</div></div><div class="score-card ${sc(it)}"><div class="score-num">${it}/100</div><div class="score-lbl">International compliance</div></div></div>`:'';
+    res.innerHTML=scores+'<div style="font-size:13px;line-height:1.8">'+fmt(r.replace(/KENYA_SCORE:[^\n]*/i,'').replace(/INTL_SCORE:[^\n]*/i,'').trim())+'</div>';
+  }catch(e){res.innerHTML=`<div style="color:var(--danger-text);font-size:13px">Error: ${e.message}</div>`;}
+}
+
+// ══════════════════════════════════════════════
+// DOCUMENT GENERATOR
+// ══════════════════════════════════════════════
+const DOCS={
+  'will':{title:'Last will & testament',sub:'Law of Succession Act (Cap. 160) — Kenya',cat:'Testamentary',jur:['ke'],color:'#B8860B',fields:[{id:'testator',l:'Full name of testator',ph:'Full legal name'},{id:'id_no',l:'ID / Passport number',ph:'National ID or passport number'},{id:'dob',l:'Date of birth',ph:'DD/MM/YYYY'},{id:'address',l:'Residential address',ph:'Physical address, county'},{id:'executor',l:'Executor full name',ph:'Full name of executor'},{id:'executor_id',l:'Executor ID number',ph:'National ID'},{id:'beneficiaries',l:'Beneficiaries & shares',ph:'Jane Doe (ID 12345) — 50%, John Doe (ID 67890) — 50%',ta:1},{id:'specific_bequests',l:'Specific bequests',ph:'e.g. Land Title No. 123 to Jane Doe',ta:1},{id:'guardian',l:'Guardian for minor children',ph:'Name and ID (leave blank if none)'},{id:'date',l:'Date of execution',ph:'DD/MM/YYYY'}]},
+  'codicil':{title:'Codicil to will',sub:'Law of Succession Act (Cap. 160) — Kenya',cat:'Testamentary',jur:['ke'],color:'#B8860B',fields:[{id:'testator',l:'Testator full name',ph:'As in original will'},{id:'will_date',l:'Date of original will',ph:'DD/MM/YYYY'},{id:'amendment',l:'Amendment / addition',ph:'I revoke clause [X] and substitute:\nI add the following new clause:',ta:1},{id:'date',l:'Date of codicil',ph:'DD/MM/YYYY'}]},
+  'living-will':{title:'Living will / advance directive',sub:'Health Act 2017, Constitution Art. 26 — Kenya',cat:'Testamentary',jur:['ke'],color:'#B8860B',fields:[{id:'name',l:'Your full name',ph:'Full legal name'},{id:'id_no',l:'ID number',ph:'National ID'},{id:'address',l:'Address',ph:'Physical address'},{id:'proxy',l:'Healthcare proxy name',ph:'Person authorised to make decisions'},{id:'proxy_id',l:'Proxy ID number',ph:'National ID'},{id:'directives',l:'Medical directives',ph:'e.g. No mechanical ventilation if brain dead; no artificial nutrition if in persistent vegetative state',ta:1},{id:'organ_donation',l:'Organ donation',ph:'',sel:['Yes — all organs','Yes — specific organs only','No organ donation','No preference']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'affidavit':{title:'Affidavit (general)',sub:'Oaths and Statutory Declarations Act (Cap. 15) — Kenya',cat:'Sworn statements',jur:['ke'],color:'#378ADD',fields:[{id:'deponent',l:'Deponent full name',ph:'Full legal name'},{id:'id_no',l:'ID / Passport number',ph:'National ID'},{id:'occupation',l:'Occupation',ph:'e.g. Business person'},{id:'address',l:'Residential address',ph:'Physical address'},{id:'court',l:'Court (if for court)',ph:'e.g. High Court at Nairobi'},{id:'case_no',l:'Case number',ph:'e.g. Civil Case No. 123 of 2025'},{id:'facts',l:'Facts sworn to',ph:'State facts clearly and concisely…',ta:1},{id:'purpose',l:'Purpose of affidavit',ph:'e.g. In support of application for injunction'},{id:'date',l:'Date of swearing',ph:'DD/MM/YYYY'}]},
+  'stat-dec':{title:'Statutory declaration',sub:'Oaths and Statutory Declarations Act (Cap. 15) — Kenya',cat:'Sworn statements',jur:['ke'],color:'#378ADD',fields:[{id:'declarant',l:'Declarant full name',ph:'Full legal name'},{id:'id_no',l:'ID / Passport number',ph:'National ID'},{id:'address',l:'Address',ph:'Physical address'},{id:'subject',l:'Subject matter',ph:'e.g. Change of name, loss of documents'},{id:'facts',l:'Facts declared',ph:'State all relevant facts…',ta:1},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'affidavit-service':{title:'Affidavit of service',sub:'Civil Procedure Rules 2010 — Kenya',cat:'Sworn statements',jur:['ke'],color:'#378ADD',fields:[{id:'server',l:'Process server name',ph:'Full legal name'},{id:'id_no',l:'ID number',ph:'National ID'},{id:'case_no',l:'Case number',ph:'Civil Case No. 45 of 2025'},{id:'court',l:'Court',ph:'e.g. High Court at Nairobi'},{id:'doc_served',l:'Document(s) served',ph:'e.g. Plaint and summons'},{id:'served_on',l:'Person served',ph:'Full name'},{id:'service_address',l:'Address of service',ph:'Where service was effected'},{id:'service_date',l:'Date and time of service',ph:'DD/MM/YYYY at HH:MM'},{id:'mode',l:'Mode of service',ph:'',sel:['Personal service','Substituted service','Postal service','Electronic service']},{id:'date',l:'Date of swearing',ph:'DD/MM/YYYY'}]},
+  'affidavit-support':{title:'Supporting affidavit',sub:'Civil Procedure Rules 2010 — Kenya',cat:'Sworn statements',jur:['ke'],color:'#378ADD',fields:[{id:'deponent',l:'Deponent full name',ph:'Full legal name'},{id:'id_no',l:'ID number',ph:'National ID'},{id:'case_no',l:'Case number',ph:'e.g. Civil Case No. 45 of 2025'},{id:'court',l:'Court',ph:'e.g. High Court at Nairobi'},{id:'application',l:'Application supported',ph:'e.g. Chamber summons dated DD/MM/YYYY for injunction'},{id:'facts',l:'Supporting facts',ph:'The grounds upon which I support this application are…',ta:1},{id:'annexures',l:'Annexures',ph:'e.g. Annexure A — Agreement dated…'},{id:'date',l:'Date of swearing',ph:'DD/MM/YYYY'}]},
+  'chamber-summons':{title:'Chamber summons',sub:'Civil Procedure Act (Cap. 21) — Kenya',cat:'Court applications',jur:['ke'],color:'#993C1D',fields:[{id:'court',l:'Court',ph:'In the High Court of Kenya at Nairobi'},{id:'case_no',l:'Case number',ph:'Civil Case No. 45 of 2025'},{id:'applicant',l:'Applicant name',ph:'Full legal name'},{id:'respondent',l:'Respondent name',ph:'Full legal name'},{id:'orders',l:'Orders sought',ph:'1. An order that…\n2. Costs of and incidental to this application…',ta:1},{id:'grounds',l:'Grounds',ph:'Brief grounds for the application…',ta:1},{id:'return_date',l:'Proposed return date',ph:'DD/MM/YYYY'},{id:'advocate',l:'Advocate on record',ph:'Name and firm'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'originating-summons':{title:'Originating summons',sub:'Civil Procedure Act (Cap. 21) — Kenya',cat:'Court applications',jur:['ke'],color:'#993C1D',fields:[{id:'court',l:'Court',ph:'High Court of Kenya at Nairobi'},{id:'case_no',l:'Case number',ph:'Leave blank if not yet filed'},{id:'plaintiff',l:'Plaintiff / Applicant',ph:'Full name'},{id:'defendant',l:'Defendant / Respondent',ph:'Full name'},{id:'question',l:'Question(s) for determination',ph:'Whether the Plaintiff is entitled to…',ta:1},{id:'relief',l:'Relief sought',ph:'An order that…',ta:1},{id:'advocate',l:'Advocate on record',ph:'Name, firm, address'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'notice-motion':{title:'Notice of motion',sub:'Civil Procedure Rules 2010 — Kenya',cat:'Court applications',jur:['ke'],color:'#993C1D',fields:[{id:'court',l:'Court',ph:'High Court of Kenya at Nairobi'},{id:'division',l:'Division',ph:'e.g. Commercial Division'},{id:'case_no',l:'Case number',ph:'e.g. Petition No. 12 of 2025'},{id:'applicant',l:'Applicant',ph:'Full legal name'},{id:'respondent',l:'Respondent',ph:'Full legal name'},{id:'orders',l:'Orders sought',ph:'1. An order that…\n2. Costs…',ta:1},{id:'grounds',l:'Grounds',ph:'This application is premised on the grounds that…',ta:1},{id:'supporting',l:'Supporting documents',ph:'e.g. Affidavit of [Name], documents annexed hereto'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'plaint':{title:'Plaint',sub:'Civil Procedure Act (Cap. 21) — Kenya',cat:'Court applications',jur:['ke'],color:'#993C1D',fields:[{id:'court',l:'Court',ph:'High Court / Magistrates Court at…'},{id:'plaintiff',l:'Plaintiff',ph:'Full name, ID, address'},{id:'defendant',l:'Defendant',ph:'Full name, ID, address'},{id:'cause',l:'Cause of action',ph:'e.g. Breach of contract, negligence'},{id:'particulars',l:'Particulars of claim',ph:'1. On or about [date] the Defendant…',ta:1},{id:'amount',l:'Amount claimed (KES)',ph:'e.g. 1,500,000'},{id:'interest',l:'Interest claimed',ph:'e.g. 14% p.a. from date of breach'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'petition':{title:'Constitutional petition',sub:'Constitution of Kenya 2010, Art. 22 & 258',cat:'Court applications',jur:['ke','int'],color:'#993C1D',fields:[{id:'court',l:'Court',ph:'High Court of Kenya at Nairobi'},{id:'petition_no',l:'Petition number',ph:'Leave blank if not yet filed'},{id:'petitioner',l:'Petitioner name',ph:'Full name or organisation'},{id:'respondent',l:'Respondent(s)',ph:'e.g. Attorney General, Cabinet Secretary'},{id:'articles',l:'Constitutional articles violated',ph:'e.g. Articles 27, 28, 47 of the Constitution'},{id:'facts',l:'Facts giving rise to petition',ph:'Chronological account of events…',ta:1},{id:'relief',l:'Relief sought',ph:'e.g. Declaration that…; Compensation of KES…',ta:1},{id:'advocate',l:'Advocate',ph:'Name and firm'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'defence':{title:'Statement of defence',sub:'Civil Procedure Rules 2010 — Kenya',cat:'Court applications',jur:['ke'],color:'#993C1D',fields:[{id:'court',l:'Court',ph:'High Court of Kenya at Nairobi'},{id:'case_no',l:'Case number',ph:'Civil Case No. 45 of 2025'},{id:'plaintiff',l:'Plaintiff',ph:'Full name'},{id:'defendant',l:'Defendant',ph:'Full name'},{id:'admissions',l:'Facts admitted',ph:'The Defendant admits paragraphs… of the Plaint'},{id:'denials',l:'Facts denied',ph:'The Defendant denies paragraphs… and puts the Plaintiff to strict proof',ta:1},{id:'positive_defence',l:'Positive defence',ph:'Further and in the alternative, the Defendant states that…',ta:1},{id:'counterclaim',l:'Counterclaim (if any)',ph:'Leave blank if no counterclaim'},{id:'advocate',l:'Advocate on record',ph:'Name, firm, address'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'nda':{title:'Non-disclosure agreement',sub:'Law of Contract Act (Cap. 23) — Kenya',cat:'Contracts',jur:['ke','int'],color:'#639922',fields:[{id:'party_a',l:'Disclosing party',ph:'Full name / company'},{id:'party_a_type',l:'Disclosing party type',ph:'',sel:['Individual','Limited Company','Partnership','LLP']},{id:'party_b',l:'Receiving party',ph:'Full name / company'},{id:'party_b_type',l:'Receiving party type',ph:'',sel:['Individual','Limited Company','Partnership','LLP']},{id:'purpose',l:'Purpose of disclosure',ph:'e.g. Evaluation of potential business partnership'},{id:'duration',l:'Confidentiality duration',ph:'',sel:['1 year','2 years','3 years','5 years','Indefinite']},{id:'governing_law',l:'Governing law',ph:'',sel:['Laws of Kenya','Laws of England & Wales','Laws of Uganda','Laws of Tanzania']},{id:'jurisdiction',l:'Dispute resolution',ph:'',sel:['Kenyan courts (Nairobi)','LCIA Arbitration','NCIA Arbitration','UNCITRAL Arbitration']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'service-agreement':{title:'Service agreement',sub:'Law of Contract Act (Cap. 23) — Kenya',cat:'Contracts',jur:['ke','int'],color:'#639922',fields:[{id:'provider',l:'Service provider',ph:'Full name / company'},{id:'client',l:'Client',ph:'Full name / company'},{id:'services',l:'Services to be provided',ph:'Describe services in detail…',ta:1},{id:'fee',l:'Fee amount (KES)',ph:'e.g. 200,000'},{id:'fee_structure',l:'Fee structure',ph:'',sel:['Fixed fee','Monthly retainer','Hourly rate','Milestone-based']},{id:'duration',l:'Contract duration',ph:'',sel:['3 months','6 months','1 year','2 years','Until completion']},{id:'governing_law',l:'Governing law',ph:'',sel:['Laws of Kenya','Laws of England & Wales']},{id:'dispute',l:'Dispute resolution',ph:'',sel:['Nairobi courts','NCIA Arbitration','Mediation then arbitration']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'employment-contract':{title:'Employment contract',sub:'Employment Act 2007 — Kenya',cat:'Contracts',jur:['ke'],color:'#639922',fields:[{id:'employer',l:'Employer name',ph:'Company name (as registered)'},{id:'employer_reg',l:'Employer reg. number',ph:'Registration / PIN number'},{id:'employee',l:'Employee full name',ph:'Full legal name'},{id:'employee_id',l:'Employee ID number',ph:'National ID'},{id:'role',l:'Job title',ph:'e.g. Senior Associate'},{id:'start_date',l:'Start date',ph:'DD/MM/YYYY'},{id:'salary',l:'Gross monthly salary (KES)',ph:'e.g. 150,000'},{id:'probation',l:'Probation period',ph:'',sel:['3 months','6 months','No probation']},{id:'notice',l:'Notice period',ph:'',sel:['1 month','2 months','3 months','As per Employment Act']},{id:'non_compete',l:'Non-compete (if any)',ph:'',sel:['None','6 months','12 months','24 months']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'lease':{title:'Lease agreement',sub:'Land Act 2012, Landlord & Tenant Act — Kenya',cat:'Contracts',jur:['ke'],color:'#639922',fields:[{id:'landlord',l:'Landlord name',ph:'Full legal name'},{id:'tenant',l:'Tenant name',ph:'Full legal name'},{id:'premises',l:'Premises description',ph:'e.g. Flat 4B, Westlands Court, Nairobi'},{id:'lr_no',l:'LR / Title number',ph:'e.g. LR No. 209/123'},{id:'rent',l:'Monthly rent (KES)',ph:'e.g. 75,000'},{id:'deposit',l:'Security deposit (KES)',ph:'e.g. 150,000'},{id:'term',l:'Lease term',ph:'',sel:['6 months','1 year','2 years','3 years','5 years']},{id:'start_date',l:'Commencement date',ph:'DD/MM/YYYY'},{id:'use',l:'Permitted use',ph:'e.g. Residential / Commercial office'},{id:'date',l:'Date of agreement',ph:'DD/MM/YYYY'}]},
+  'sale-agreement':{title:'Sale of goods agreement',sub:'Sale of Goods Act (Cap. 31) — Kenya',cat:'Contracts',jur:['ke'],color:'#639922',fields:[{id:'seller',l:'Seller',ph:'Full name / company'},{id:'buyer',l:'Buyer',ph:'Full name / company'},{id:'goods',l:'Description of goods',ph:'Describe goods, quantity, specification…',ta:1},{id:'price',l:'Purchase price (KES)',ph:'e.g. 5,000,000'},{id:'payment_terms',l:'Payment terms',ph:'',sel:['Full payment on signing','50% deposit, balance on delivery','30/70 split','Within 30 days']},{id:'delivery',l:'Delivery terms',ph:'e.g. Ex-works Nairobi, CIF Mombasa'},{id:'warranty',l:'Warranty period',ph:'',sel:['No warranty','3 months','6 months','12 months']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'shareholders':{title:'Shareholders agreement',sub:'Companies Act 2015 — Kenya',cat:'Contracts',jur:['ke'],color:'#639922',fields:[{id:'company',l:'Company name',ph:'As per certificate of incorporation'},{id:'reg_no',l:'Registration number',ph:'PVT/123456'},{id:'shareholders',l:'Shareholders & shareholding',ph:'John Doe — 60%, Jane Doe — 40%',ta:1},{id:'directors',l:'Board composition',ph:'e.g. 3 directors; majority appoints 2'},{id:'reserved',l:'Reserved matters',ph:'New share issuance, sale of business, name change…',ta:1},{id:'dividend',l:'Dividend policy',ph:'e.g. 30% of net profit annually'},{id:'drag_tag',l:'Drag/tag-along',ph:'',sel:['Both drag and tag-along','Drag-along only','Tag-along only','None']},{id:'dispute',l:'Dispute resolution',ph:'',sel:['Nairobi courts','NCIA Arbitration','UNCITRAL Arbitration']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'poa-general':{title:'General power of attorney',sub:'Powers of Attorney Act (Cap. 53) — Kenya',cat:'Powers & authority',jur:['ke'],color:'#534AB7',fields:[{id:'donor',l:'Donor (principal) full name',ph:'Full legal name'},{id:'donor_id',l:'Donor ID number',ph:'National ID'},{id:'donor_address',l:'Donor address',ph:'Physical address'},{id:'attorney',l:'Attorney full name',ph:'Full legal name'},{id:'attorney_id',l:'Attorney ID number',ph:'National ID'},{id:'attorney_address',l:'Attorney address',ph:'Physical address'},{id:'powers',l:'Scope of powers granted',ph:'All matters concerning banking, property, legal proceedings…',ta:1},{id:'duration',l:'Duration',ph:'',sel:['Until revoked','1 year','2 years','5 years','For specific transaction only']},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'poa-specific':{title:'Specific power of attorney',sub:'Powers of Attorney Act (Cap. 53) — Kenya',cat:'Powers & authority',jur:['ke'],color:'#534AB7',fields:[{id:'donor',l:'Donor full name',ph:'Full legal name'},{id:'donor_id',l:'Donor ID',ph:'National ID'},{id:'attorney',l:'Attorney full name',ph:'Full legal name'},{id:'attorney_id',l:'Attorney ID',ph:'National ID'},{id:'purpose',l:'Specific purpose / transaction',ph:'e.g. To sell and transfer LR No. 209/123 on my behalf'},{id:'limitations',l:'Limitations on authority',ph:'e.g. Sale price not less than KES 5,000,000'},{id:'expiry',l:'Expiry',ph:'DD/MM/YYYY or "upon completion of transaction"'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'board-resolution':{title:'Board resolution',sub:'Companies Act 2015 — Kenya',cat:'Powers & authority',jur:['ke'],color:'#534AB7',fields:[{id:'company',l:'Company name',ph:'As per certificate of incorporation'},{id:'reg_no',l:'Registration number',ph:'PVT/123456'},{id:'res_type',l:'Type of resolution',ph:'',sel:['Opening bank account','Authorising signatory','Borrowing / loan','Property transaction','Appointment of director','Removal of director','Dividend declaration','Share allotment']},{id:'meeting_date',l:'Date of meeting',ph:'DD/MM/YYYY'},{id:'directors',l:'Directors present',ph:'Name 1, Name 2…'},{id:'resolution',l:'Resolution text',ph:'IT IS HEREBY RESOLVED that…',ta:1},{id:'date',l:'Date signed',ph:'DD/MM/YYYY'}]},
+  'demand-letter':{title:'Demand letter',sub:'Civil dispute pre-action notice — Kenya',cat:'Demand & notice',jur:['ke'],color:'#5F5E5A',fields:[{id:'sender',l:'Sender / law firm',ph:'Name and address'},{id:'recipient',l:'Recipient name',ph:'Full name / company'},{id:'recipient_address',l:'Recipient address',ph:'Physical / postal address'},{id:'subject',l:'Subject matter',ph:'e.g. Demand for payment of outstanding debt'},{id:'amount',l:'Amount demanded (KES)',ph:'e.g. 500,000'},{id:'background',l:'Background facts',ph:'Brief summary of the dispute…',ta:1},{id:'demand',l:'Specific demand',ph:'e.g. Payment within 14 days, delivery of goods…',ta:1},{id:'deadline_days',l:'Response deadline (days)',ph:'e.g. 14'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'notice-terminate':{title:'Notice of termination',sub:'Law of Contract Act / Employment Act — Kenya',cat:'Demand & notice',jur:['ke'],color:'#5F5E5A',fields:[{id:'party_a',l:'Terminating party',ph:'Name / company'},{id:'party_b',l:'Receiving party',ph:'Name / company'},{id:'contract_type',l:'Contract type',ph:'',sel:['Employment contract','Service agreement','Lease agreement','Supply contract','Other']},{id:'contract_date',l:'Date of original contract',ph:'DD/MM/YYYY'},{id:'grounds',l:'Grounds for termination',ph:'e.g. Breach of clause 5, redundancy, expiry of term'},{id:'notice_period',l:'Notice period',ph:'e.g. 30 days from date of this notice'},{id:'effective_date',l:'Effective date',ph:'DD/MM/YYYY'},{id:'date',l:'Date of notice',ph:'DD/MM/YYYY'}]},
+  'cease-desist':{title:'Cease & desist letter',sub:'Civil & IP law — Kenya',cat:'Demand & notice',jur:['ke','int'],color:'#5F5E5A',fields:[{id:'sender',l:'Sender / law firm',ph:'Name and address'},{id:'recipient',l:'Recipient name',ph:'Full name / company'},{id:'recipient_address',l:'Recipient address',ph:'Physical / postal address'},{id:'violation',l:'Type of violation',ph:'',sel:['IP infringement','Defamation','Breach of contract','Harassment','Trademark infringement','Copyright infringement']},{id:'facts',l:'Facts of the violation',ph:'Describe the infringing conduct in detail…',ta:1},{id:'legal_basis',l:'Legal basis',ph:'e.g. Copyright Act Cap. 130, Trade Marks Act Cap. 506'},{id:'remedy',l:'Remedy demanded',ph:'e.g. Immediate cessation, removal of content, payment of damages'},{id:'deadline_days',l:'Compliance deadline (days)',ph:'e.g. 7'},{id:'date',l:'Date',ph:'DD/MM/YYYY'}]},
+  'letters-admin':{title:'Petition — letters of administration',sub:'Law of Succession Act (Cap. 160) — Kenya',cat:'Family & probate',jur:['ke'],color:'#D4537E',fields:[{id:'court',l:'Court',ph:'High Court of Kenya at Nairobi'},{id:'petitioner',l:'Petitioner name',ph:'Full legal name'},{id:'petitioner_id',l:'Petitioner ID',ph:'National ID'},{id:'relationship',l:'Relationship to deceased',ph:'e.g. Spouse, child, sibling'},{id:'deceased',l:'Deceased full name',ph:'Full legal name'},{id:'dod',l:'Date of death',ph:'DD/MM/YYYY'},{id:'deceased_address',l:'Deceased last address',ph:'Physical address'},{id:'estate',l:'Description of estate',ph:'Land LR No. 123, motor vehicle KCA 001X, bank accounts…',ta:1},{id:'date',l:'Date of petition',ph:'DD/MM/YYYY'}]},
+  'grant-probate':{title:'Petition for grant of probate',sub:'Law of Succession Act (Cap. 160) — Kenya',cat:'Family & probate',jur:['ke'],color:'#D4537E',fields:[{id:'court',l:'Court',ph:'High Court of Kenya at Nairobi'},{id:'executor',l:'Executor / petitioner name',ph:'Full legal name'},{id:'executor_id',l:'Executor ID',ph:'National ID'},{id:'deceased',l:'Deceased full name',ph:'Full legal name'},{id:'dod',l:'Date of death',ph:'DD/MM/YYYY'},{id:'will_date',l:'Date of will',ph:'DD/MM/YYYY'},{id:'estate',l:'Description of estate',ph:'Land, vehicles, bank accounts, shares…',ta:1},{id:'date',l:'Date of petition',ph:'DD/MM/YYYY'}]},
+  'prenup':{title:'Pre-nuptial agreement',sub:'Marriage Act 2014 — Kenya',cat:'Family & probate',jur:['ke'],color:'#D4537E',fields:[{id:'party_a',l:'First party full name',ph:'Full legal name'},{id:'party_a_id',l:'First party ID',ph:'National ID'},{id:'party_b',l:'Second party full name',ph:'Full legal name'},{id:'party_b_id',l:'Second party ID',ph:'National ID'},{id:'marriage_date',l:'Intended marriage date',ph:'DD/MM/YYYY'},{id:'assets_a',l:"First party's assets",ph:'Property, investments, business interests…',ta:1},{id:'assets_b',l:"Second party's assets",ph:'Property, investments, business interests…',ta:1},{id:'joint_assets',l:'Joint assets arrangement',ph:'How jointly acquired assets will be treated'},{id:'spousal_support',l:'Spousal maintenance arrangement',ph:'e.g. KES 50,000/month for 2 years upon separation'},{id:'date',l:'Date of signing',ph:'DD/MM/YYYY'}]},
+};
+
+const CATS=['Testamentary','Sworn statements','Court applications','Contracts','Powers & authority','Demand & notice','Family & probate'];
+const CAT_COLORS={'Testamentary':'#B8860B','Sworn statements':'#378ADD','Court applications':'#993C1D','Contracts':'#639922','Powers & authority':'#534AB7','Demand & notice':'#5F5E5A','Family & probate':'#D4537E'};
+
+let currentDocId=null,generatedText='';
+
+function buildDocList(){
+  const dl=document.getElementById('dg-doclist');
+  dl.innerHTML='';
+  CATS.forEach(cat=>{
+    const entries=Object.entries(DOCS).filter(([,d])=>d.cat===cat);
+    if(!entries.length)return;
+    const label=document.createElement('div');label.className='dg-cat-label';label.textContent=cat;dl.appendChild(label);
+    entries.forEach(([id,d])=>{
+      const btn=document.createElement('button');btn.className='dg-doc-btn';btn.setAttribute('data-id',id);btn.setAttribute('data-cat',cat);
+      btn.innerHTML=`<span class="dg-dot" style="background:${CAT_COLORS[cat]}"></span>${d.title}`;
+      btn.onclick=()=>selectDoc(id);
+      dl.appendChild(btn);
+    });
+  });
+}
+
+function dgFilter(q){
+  document.querySelectorAll('.dg-doc-btn').forEach(b=>{b.style.display=!q||b.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});
+  document.querySelectorAll('.dg-cat-label').forEach(l=>{
+    const next=l.nextElementSibling;
+    const anyVis=next&&[...document.querySelectorAll(`.dg-doc-btn[data-cat="${l.textContent}"]`)].some(b=>b.style.display!=='none');
+    l.style.display=anyVis||!q?'':'none';
+  });
+}
+
+function selectDoc(id){
+  currentDocId=id;
+  const d=DOCS[id];if(!d)return;
+  document.querySelectorAll('.dg-doc-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('data-id')===id));
+  document.getElementById('dg-doc-title').textContent=d.title;
+  document.getElementById('dg-doc-sub').textContent=d.sub;
+  document.getElementById('btn-copy').style.display='none';
+  document.getElementById('btn-print').style.display='none';
+  buildDgForm(d);
+  document.getElementById('dg-preview').innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>Fill in the form and click Generate document</p></div>';
+}
+
+function buildDgForm(d){
+  const fp=document.getElementById('dg-form');
+  let h='';
+  const jh=d.jur.map(j=>j==='ke'?'<span class="jt-ke">Kenya</span>':'<span class="jt-int">International</span>').join('');
+  h+=`<div class="fg"><div class="fl">Jurisdiction</div><div class="jur-tags">${jh}</div></div>`;
+  h+='<div class="fg-div">Document details</div>';
+  d.fields.forEach(f=>{
+    h+=`<div class="fg"><label class="fl" for="dgf_${f.id}">${f.l}</label>`;
+    if(f.ta)h+=`<textarea class="fi fi-ta" id="dgf_${f.id}" placeholder="${f.ph||''}"></textarea>`;
+    else if(f.sel)h+=`<select class="fi-sel" id="dgf_${f.id}"><option value="">Select…</option>${f.sel.map(o=>`<option>${o}</option>`).join('')}</select>`;
+    else h+=`<input class="fi" id="dgf_${f.id}" placeholder="${f.ph||''}" type="text"/>`;
+    h+='</div>';
+  });
+  h+=`<button class="btn-gold" id="dg-gen-btn" onclick="generateDoc()" style="width:100%;height:38px">Generate document</button>`;
+  fp.innerHTML=h;
+}
+
+function getDgVals(){
+  const d=DOCS[currentDocId];if(!d)return{};
+  const v={};d.fields.forEach(f=>{const el=document.getElementById('dgf_'+f.id);if(el)v[f.id]=el.value||('['+f.l+']');});
+  return v;
+}
+
+async function generateDoc(){
+  if(!currentDocId)return;
+  const d=DOCS[currentDocId];
+  const vals=getDgVals();
+  const btn=document.getElementById('dg-gen-btn');
+  btn.disabled=true;btn.textContent='Generating…';
+  document.getElementById('dg-preview').innerHTML='<div class="loading-wrap"><svg class="spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg><span>Drafting your document…</span></div>';
+  const fieldSummary=Object.entries(vals).map(([k,v])=>`${k}: ${v}`).join('\n');
+  const prompt=`Draft a complete, formal ${d.title} for use in Kenya. Statute: ${d.sub}.\n\nDetails:\n${fieldSummary}\n\nGenerate the FULL document text exactly as it should appear when printed, with proper headings, numbered clauses, recitals, operative clauses, signature blocks with witness lines, attestation clauses, and all required Kenyan legal language. Use [BLANK] for any fields not provided. Reference applicable Kenyan statutes throughout.`;
+  const sys=`You are a senior Kenyan advocate with 20 years experience. Draft complete, print-ready formal legal documents strictly following Kenyan legal practice and formatting requirements:
+
+MANDATORY KENYAN DOCUMENT FORMATTING RULES:
+1. TITLE BLOCK: Centre the document title in FULL CAPITALS. Below it, include the governing statute reference.
+2. PARTIES: Identify parties with full legal name, ID/Passport/Registration number, physical address, and county. Use defined terms e.g. "hereinafter called the VENDOR".
+3. RECITALS: Begin with "WHEREAS:" recitals setting out background facts.
+4. OPERATIVE CLAUSES: Number all clauses with Arabic numerals (1, 2, 3...). Sub-clauses use (a), (b), (c)... and (i), (ii), (iii)...
+5. CONSIDERATION: State KES amounts in both figures and words e.g. "Kenya Shillings One Million (KES 1,000,000)".
+6. ATTESTATION: Use proper Kenyan attestation block:
+   - "IN WITNESS WHEREOF the parties hereto have executed this [document] the day and year first above written"
+   - Signature lines: "SIGNED by [NAME] (ID No. [  ]) in the presence of:"
+   - Witness block: "Witness: Name:_______ ID No.:_______ Address:_______ Signature:_______ Date:_______"
+   - For deeds: include "SIGNED SEALED AND DELIVERED"
+7. AFFIDAVITS/STATUTORY DECLARATIONS: Must include:
+   - Venue line: "IN THE [COURT] OF KENYA AT [TOWN]" (if court document)
+   - Title: "AFFIDAVIT OF [DEPONENT NAME]"
+   - Intro para: "I, [full name], of [address], [occupation], do solemnly swear/affirm that:"
+   - Numbered paragraphs of facts
+   - Jurat: "SWORN/AFFIRMED at [Town] in the Republic of Kenya this [  ] day of [Month] 20[  ] BEFORE ME: [Commissioner for Oaths / Notary Public]" with seal/stamp notation
+8. COURT DOCUMENTS: Include full court header: "IN THE [COURT] OF KENYA AT [TOWN] [CASE TYPE] NO. [  ] OF [YEAR]"
+9. POWERS OF ATTORNEY: Note requirement for execution before Commissioner for Oaths and registration under Powers of Attorney Act (Cap. 53) if irrevocable.
+10. WILLS: Note requirement for two witnesses present simultaneously who must sign in testator's presence per Section 11, Law of Succession Act.
+11. DATE FORMAT: Use "this [  ] day of [Month], 20[  ]" — never DD/MM/YYYY format in the body.
+12. LAND DOCUMENTS: Reference Land Registration Act 2012 (not repealed RLA). Use "Title No." not "LR No." for parcels registered under Land Registration Act 2012.
+13. STAMP DUTY NOTE: Add a note at the end: "N.B. This document is subject to stamp duty under the Stamp Duty Act (Cap. 480) at [applicable rate]."
+
+Generate the COMPLETE document text exactly as it should appear when printed. No commentary, no preamble, no markdown.`;
+  try{
+    const raw=await callAI(prompt,sys,1500);
+    generatedText=raw;
+    renderDocPreview(raw,d);
+    document.getElementById('btn-copy').style.display='inline-block';
+    document.getElementById('btn-print').style.display='inline-block';
+  }catch(e){
+    document.getElementById('dg-preview').innerHTML=`<div style="padding:20px;font-size:13px;color:var(--danger-text)">Error: ${e.message}<br><br>Please ensure your API key is set correctly in the HTML file.</div>`;
+  }
+  btn.disabled=false;btn.textContent='Regenerate document';
+}
+
+function renderDocPreview(text,d){
+  const lines=text.split('\n');
+  let html='<div class="dp-header">';
+  html+=`<div class="dp-court">${d.sub}</div>`;
+  html+=`<div class="dp-title">${d.title.toUpperCase()}</div>`;
+  html+=`<div class="dp-ref">Generated ${new Date().toLocaleDateString('en-KE',{day:'2-digit',month:'long',year:'numeric'})}</div>`;
+  html+='</div><div class="dp-body">';
+  lines.forEach(line=>{
+    if(!line.trim()){html+='<p style="margin-bottom:4px"> </p>';return;}
+    const f=line.replace(/\[([^\]]+)\]/g,'<span class="dp-blank">$1</span>');
+    if(/^[A-Z\s]{6,}$/.test(line.trim())&&line.trim().length<80)html+=`<p style="font-weight:700;font-family:inherit;margin-top:14px;margin-bottom:6px;font-size:13px">${f}</p>`;
+    else if(/^\d+\.|^[a-z]\)|^\([a-z]\)/.test(line))html+=`<p style="padding-left:20px">${f}</p>`;
+    else html+=`<p>${f}</p>`;
+  });
+  html+='</div>';
+  document.getElementById('dg-preview').innerHTML=html;
+}
+
+function copyDoc(){
+  if(!generatedText)return;
+  navigator.clipboard.writeText(generatedText).then(()=>{const b=document.getElementById('btn-copy');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy text',2000);}).catch(()=>alert('Select text manually to copy.'));
+}
+
+function printDoc(){
+  const content=document.getElementById('dg-preview').innerHTML;
+  const d=DOCS[currentDocId];
+  const w=window.open('','_blank','width=850,height=950');
+  w.document.write(`<!DOCTYPE html><html><head><title>${d?d.title:'Document'}</title><style>
+    body{font-family:Georgia,'Times New Roman',serif;max-width:740px;margin:48px auto;line-height:2;font-size:12.5pt;color:#000}
+    .dp-header{text-align:center;border-bottom:1.5px solid #333;padding-bottom:18px;margin-bottom:24px}
+    .dp-title{font-size:15pt;font-weight:bold;margin:6px 0;text-transform:uppercase}
+    .dp-court{font-size:9pt;color:#555;text-transform:uppercase;letter-spacing:.07em;font-family:Arial,sans-serif}
+    .dp-ref{font-size:9pt;color:#777;font-family:Arial,sans-serif}
+    .dp-body p{margin-bottom:10px}
+    .dp-blank{border-bottom:1px solid #000;min-width:100px;display:inline-block;color:#B8860B;font-style:italic}
+    @media print{body{margin:18mm 20mm}button{display:none}}
+  </style></head><body>`);
+  w.document.write(content);
+  w.document.write(`<script>window.onload=function(){window.print()}<\/script></body></html>`);
+  w.document.close();
+}
+
+// ══════════════════════════════════════════════
+// FEE CALCULATOR — Advocates (Remuneration) Order
+// L.N. 64/1962 as amended by L.N. 35/2014 & L.N. 45/2014
+// ══════════════════════════════════════════════
+
+function fmtKES(n){return'KES '+Math.round(n).toLocaleString('en-KE');}
+
+// ── Schedule 1: Sales & Purchases of Land ──
+function scheduleOneSaleFee(v){
+  // Cumulative bands per L.N.35/2014
+  let fee=0;
+  const b1=Math.min(v,5000000);
+  fee=Math.max(b1*0.02,35000);
+  if(v>5000000){const b2=Math.min(v,100000000)-5000000;fee+=(b2*0.015);}
+  if(v>100000000){const b3=Math.min(v,250000000)-100000000;fee+=(b3*0.0125);}
+  if(v>250000000){const b4=Math.min(v,1000000000)-250000000;fee+=(b4*0.01);}
+  if(v>1000000000){fee+=((v-1000000000)*0.001);}
+  return fee;
+}
+
+function calcS1(){
+  const v=parseFloat(document.getElementById('s1-val').value)||0;
+  const role=document.getElementById('s1-role').value;
+  const agr=document.getElementById('s1-agr').value;
+  if(!v){document.getElementById('s1-result').classList.remove('show');return;}
+  const base=scheduleOneSaleFee(v);
+  let vFee=base,pFee=base,total=0;
+  if(agr==='no')vFee=vFee*(2/3);
+  let rows='';
+  if(role==='vendor'||role==='both'){rows+=`<div class="fee-br-row"><span>Vendor's advocate fee</span><span>${fmtKES(vFee)}</span></div>`;total+=vFee;}
+  if(role==='purchaser'||role==='both'){rows+=`<div class="fee-br-row"><span>Purchaser's advocate fee</span><span>${fmtKES(pFee)}</span></div>`;total+=pFee;}
+  if(role==='both')rows+=`<div class="fee-br-row total"><span>Total (both sides)</span><span>${fmtKES(total)}</span></div>`;
+  else total=role==='vendor'?vFee:pFee;
+  document.getElementById('s1-main').textContent=fmtKES(total);
+  document.getElementById('s1-bd').innerHTML=rows;
+  document.getElementById('s1-result').classList.add('show');
+}
+
+// ── Schedule 2: Leases ──
+function scheduleTwoLeaseFee(annualRent){
+  // NOT cumulative per Note 4, Schedule 2
+  if(annualRent<=500000)return Math.max(annualRent*0.15,20000);
+  if(annualRent<=3000000)return Math.max(500000*0.15,20000)+(annualRent-500000)*0.03;
+  return Math.max(500000*0.15,20000)+(3000000-500000)*0.03+(annualRent-3000000)*0.01;
+}
+
+function calcS2(){
+  const rent=parseFloat(document.getElementById('s2-rent').value)||0;
+  const role=document.getElementById('s2-role').value;
+  if(!rent){document.getElementById('s2-result').classList.remove('show');return;}
+  const base=scheduleTwoLeaseFee(rent);
+  const fee=role==='lessee'?base*0.5:base;
+  const rows=`<div class="fee-br-row"><span>${role==='lessor'?'Lessor (preparing)':'Lessee (perusing)'} — annual rent</span><span>${fmtKES(rent)}</span></div>`
+    +`<div class="fee-br-row"><span>Scale fee (${role==='lessee'?'50% of lessor fee':'full'})</span><span>${fmtKES(fee)}</span></div>`;
+  document.getElementById('s2-main').textContent=fmtKES(fee);
+  document.getElementById('s2-bd').innerHTML=rows;
+  document.getElementById('s2-result').classList.add('show');
+}
+
+// ── Schedule 1 (2nd Scale): Mortgages & Charges ──
+function scheduleMortgageFee(v){
+  let fee=0;
+  const b1=Math.min(v,2500000);fee=Math.max(b1*0.02,28000);
+  if(v>2500000){fee+=(Math.min(v,5000000)-2500000)*0.0175;}
+  if(v>5000000){fee+=(Math.min(v,100000000)-5000000)*0.01;}
+  if(v>100000000){fee+=(Math.min(v,250000000)-100000000)*0.0075;}
+  if(v>250000000){fee+=(Math.min(v,1000000000)-250000000)*0.0015;}
+  if(v>1000000000){fee+=((v-1000000000)*0.001);}
+  return fee;
+}
+
+function calcS1b(){
+  const v=parseFloat(document.getElementById('s1b-val').value)||0;
+  const role=document.getElementById('s1b-role').value;
+  if(!v){document.getElementById('s1b-result').classList.remove('show');return;}
+  const granteeFee=scheduleMortgageFee(v);
+  const grantorFee=granteeFee*0.5;
+  let total=0,rows='';
+  if(role==='grantee'){total=granteeFee;rows=`<div class="fee-br-row"><span>Grantee's (lender's) advocate fee</span><span>${fmtKES(granteeFee)}</span></div>`;}
+  else if(role==='grantor'){total=grantorFee;rows=`<div class="fee-br-row"><span>Grantor's (borrower's) advocate fee</span><span>${fmtKES(grantorFee)}</span></div>`;}
+  else{total=granteeFee+grantorFee;rows=`<div class="fee-br-row"><span>Grantee's advocate fee</span><span>${fmtKES(granteeFee)}</span></div><div class="fee-br-row"><span>Grantor's advocate fee (50%)</span><span>${fmtKES(grantorFee)}</span></div><div class="fee-br-row total"><span>Total (both sides)</span><span>${fmtKES(total)}</span></div>`;}
+  document.getElementById('s1b-main').textContent=fmtKES(total);
+  document.getElementById('s1b-bd').innerHTML=rows;
+  document.getElementById('s1b-result').classList.add('show');
+}
+
+// ── Schedule 6: High Court (L.N.35/2014 rates) ──
+function schedSixBase_1a(v){
+  if(v<=500000)return 45000;
+  if(v<=750000)return 65000;
+  if(v<=1000000)return 75000;
+  if(v<=20000000)return 75000+(v-1000000)*0.0175;
+  return 75000+(20000000-1000000)*0.0175+(v-20000000)*0.015;
+}
+function schedSixBase_1b(v){
+  if(v<=500000)return 75000;
+  if(v<=750000)return 90000;
+  if(v<=1000000)return 120000;
+  if(v<=20000000)return 120000+(v-1000000)*0.02;
+  return 120000+(20000000-1000000)*0.02+(v-20000000)*0.015;
+}
+function calcS6(){
+  const v=parseFloat(document.getElementById('s6-val').value)||0;
+  const type=document.getElementById('s6-type').value;
+  const basis=document.getElementById('s6-basis').value;
+  if(!v){document.getElementById('s6-result').classList.remove('show');return;}
+  let base=schedSixBase_1b(v),label='',pct='';
+  if(type==='undefended'){base=schedSixBase_1b(v)*0.65;label='Undefended';pct='65% of scale 1b';}
+  else if(type==='summary'){base=schedSixBase_1b(v)*0.75;label='Summary determination';pct='75% of scale 1b';}
+  else if(type==='settled_pre'){base=schedSixBase_1b(v)*0.85;label='Settled pre-hearing';pct='85% of scale 1b';}
+  else if(type==='uncontested'){base=schedSixBase_1a(v);label='Uncontested (no defence)';pct='Scale 1a';}
+  else{base=schedSixBase_1b(v);label='Fully contested';pct='Scale 1b';}
+  const fee=basis==='ac'?base*1.5:base;
+  const rows=`<div class="fee-br-row"><span>${label} (${pct})</span><span>${fmtKES(base)}</span></div>`
+    +(basis==='ac'?`<div class="fee-br-row"><span>Advocate &amp; client uplift (+50%)</span><span>${fmtKES(base*0.5)}</span></div><div class="fee-br-row total"><span>A&amp;C instruction fee</span><span>${fmtKES(fee)}</span></div>`:'');
+  document.getElementById('s6-main').textContent=fmtKES(fee);
+  document.getElementById('s6-bd').innerHTML=rows;
+  document.getElementById('s6-result').classList.add('show');
+}
+
+// ── Schedule 7: Magistrates Court (L.N.45/2014 rates) ──
+function calcS7(){
+  const v=parseFloat(document.getElementById('s7-val').value)||0;
+  const scale=document.getElementById('s7-scale').value;
+  if(!v){document.getElementById('s7-result').classList.remove('show');return;}
+  // L.N.45/2014 table
+  const bands=[
+    [0,50000,10000,15000],
+    [50000,100000,15000,30000],
+    [100000,200000,30000,40000],
+    [200000,500000,45000,65000],
+    [500000,1000000,65000,90000],
+    [1000000,2000000,90000,120000]
+  ];
+  let fee=0,bandLabel='';
+  for(const[lo,hi,low,high] of bands){
+    if(v>lo&&v<=hi){fee=scale==='lower'?low:high;bandLabel=`${fmtKES(lo)}–${fmtKES(hi)}`;break;}
+  }
+  if(v>2000000){
+    const base2m=scale==='lower'?120000:120000; // at 2m
+    const excess=v-2000000;
+    fee=(scale==='lower'?120000:120000)+excess*0.25;
+    bandLabel='Over KES 2,000,000';
+  }
+  const rows=`<div class="fee-br-row"><span>Claim band: ${bandLabel}</span><span></span></div>`
+    +`<div class="fee-br-row"><span>${scale==='lower'?'Lower':'Higher'} scale fee</span><span>${fmtKES(fee)}</span></div>`;
+  document.getElementById('s7-main').textContent=fmtKES(fee);
+  document.getElementById('s7-bd').innerHTML=rows;
+  document.getElementById('s7-result').classList.add('show');
+}
+
+// ── Schedule 10: Probate & Administration ──
+function calcS10(){
+  const v=parseFloat(document.getElementById('s10-val').value)||0;
+  const type=document.getElementById('s10-type').value;
+  if(!v){document.getElementById('s10-result').classList.remove('show');return;}
+  // Schedule 10 uses Schedule 1 (Sale) rates as a guide for estate value
+  // Full admin = Schedule 1 sale fee on estate value (standard practice in Kenya)
+  // Grant only ≈ 60% of full admin
+  const full=scheduleOneSaleFee(v);
+  const grant=full*0.6;
+  const fee=type==='admin'?full:grant;
+  const label=type==='admin'?'Full administration (Schedule 10)':'Grant only (approx. 60% of full admin)';
+  const rows=`<div class="fee-br-row"><span>${label}</span><span>${fmtKES(fee)}</span></div>`;
+  document.getElementById('s10-main').textContent=fmtKES(fee);
+  document.getElementById('s10-bd').innerHTML=rows;
+  document.getElementById('s10-result').classList.add('show');
+}
+
+// ── Schedule 5: Debt Collection ──
+function calcS5(){
+  const v=parseFloat(document.getElementById('s5-val').value)||0;
+  const stage=document.getElementById('s5-stage').value;
+  if(!v){document.getElementById('s5-result').classList.remove('show');return;}
+  let fee=0;
+  if(v<=100000){fee=v*0.10;}
+  else if(v<=500000){fee=10000+(v-100000)*0.05;}
+  else if(v<=2000000){fee=50000+(v-500000)*0.03;}
+  else{fee=100000+(v-2000000)*0.015;}
+  if(stage==='demand'){fee=Math.max(fee*0.5,1000);}
+  const rows=`<div class="fee-br-row"><span>Debt amount</span><span>${fmtKES(v)}</span></div>`
+    +`<div class="fee-br-row"><span>${stage==='demand'?'Demand letter only (50% of scale, min KES 1,000)':'Full non-contentious recovery'}</span><span>${fmtKES(fee)}</span></div>`;
+  document.getElementById('s5-main').textContent=fmtKES(fee);
+  document.getElementById('s5-bd').innerHTML=rows;
+  document.getElementById('s5-result').classList.add('show');
+}
+
+// ── Schedule 3/4: Company & Trademark ──
+const S3_FEES={
+  company_local:{label:'Company incorporation (Schedule 3)',fee:60000},
+  company_foreign:{label:'Foreign company registration (Schedule 3)',fee:60000},
+  tm_one:{label:'Trademark — 1 mark, 1 class (Schedule 4)',fee:42000},
+  tm_two:{label:'Trademark — 2nd mark, same proprietor (Schedule 4)',fee:29000},
+  tm_renew:{label:'Trademark renewal — 1 class (Schedule 4)',fee:25000},
+  tm_assign:{label:'Trademark assignment — 1 mark (Schedule 4)',fee:25000}
+};
+function calcS3(){
+  const type=document.getElementById('s3-type').value;
+  const d=S3_FEES[type];
+  document.getElementById('s3-main').textContent=fmtKES(d.fee);
+  document.getElementById('s3-bd').innerHTML=`<div class="fee-br-row"><span>${d.label}</span><span>${fmtKES(d.fee)}</span></div>`;
+}
+// init
+calcS3();
+
+
+// ══════════════════════════════════════════════
+// SUPABASE CONFIG
+// 1. Go to https://supabase.com → New project
+// 2. Settings → API → copy Project URL and anon key
+// 3. Paste below
+// ══════════════════════════════════════════════
+const SUPABASE_URL  = 'https://luodoituiuruktlihuam.supabase.co';      // e.g. https://xyzabc.supabase.co
+const SUPABASE_ANON = 'sb_publishable_aLe7aC7N-NQ4Mv4MylZpHA_EWPK7Ijr'; // e.g. eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+// ── REQUIRED SUPABASE TABLES ──────────────────
+// Run these SQL statements in Supabase SQL Editor:
+//
+// -- 1. User profiles (extends auth.users)
+// CREATE TABLE public.profiles (
+//   id           UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+//   full_name    TEXT,
+//   firm         TEXT,
+//   role         TEXT DEFAULT 'user',  -- 'user' or 'admin'
+//   created_at   TIMESTAMPTZ DEFAULT NOW()
+// );
+// ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+// CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+// CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+// -- Admin can see all profiles:
+// CREATE POLICY "Admin read all profiles" ON public.profiles FOR SELECT USING (
+//   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
+// );
+//
+// -- 2. Activity log
+// CREATE TABLE public.activity_log (
+//   id         BIGSERIAL PRIMARY KEY,
+//   user_id    UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+//   user_email TEXT,
+//   action     TEXT NOT NULL,   -- 'login','chat','doc_generate','clause','compliance','fee_calc'
+//   detail     TEXT,
+//   created_at TIMESTAMPTZ DEFAULT NOW()
+// );
+// ALTER TABLE public.activity_log ENABLE ROW LEVEL SECURITY;
+// CREATE POLICY "Users insert own logs" ON public.activity_log FOR INSERT WITH CHECK (auth.uid() = user_id);
+// CREATE POLICY "Admin read all logs" ON public.activity_log FOR SELECT USING (
+//   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
+// );
+//
+// -- 3. Auto-create profile on signup (Supabase DB function)
+// CREATE OR REPLACE FUNCTION public.handle_new_user()
+// RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+// BEGIN
+//   INSERT INTO public.profiles (id, full_name, firm, role)
+//   VALUES (
+//     NEW.id,
+//     NEW.raw_user_meta_data->>'full_name',
+//     NEW.raw_user_meta_data->>'firm',
+//     'user'
+//   );
+//   RETURN NEW;
+// END;
+// $$;
+// CREATE TRIGGER on_auth_user_created
+//   AFTER INSERT ON auth.users
+//   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+// ─────────────────────────────────────────────
+
+let sbClient = null;
+let currentUser = null;
+let currentProfile = null;
+
+// Init Supabase client (runs after SDK is loaded)
+function initSupabase(){
+  if(SUPABASE_URL.includes('YOUR_')||SUPABASE_ANON.includes('YOUR_')){
+    console.warn('LexAI: Supabase not configured — running in demo mode');
+    // Demo mode: bypass auth for local testing only
+    simulateDemoLogin();
+    return;
+  }
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  // Check for existing session
+  sbClient.auth.getSession().then(({data:{session}})=>{
+    if(session){onAuthSuccess(session.user);}
+    // Listen for auth state changes
+    sbClient.auth.onAuthStateChange((_,session)=>{
+      if(session){onAuthSuccess(session.user);}
+      else{showAuthOverlay();}
+    });
+  });
+}
+
+// ── AUTH UI ──────────────────────────────────
+function authTab(t){
+  document.getElementById('tab-signin').classList.toggle('active',t==='signin');
+  document.getElementById('form-signin').style.display=t==='signin'?'flex':'none';
+}
+
+function setAuthMsg(id,text,type){
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.className='auth-msg '+(type||'');
+}
+
+async function doSignIn(){
+  if(!sbClient){simulateDemoLogin();return;}
+  const email=document.getElementById('si-email').value.trim();
+  const pass=document.getElementById('si-pass').value;
+  if(!email||!pass){setAuthMsg('si-msg','Please enter your email and password.','err');return;}
+  const btn=document.getElementById('si-btn');
+  btn.disabled=true;btn.textContent='Signing in…';
+  const {data,error}=await sbClient.auth.signInWithPassword({email,password:pass});
+  btn.disabled=false;btn.textContent='Sign In';
+  if(error){setAuthMsg('si-msg',error.message,'err');return;}
+  onAuthSuccess(data.user);
+}
+
+async function doSignUp(){
+  if(!sbClient){simulateDemoLogin();return;}
+  const name=document.getElementById('su-name').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  const firm=document.getElementById('su-firm').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  if(!name||!email||!pass){setAuthMsg('su-msg','Please fill in all required fields.','err');return;}
+  if(pass.length<8){setAuthMsg('su-msg','Password must be at least 8 characters.','err');return;}
+  const btn=document.getElementById('su-btn');
+  btn.disabled=true;btn.textContent='Creating account…';
+  const {data,error}=await sbClient.auth.signUp({
+    email,password:pass,
+    options:{data:{full_name:name,firm:firm||''}}
+  });
+  btn.disabled=false;btn.textContent='Create Account';
+  if(error){setAuthMsg('su-msg',error.message,'err');return;}
+  if(data.user&&!data.session){
+    setAuthMsg('su-msg','Account created! Please check your email to confirm your address, then sign in.','ok');
+    return;
+  }
+  onAuthSuccess(data.user);
+}
+
+async function doSignOut(){
+  if(sbClient) await sbClient.auth.signOut();
+  currentUser=null;currentProfile=null;
+  showAuthOverlay();
+}
+
+async function onAuthSuccess(user){
+  currentUser=user;
+  // Fetch profile
+  if(sbClient){
+    try{
+      const {data,error}=await sbClient.from('profiles').select('*').eq('id',user.id).single();
+      if(error&&(error.code==='42P01'||String(error.message).includes('does not exist'))){
+        console.error('DKM: profiles table missing. Run SQL setup in Supabase SQL Editor.');
+        currentProfile={full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'admin'};
+      } else {
+        currentProfile=data||{full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'user'};
+      }
+    }catch(e){
+      currentProfile={full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'user'};
+    }
+  } else {
+    currentProfile={full_name:user.email,firm:'Dennis Kimani Mutonga Advocate',role:'admin'};
+  }
+  hideAuthOverlay();
+  updateUserPill();
+  logActivity('login','Session started');
+}
+
+function showAuthOverlay(){
+  document.getElementById('auth-overlay').classList.remove('hidden');
+  document.getElementById('user-pill-wrap').style.display='none';
+}
+function hideAuthOverlay(){
+  document.getElementById('auth-overlay').classList.add('hidden');
+}
+
+function updateUserPill(){
+  if(!currentProfile)return;
+  const name=currentProfile.full_name||currentUser?.email||'User';
+  const role=currentProfile.role==='admin'?'Administrator':currentProfile.firm||'User';
+  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('user-avatar-initials').textContent=initials;
+  document.getElementById('user-display-name').textContent=name;
+  document.getElementById('user-display-role').textContent=role;
+  document.getElementById('user-pill-wrap').style.display='block';
+  // Show admin elements if admin
+  if(currentProfile.role==='admin'){
+    document.getElementById('admin-nav-section').style.display='block';
+    document.getElementById('tab-admin').style.display='flex';
+  }
+}
+
+// ── ACTIVITY LOGGING ────────────────────────
+async function logActivity(action,detail){
+  if(!sbClient||!currentUser)return;
+  try{
+    await sbClient.from('activity_log').insert({
+      user_id:currentUser.id,
+      user_email:currentUser.email,
+      action,
+      detail:detail?String(detail).slice(0,200):null
+    });
+  }catch(e){console.warn('Log error:',e);}
+}
+
+// ── ADMIN DATA ───────────────────────────────
+async function loadAdminData(){
+  if(!sbClient||currentProfile?.role!=='admin')return;
+  // Load users
+  const {data:users}=await sbClient.from('profiles').select('*,email:id').order('created_at',{ascending:false});
+  // Supabase doesn't expose auth.users email via profiles directly - join workaround
+  // We use user_email stored in activity_log for display
+  const {data:logs}=await sbClient.from('activity_log').select('*').order('created_at',{ascending:false}).limit(100);
+  const {count:userCount}=await sbClient.from('profiles').select('*',{count:'exact',head:true});
+  const today=new Date().toISOString().slice(0,10);
+  const todayLogs=logs?.filter(l=>l.created_at?.startsWith(today))||[];
+  const docLogs=logs?.filter(l=>l.action==='doc_generate')||[];
+  const chatLogs=logs?.filter(l=>l.action==='chat')||[];
+
+  document.getElementById('stat-users').textContent=userCount??'—';
+  document.getElementById('stat-today').textContent=todayLogs.length;
+  document.getElementById('stat-docs').textContent=docLogs.length;
+  document.getElementById('stat-chats').textContent=chatLogs.length;
+
+  // Users table — get emails from log
+  const emailMap={};
+  logs?.forEach(l=>{if(l.user_id&&l.user_email)emailMap[l.user_id]=l.user_email;});
+  const usersHtml=(users||[]).map(u=>{
+    const email=emailMap[u.id]||u.id.slice(0,8)+'…';
+    const joined=u.created_at?new Date(u.created_at).toLocaleDateString('en-KE',{day:'2-digit',month:'short',year:'numeric'}):'—';
+    return`<div class="users-row"><div>${email}<br><span style="font-size:10px;color:var(--text3)">${u.full_name||''}</span></div><div><span class="${u.role==='admin'?'badge-admin':'badge-user'}">${u.role||'user'}</span></div><div>${joined}</div><div style="font-size:11px;color:var(--text3)">${u.firm||'—'}</div></div>`;
+  }).join('')||'<div style="padding:14px;font-size:12px;color:var(--text3)">No users found.</div>';
+  document.getElementById('admin-users-body').innerHTML=usersHtml;
+
+  // Logs table
+  const actionClass={login:'la-login',chat:'la-chat',doc_generate:'la-doc',clause:'la-clause',compliance:'la-comp',fee_calc:'la-fee'};
+  const logsHtml=(logs||[]).map(l=>{
+    const t=new Date(l.created_at).toLocaleString('en-KE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    const cls=actionClass[l.action]||'la-login';
+    return`<div class="log-row"><div style="font-size:11px;color:var(--text3)">${t}</div><div style="font-size:11px">${l.user_email||'—'}</div><div><span class="log-action-badge ${cls}">${l.action}</span></div><div style="font-size:11px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.detail||''}</div></div>`;
+  }).join('')||'<div style="padding:14px;font-size:12px;color:var(--text3)">No activity yet.</div>';
+  document.getElementById('admin-log-body').innerHTML=logsHtml;
+}
+
+// ── DEMO MODE (no Supabase configured) ────────
+function simulateDemoLogin(){
+  currentUser={id:'demo',email:'demo@dkm-law.co.ke'};
+  currentProfile={full_name:'Demo User',firm:'Dennis Kimani Mutonga Advocate',role:'admin'};
+  hideAuthOverlay();
+  updateUserPill();
+  console.log('LexAI: Running in demo mode — configure Supabase to enable real auth.');
+}
+
+// ── HOOK LOGGING INTO EXISTING FUNCTIONS ──────
+// Wrap sendChat to log
+const _origSendChat=sendChat;
+window.sendChat=async function(){
+  const txt=document.getElementById('chat-input')?.value?.trim();
+  if(txt)logActivity('chat',txt.slice(0,150));
+  return _origSendChat.apply(this,arguments);
+};
+// Wrap generateDoc
+const _origGenerateDoc=generateDoc;
+window.generateDoc=async function(){
+  const docTitle=currentDocId?DOCS[currentDocId]?.title:'unknown';
+  logActivity('doc_generate',docTitle);
+  return _origGenerateDoc.apply(this,arguments);
+};
+// Wrap extractClauses
+const _origExtract=extractClauses;
+window.extractClauses=async function(){
+  logActivity('clause','Clause extraction');
+  return _origExtract.apply(this,arguments);
+};
+// Wrap runCompliance
+const _origCompliance=runCompliance;
+window.runCompliance=async function(){
+  const q=document.getElementById('comp-query')?.value?.trim();
+  logActivity('compliance',q?.slice(0,100)||'compliance check');
+  return _origCompliance.apply(this,arguments);
+};
+// Log fee calculations on tab switch
+const _origSwitchTab=switchTab;
+window.switchTab=function(t){
+  if(t==='fees')logActivity('fee_calc','Fee calculator opened');
+  if(t==='admin')loadAdminData();
+  return _origSwitchTab.apply(this,arguments);
+};
+
+// ── ADMIN: CREATE USER ────────────────────────
+async function adminCreateUser(){
+  if(!sbClient||currentProfile?.role!=='admin'){
+    alert('Admin access required.');return;
+  }
+  const name=document.getElementById('cu-name').value.trim();
+  const email=document.getElementById('cu-email').value.trim();
+  const pass=document.getElementById('cu-pass').value;
+  const role=document.getElementById('cu-role').value;
+  const msgEl=document.getElementById('cu-msg');
+  const btn=document.getElementById('cu-btn');
+
+  function showMsg(txt,type){
+    msgEl.textContent=txt;
+    msgEl.style.display='block';
+    msgEl.style.background=type==='ok'?'var(--success-bg)':'var(--danger-bg)';
+    msgEl.style.color=type==='ok'?'var(--success-text)':'var(--danger-text)';
+    msgEl.style.border=type==='ok'?'0.5px solid #97c459':'0.5px solid #f09595';
+  }
+
+  if(!name||!email||!pass){showMsg('Please fill in all fields.','err');return;}
+  if(pass.length<8){showMsg('Password must be at least 8 characters.','err');return;}
+
+  btn.disabled=true;btn.textContent='Creating…';
+  msgEl.style.display='none';
+
+  try{
+    // Use Supabase Admin API via Edge Function is not available in client SDK directly.
+    // Use signUp with auto-confirm — admin creates user with their credentials.
+    const {data,error}=await sbClient.auth.signUp({
+      email,password:pass,
+      options:{data:{full_name:name,firm:'Dennis Kimani Mutonga Advocate'}}
+    });
+    if(error){showMsg(error.message,'err');return;}
+    // Update role if admin
+    if(role==='admin'&&data.user){
+      await sbClient.from('profiles').update({role:'admin',full_name:name}).eq('id',data.user.id);
+    }
+    showMsg(`✓ User created: ${email}. They will receive a confirmation email.`,'ok');
+    document.getElementById('cu-name').value='';
+    document.getElementById('cu-email').value='';
+    document.getElementById('cu-pass').value='';
+    logActivity('create_user',`Created user: ${email} (${role})`);
+    setTimeout(()=>loadAdminData(),1200);
+  } catch(e){
+    showMsg('Error: '+e.message,'err');
+  } finally{
+    btn.disabled=false;btn.textContent='Create User Account';
+  }
+}
+
+// ── BOOTSTRAP ─────────────────────────────────
+document.addEventListener('DOMContentLoaded', initSupabase);
+
+</script>
+</body>
+</html>
