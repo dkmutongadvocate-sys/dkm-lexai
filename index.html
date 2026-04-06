@@ -478,6 +478,14 @@
           <span class="chip" onclick="useChip(this)">EAC cross-border contract</span>
           <span class="chip" onclick="useChip(this)">Limitation periods Kenya</span>
           <span class="chip" onclick="useChip(this)">Constitutional petition grounds</span>
+          <span class="chip" onclick="useChip(this)">Unfair termination Kenya elements</span>
+          <span class="chip" onclick="useChip(this)">Land registration transfer process</span>
+          <span class="chip" onclick="useChip(this)">Order 26 injunction requirements</span>
+          <span class="chip" onclick="useChip(this)">Setting aside default judgment Kenya</span>
+          <span class="chip" onclick="useChip(this)">Judicial review grounds Kenya</span>
+          <span class="chip" onclick="useChip(this)">Enforcement of arbitral award Kenya</span>
+          <span class="chip" onclick="useChip(this)">Garnishee order procedure Kenya</span>
+          <span class="chip" onclick="clearChat()" style="background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-text)">🗑 Clear chat</span>
         </div>
         <div class="input-row">
           <textarea id="chat-input" class="txt-input" placeholder="Ask a legal research question…" onkeydown="chatKey(event)"></textarea>
@@ -519,9 +527,13 @@
           <span class="pf" onclick="pfToggle(this)">EAC</span>
           <span class="pf" onclick="pfToggle(this)">Commonwealth</span>
           <span class="pf" onclick="pfToggle(this)">Constitutional</span>
+          <span class="pf" onclick="pfToggle(this)">Civil Procedure</span>
           <span class="pf" onclick="pfToggle(this)">Commercial</span>
           <span class="pf" onclick="pfToggle(this)">Employment</span>
           <span class="pf" onclick="pfToggle(this)">Data Protection</span>
+          <span class="pf" onclick="pfToggle(this)">Arbitration</span>
+          <span class="pf" onclick="pfToggle(this)">Succession</span>
+          <span class="pf" onclick="pfToggle(this)">Enforcement</span>
         </div>
       </div>
       <div id="prec-list"></div>
@@ -539,11 +551,11 @@
         <div class="comp-card">
           <div class="comp-card-hd" style="color:var(--success-text)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="comp-card-title">Key Kenyan statutes</span></div>
           <div class="comp-rows">
-            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Constitution of Kenya 2010</div><div class="comp-sub">Bill of Rights, Art. 31 privacy, Art. 35 access to info</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Constitution of Kenya 2010</div><div class="comp-sub">Bill of Rights, Art. 31 privacy, Art. 35 access to info, Art. 48 access to justice</div></div></div>
             <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Data Protection Act 2019</div><div class="comp-sub">ODPC registration, lawful basis, data subject rights</div></div></div>
             <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Law of Contract Act (Cap. 23)</div><div class="comp-sub">Formation, consideration, capacity, illegality</div></div></div>
             <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Employment Act 2007</div><div class="comp-sub">Non-competes — reasonableness test applies</div></div></div>
-            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Arbitration Act (Cap. 49)</div><div class="comp-sub">UNCITRAL Model Law adopted, NY Convention ratified</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Arbitration Act (Cap. 49)</div><div class="comp-sub">UNCITRAL Model Law adopted, NY Convention ratified, s.6 mandatory stay</div></div></div>
             <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Companies Act 2015</div><div class="comp-sub">Incorporation, directors, shares, winding up</div></div></div>
             <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Law of Succession Act (Cap. 160)</div><div class="comp-sub">Wills, intestacy, probate, letters of administration</div></div></div>
           </div>
@@ -559,13 +571,27 @@
             <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">ILO core conventions</div><div class="comp-sub">Ratified — labour standards apply</div></div></div>
           </div>
         </div>
+        <div class="comp-card">
+          <div class="comp-card-hd" style="color:var(--navy)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="comp-card-title">Procedural law — key rules</span></div>
+          <div class="comp-rows">
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Civil Procedure Rules 2010 (Or. 1–51)</div><div class="comp-sub">Or.26 injunctions, Or.53 judicial review, Or.23 garnishee, Or.9/10 judgment</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Limitation of Actions Act (Cap. 22)</div><div class="comp-sub">6 yrs contract · 3 yrs tort · 12 yrs land — cannot be shortened by contract</div></div></div>
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Exclusive jurisdiction — ELRC &amp; ELC</div><div class="comp-sub">Employment → ELRC only; Land/environment → ELC only; clauses ousting this are void</div></div></div>
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Stamp Duty Act (Cap. 480)</div><div class="comp-sub">Conveyances 4%, leases, share transfers 1%, debentures — instruments must be stamped</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Court of Appeal Rules 2010</div><div class="comp-sub">30 days notice of appeal (r.75); record of appeal within 60 days</div></div></div>
+            <div class="comp-row"><div class="cdot dot-ok"></div><div><div class="comp-item">Small Claims Court Act 2016</div><div class="comp-sub">Claims ≤ KES 1,000,000 · No advocates · 60-day target</div></div></div>
+          </div>
+        </div>
         <div class="comp-card" style="grid-column:1/-1">
           <div class="comp-card-hd"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="comp-card-title">Common risk areas for Kenyan contracts</span></div>
           <div class="comp-rows">
-            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Choice of foreign law clauses</div><div class="comp-sub">Courts may refuse to apply if contrary to Kenyan public policy (Constitution Art. 2(4))</div></div></div>
-            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Cross-border data transfers</div><div class="comp-sub">Data Protection Act s.48 requires adequate protection or consent</div></div></div>
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Choice of foreign law clauses</div><div class="comp-sub">Courts may refuse to apply if contrary to Kenyan public policy (Constitution Art. 2(4)) — Hashi Energy v KRA [2019]</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Ouster of court jurisdiction</div><div class="comp-sub">Any clause excluding Kenyan courts entirely is void — Art. 48 CoK (access to justice) unless valid arbitration clause</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Shortened limitation periods</div><div class="comp-sub">Cannot contractually shorten below Limitation of Actions Act (Cap. 22) — Gabriel Mutava v KPA [2016]</div></div></div>
+            <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Cross-border data transfers</div><div class="comp-sub">Data Protection Act s.48 requires adequate protection or explicit consent</div></div></div>
             <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Penalty clauses</div><div class="comp-sub">Must represent genuine pre-estimate of loss; unconscionable penalties void under Kenyan equity</div></div></div>
             <div class="comp-row"><div class="cdot dot-req"></div><div><div class="comp-item">Consumer protection</div><div class="comp-sub">Consumer Protection Act 2012 — unfair terms unenforceable in B2C contracts</div></div></div>
+            <div class="comp-row"><div class="cdot dot-warn"></div><div><div class="comp-item">Pathological arbitration clauses</div><div class="comp-sub">No seat, contradictory rules, no governing law — clause may be unenforceable; Esso (Kenya) Ltd v MV "Saruji" [1994]</div></div></div>
           </div>
         </div>
       </div>
@@ -1127,10 +1153,263 @@ function nav(el,t){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.
 // ══════════════════════════════════════════════
 // CHAT
 // ══════════════════════════════════════════════
-const CHAT_SYS=`You are a senior legal research assistant specialising in Kenyan law and international commercial law. Always cite relevant Kenyan statutes and case law. Use [KE] before Kenyan law citations, [INT] before international citations, [WARN] before risk flags. Keep responses under 250 words. Be precise and practitioner-focused. Never request or expose client-identifying information.`;
+const CHAT_SYS=`You are a senior advocate and legal intelligence assistant for the law firm of Dennis Kimani Mutonga, Advocate, Nairobi, Kenya. You have encyclopaedic knowledge of ALL Kenyan legislation, subsidiary legislation, rules, practice directions, and international law binding on Kenya.
+
+════════════════════════════════════════
+KENYAN CONSTITUTIONAL & DEVOLUTION LAW
+════════════════════════════════════════
+Constitution of Kenya 2010 (CoK 2010): Chapter 1 Sovereignty (Art.1-4); Chapter 2 Republic; Chapter 3 Citizenship (Arts.12-18); Chapter 4 Bill of Rights (Arts.19-57) — Art.20 application, Art.21 implementation, Art.22 enforcement, Art.23 remedies, Art.24 limitation, Art.25 non-derogable rights, Art.26 life, Art.27 equality/non-discrimination, Art.28 dignity, Art.29 liberty, Art.30 slavery, Art.31 privacy, Art.32 conscience, Art.33 expression, Art.34 media, Art.35 information, Art.36 association, Art.37 assembly, Art.38 political rights, Art.39 movement, Art.40 property, Art.41 labour, Art.42 environment, Art.43 economic/social rights, Art.44 language/culture, Art.45 family, Art.46 consumer rights, Art.47 fair administration, Art.48 access to justice, Art.49 arrested persons, Art.50 fair hearing, Art.51 detained persons; Chapter 5 Land (Arts.60-72); Chapter 6 Leadership & Integrity (Arts.73-80, Leadership & Integrity Act 2012, Public Officer Ethics Act 2003); Chapter 7 Representation (Elections); Chapter 8 Legislature; Chapter 9 Executive; Chapter 10 Judiciary (Arts.159-173); Chapter 11 Devolution (Arts.174-200); Chapter 12 Public Finance (Arts.201-231); Chapter 13 National Security; Chapter 14 National Values (Art.10); Chapter 15 Commissions & Independent Offices; Chapter 16 Amendment (Art.255-257); Sixth Schedule (transitional).
+Devolution: County Governments Act 2012, Intergovernmental Relations Act 2012, Urban Areas and Cities Act 2011, Transition to Devolved Government Act 2012, Division of Revenue Act (annual), County Allocation of Revenue Act (annual). Council of Governors. Senate jurisdiction over county legislation.
+Elections: Elections Act 2011, Election Offences Act 2016, Political Parties Act 2011, IEBC Act 2011, Election Campaign Financing Act 2013. Presidential petition — Supreme Court, 14-day hearing, 21-day determination (Art.163(3)(a)). Other petition — High Court/ELC (21+21 days).
+
+════════════════════════════════════════
+LAND LAW & CONVEYANCING
+════════════════════════════════════════
+Principal statutes: Land Act 2012, Land Registration Act 2012 (LRA 2012 — replaced RLA Cap.300, GLA Cap.280, RTA Cap.281), National Land Commission Act 2012, Community Land Act 2016, Sectional Properties Act 2020, Physical and Land Use Planning Act 2019 (PLUPA 2019), Survey Act (Cap.299).
+Land categories (Art.61 CoK): Public land (NLC holds in trust — Art.62), Community land (Art.63), Private land (Art.64). Conversion — NLC approval.
+Tenure: Freehold (absolute proprietorship), Leasehold (government leases — 99 years standard; 33 years agricultural; 999 years private), Commonhold (sectional — Sectional Properties Act 2020). Non-citizens — leasehold only max 99 years (Art.65 CoK).
+Registration: LRA 2012 — first registration (s.15), dealings (Part VI), rectification (s.80), indemnity (s.81). Title absolute (s.26 — indefeasibility subject to fraud). Caution — s.71 (60-day lapse unless extended). Restriction — s.76. Inhibition — s.78. Overriding interests — s.28 LRA.
+Transfers: Agreement for sale (Land Regulations 2017), stamp duty (Stamp Duty Act Cap.480 — 4% residential; 2% agricultural), registration fees (Land Registration (Fees) Rules). Spousal consent — s.12 Matrimonial Property Act 2013. Succession — assent under s.82 LRA + probate.
+Charges/mortgages: Part IX LRA 2012, Movable Property Security Rights Act 2017 (MPSRA). Enforcement — statutory power of sale (s.90 LRA), foreclosure. Consumer protection on residential charges — s.44 LRA.
+ELC procedure: ELC Act 2011, ELC (Procedure) Rules 2013. Mandatory ADR attempt. Land Acquisition: Land Act 2012 Part VIII — compulsory acquisition, prompt and full compensation (Art.40(3) CoK), NLC role.
+Sectional properties: Sectional Properties Act 2020 (Regulations 2021) — body corporate, management committee, unit title, common property.
+Planning: PLUPA 2019 — county spatial plans, development permission (county government), change of use, EIA (EMCA 1999). Building Code — county by-laws.
+Stamp duty: Stamp Duty Act (Cap.480) — conveyances 4%, leases (graduated), debentures 0.1%, share transfers 1%. Exemptions (s.105). Commissioner of Domestic Taxes — adjudication.
+
+════════════════════════════════════════
+CONTRACT & COMMERCIAL LAW
+════════════════════════════════════════
+Formation: Law of Contract Act (Cap.23) — offer (objective test), acceptance (postal rule), consideration (past consideration invalid, adequacy vs sufficiency), capacity (Age of Majority Act Cap.33 — 18 years; mental capacity), legality, formality (contracts for land s.3(3) — written + signed). Electronic contracts: Kenya Information and Communications Act (Cap.411A), Electronic Transactions Act 2007 (e-signatures valid).
+Vitiating factors: Misrepresentation (fraudulent/negligent/innocent), duress, undue influence (presumed — fiduciary), mistake (common/mutual/unilateral), illegality (void vs unenforceable).
+Terms: Express vs implied (fact, law, custom). Exclusion clauses — UCTA principles; Consumer Protection Act 2012 s.52 (unfair terms void in B2C). Penalty clauses — Dunlop v New Garage test (penalty void). Force majeure — must be expressly drafted. Frustration — Law of Contract Act s.18.
+Remedies: Damages (expectation, reliance, restitution), specific performance (equitable, not for personal services), injunctions (Or.26 CPR), rescission, rectification, account of profits.
+Sale of Goods: Sale of Goods Act (Cap.31) — implied terms (title s.14, description s.15, quality/fitness s.16, sample s.17), property passing (s.18 rules 1-5), risk, remedies. CISG — not ratified but persuasive.
+Consumer protection: Consumer Protection Act 2012 — unfair practices, product liability, right of return. Competition Act 2010 — abuse of dominance, mergers (CAK approval >KES 1 billion), restrictive trade practices.
+Agency: Common law — actual/ostensible/apparent authority. Powers of Attorney Act (Cap.53) — irrevocable powers, registration.
+Suretyship: Guarantee vs indemnity. Writing requirement (s.3(1)(d) Law of Contract). Discharge — material variation, time given.
+Unjust enrichment: Quasi-contract — money had and received, quantum meruit. UNIDROIT Art.3.2.7 (persuasive). Triton Petroleum v Pan Ocean [2017].
+
+════════════════════════════════════════
+COMPANY, COMMERCIAL & INSOLVENCY LAW
+════════════════════════════════════════
+Companies Act 2015: Incorporation — private (min.1 shareholder, 1 director), public (min.2 directors, company secretary required), unlimited, guarantee. Memorandum & Articles — Table A (default articles). Share capital — authorisation, allotment (pre-emption rights s.265), transfer (stock transfer form, stamp duty 1%), buyback. Directors — fiduciary duties (s.143: act within powers, promote success, exercise independent judgment, avoid conflicts, not accept benefits, declare interests); shadow directors; disqualification (s.168). Accounts — s.640 filing with Registrar within 6 months (private), 3 months (listed). Charges — registration with BRS within 30 days (s.887) — void against liquidator if unregistered. Meetings — AGM (s.337), notice (21 days — s.317), resolutions (ordinary/special 75%). Foreign companies — s.971 registration within 30 days.
+Insolvency Act 2015: Voluntary liquidation (s.375/s.380), compulsory winding up — s.399 (statutory demand KES 100,000, 21 days; commercial/balance sheet insolvency), official receiver, liquidator, proof of debts, priority (s.381 — employees wages 4 months, NSSF/NHIF contributions, KRA 12 months; secured; unsecured). Administration (Part IV — moratorium). Voluntary arrangement (Part II — CVA, 75% creditors). Cross-border insolvency (Part VI — UNCITRAL Model Law). Preferences and transactions at undervalue — s.522 (6 months/2 years connected parties). Fraudulent trading — s.530. Wrongful trading — s.531.
+Capital markets: Capital Markets Act (Cap.485A), CMA — fund managers, investment advisers, stockbrokers. NSE listing requirements. Prospectus requirements (s.30). Insider trading — Capital Markets (Insider Trading) Regulations 2003.
+Partnerships: Partnership Act (Cap.29). Limited Liability Partnership Act 2011.
+Trusts: Trustees Act (Cap.167), Public Trustee Act (Cap.168). Express, resulting, constructive. Public Benefit Organisations Act 2013.
+Business registration: Business Registration Service Act 2015 (BRS) — one-stop shop. eCitizen portal.
+
+════════════════════════════════════════
+EMPLOYMENT & LABOUR LAW
+════════════════════════════════════════
+Employment Act 2007: Written particulars (s.10, within 2 months), probation (max 6 months renewable once — s.42(1)), notice (s.35 — 28 days/one month/one pay period), summary dismissal (s.44 — gross misconduct), termination (s.45 — valid reason + fair procedure: show cause, hearing, appeal — Kenya Hotels v Karanja test), unfair termination (s.45(2) — compensation max 12 months), wrongful dismissal (common law), constructive dismissal, redundancy (s.40 — 1 month notice, NSSF paid, LIFO criteria), maternity leave (s.29 — 3 months full pay), paternity leave (s.29A — 2 weeks full pay), annual leave (s.28 — 21 days), sick leave (s.30 — 7 days full + 7 days half), public holidays (Public Holidays Act Cap.110). Sexual harassment — s.6. Child labour — prohibited under 16 (s.56). Minimum wages — Regulation of Wages (Cabinet Secretary orders, annually revised). PAYE deductions — Income Tax Act.
+Labour Relations Act 2007: Trade union recognition (s.54 — 51% membership), CBAs (binding when registered with ELRC — s.59), industrial action (s.76 — 7-day notice; essential services — notice only), check-off (s.49).
+WIBA 2007: Employer liability for occupational injuries/diseases. DOSH. Compensation — degree of disablement x earnings x multiplier.
+Retirement Benefits Act 1997: RBA registration, trust deed, fund manager, custodian, actuary. Contributions — employer minimum 5%. Portability — s.38.
+NSSF Act 2013: Tier I (KES 2,160/month each), Tier II (6% above lower earnings limit). SHA/Social Health Insurance Act 2023 (replacing NHIF).
+ELRC: ELRC Act 2011, ELRC Rules 2016 — Claim Form A (unfair termination), B (wages), C (trade dispute). Mandatory mediation first. 3-year limitation (s.90 EA). Registries — Nairobi, Mombasa, Kisumu, Nakuru, Nyeri, Eldoret, Malindi. Appeal to Court of Appeal on law only.
+
+════════════════════════════════════════
+CRIMINAL LAW & PROCEDURE
+════════════════════════════════════════
+Substantive: Penal Code (Cap.63) — general principles (mens rea, actus reus, attempts, conspiracy, aiding/abetting), murder (s.203), manslaughter (s.202), theft (s.275), robbery (s.296/297), burglary (s.304), fraud (s.317), forgery (s.345), defamation. Sexual Offences Act 2006 — rape (s.3), defilement (s.8 — under 18, strict liability, 15 years minimum), gang rape (s.10), sentence-doubling (s.36). Domestic Violence Act 2015. Children Act 2022 — diversion, Children's Court. ACECA 2003 — corruption (EACC). POCAMLA 2009 — money laundering (s.3 — predicate offences, placement/layering/integration), forfeiture (civil s.55; criminal s.54), STRs to FRC. Computer Misuse and Cybercrimes Act 2018 (CMCA) — unauthorised access (s.3), computer fraud (s.14), cyber harassment (s.27), identity theft (s.26), interception (s.11). Prevention of Terrorism Act 2012. Narcotic Drugs and Psychotropic Substances (Control) Act 1994. Firearms Act (Cap.114). Wildlife Conservation and Management Act 2013. Traffic Act (Cap.403).
+Criminal procedure: CPC (Cap.75) — charge (s.89), warrant/summons (s.73/89A), arrest (s.29-39), bail (s.123 CPC; Art.49(1)(h) CoK — as of right for bailable offences; bail review s.123A; denial — capital/likely to abscond/witness interference/public safety), plea (s.207 — equivocal plea), remand (s.72 — 15 days Magistrate, 30 days HC), DPP nol pros (Art.157(6)(b)), committal (s.240 — to HC for capital), trial, evidence (Evidence Act Cap.80 — beyond reasonable doubt, confessions s.25/26 CPC, dying declarations s.33 EA, electronic evidence KICA Cap.411A), sentencing (Sentencing Guidelines 2023), appeal (s.347 — Magistrate to HC; HC to CoA; CoA to SC on constitutional questions). Plea bargaining — Criminal Procedure (Plea Agreements) Rules 2017. Victim Protection Act 2014.
+DPP: Art.157 CoK — independent; power to direct investigations, take over/discontinue; consent required for certain offences. National Prosecution Policy 2013.
+Bail: Anti-terrorism — no bail (Prevention of Terrorism Act). Sexual offences against children under 11 — court discretion (s.8 SOA). Robbery with violence (s.296(2) PC) — Schedule 1 offence — bail in HC only.
+Witness protection: Witness Protection Act 2006. Evidence via CCTV/screens — Children Act 2022 s.214.
+Inquests: CPC Part VIII (s.387-406) — Chief Magistrate — sudden/unnatural deaths.
+
+════════════════════════════════════════
+FAMILY, MATRIMONIAL & SUCCESSION LAW
+════════════════════════════════════════
+Marriage: Marriage Act 2014 — civil, Christian, customary, Hindu, Islamic. Age — 18 years. Prohibited degrees (s.11). Registration. Monogamy vs polygamy (Art.45(4) CoK — Islamic/customary permit polygamy).
+Matrimonial property: Matrimonial Property Act 2013 — matrimonial home (s.12 — cannot dispose without spouse consent), matrimonial property (equal share presumption s.7/8 — contribution: monetary + non-monetary including domestic work). Antenuptial contracts — s.6 MPA (must be registered).
+Divorce: Marriage Act 2014 Part VI — irretrievable breakdown (s.66) — separation 3 years; cruelty; adultery; desertion 3 years; exceptional depravity. Judicial separation (s.79). Decrees — nisi (6 weeks) → absolute. Domestic Violence Act 2015 — protection orders.
+Children: Children Act 2022 — best interests paramount (s.4); parental responsibility (s.25); custody/care/access (s.89-100); child maintenance (s.103-118); adoption (s.160-190 — HC; intercountry adoption); child labour (s.10 — under 16 prohibited); Children's Court; corporal punishment abolished (s.19); FGM — Female Genital Mutilation Act 2011.
+Succession: Law of Succession Act (Cap.160) — testate (s.8 — writing, signed, 2 simultaneous witnesses, no beneficiary as witness), intestate (s.32-44 — spouse takes personal chattels + life interest; children share residue), grants (probate s.51, letters of administration s.66, small estates s.73 — summary procedure KES 100,000), revocation (s.72), distribution (s.83). High Court Family Division — contested succession. Kadhis' Court — Muslim succession. Assent under s.82 LRA.
+
+════════════════════════════════════════
+DATA PROTECTION & PRIVACY LAW
+════════════════════════════════════════
+Data Protection Act 2019: Personal data, sensitive data (health, biometric, genetic, sexual orientation, race, religion, criminal record, financial — s.2). Principles (s.25) — lawfulness, fairness, transparency; purpose limitation; data minimisation; accuracy; storage limitation; integrity/confidentiality; accountability. Lawful bases (s.30) — consent; contract; legal obligation; vital interests; public interest; legitimate interests. Consent (s.32) — freely given, specific, informed, unambiguous; withdrawal any time. Sensitive data — explicit consent + one s.30 ground. Data subject rights (s.26-29) — access (s.26), rectification (s.27), erasure (s.28), objection (s.29), portability, not subject to automated decisions. DPO — mandatory for public entities and high-risk processing (s.24). DPIA — mandatory for high-risk processing. Cross-border transfers (s.48) — adequate protection or explicit consent or binding corporate rules. Breach notification (s.43) — ODPC within 72 hours; data subjects promptly. ODPC — registration (s.17); enforcement notices; penalties up to KES 5,000,000 or 1% of annual turnover. Regulations — Registration Regulations 2021, Compliance and Enforcement Regulations 2021, General Regulations 2021.
+
+════════════════════════════════════════
+INTELLECTUAL PROPERTY LAW
+════════════════════════════════════════
+Copyright: Copyright Act (Cap.130) — literary, musical, artistic, sound recordings, films, broadcasts; economic rights (reproduction, distribution, public performance, communication, adaptation); duration (life + 50 years; 50 years from publication for corporate works); assignment (writing — s.35; future works not covered by general assignment — Kenya Breweries v Longhorn [2016]); licences; KECOBO enforcement; fair dealing (criticism, news, research — s.26); software as literary work; employer owns works in course of employment (s.32).
+Industrial property: Industrial Property Act 2001 (KIPI) — patents (20 years, PCT national phase), utility models (10 years), industrial designs (15 years), layout designs (10 years). Compulsory licences (s.73 — public health). TRIPS compliance.
+Trade marks: Trade Marks Act (Cap.506) — KIPI registration (Part A/B), duration (10 years + renewal), assignment, licensing, infringement, passing off (goodwill + misrepresentation + damage). Madrid Protocol (Kenya 1998). Well-known marks (s.15A). Geographical Indications Act 2013.
+Anti-counterfeit: Anti-Counterfeit Act 2008 — ACA; seizure powers; criminal penalties. KRA border enforcement.
+
+════════════════════════════════════════
+TAX LAW
+════════════════════════════════════════
+Income Tax Act (Cap.470): Resident (183 days or incorporated in Kenya). PAYE — graduated (10% to KES 24,000; 25% to KES 32,333; 30% above — subject to Finance Acts). Business income deductions (s.15 — wholly and exclusively). Capital allowances — investment deduction 100%, wear and tear. Withholding taxes — dividends 5% resident/15% non-resident; interest 15% non-resident; royalties 5% resident/20% non-resident; management fees 5.625% resident/20% non-resident. Capital Gains Tax — 5% marketable securities; 15% land/buildings. Turnover tax (TOT) — 3% for KES 1-50 million turnover. Transfer pricing — Income Tax (Transfer Pricing) Rules 2006 — arm's length.
+VAT Act 2013: Standard rate 16%, zero-rated, exempt. Input tax credits. Reverse charge (imported services). Digital service tax (DST — Finance Act 2020 amendments).
+Tax Procedures Act 2015: Assessments, amended returns. Objections (30 days) → Tax Appeals Tribunal (TAT) → High Court → Court of Appeal. Penalties — late filing (5% + 1% per month). KRA audit powers. Advance rulings (s.88).
+Excise Duty Act 2015: Alcohol, cigarettes, fuels, telecoms, financial services, insurance premiums (40%).
+Customs: EACCMA 2004 — common external tariff, WTO Customs Valuation Agreement, rules of origin (EAC, COMESA, AfCFTA).
+Double tax treaties: UK, Canada, India, Norway, Sweden, Denmark, France, Germany, Zambia, UAE, Qatar, Mauritius (in force).
+
+════════════════════════════════════════
+BANKING, FINANCE & INSURANCE
+════════════════════════════════════════
+Banking Act (Cap.488): CBK licensing — commercial banks, mortgage finance companies, microfinance banks. Prudential guidelines — CAR 14.5% (Basel III), liquidity 20%, large exposures, AML/CFT. CBK Act (Cap.491) — monetary policy, lender of last resort. Deposit Protection Fund.
+Mobile money: National Payment System Act 2011, NPS Regulations 2014 — PSP licensing. M-Pesa regulatory framework (CBK). AML/CFT — POCAMLA applies to all PSPs.
+Microfinance: Microfinance Act 2006, Microfinance (Deposit-Taking) Regulations 2008 — DTM licensing.
+SACCO: SACCO Societies Act 2008, SACCO Societies (Deposit-Taking) Regulations 2010 — SASRA licensing.
+Capital markets: CMA Act (Cap.485A) — broker-dealer, investment adviser, fund manager, custodian, REIT manager licensing. NSE — Listing Manual, GEMS. CMA (Securities) (Public Offers, Listing and Disclosures) Regulations 2002. REITs — Real Estate Investment Trusts Regulations 2013.
+Insurance: Insurance Act (Cap.487), IRA — classes of insurance, minimum capital, solvency margins, reinsurance, claims handling. Motor Third Party Liability — MVTPI Act (Cap.405) — compulsory. Marine — Marine Insurance Act (Cap.390).
+AML/CFT: POCAMLA 2009, AML/CFT Regulations 2023, FRC — STRs, KYC, beneficial ownership (PSC register). Counter-Financing of Terrorism Act 2010.
+
+════════════════════════════════════════
+CIVIL PROCEDURE — COMPLETE ORDERS 1-51
+════════════════════════════════════════
+Governing law: Civil Procedure Act (Cap.21), Civil Procedure Rules 2010 (L.N.151/2010 — 51 Orders), Judicature Act (Cap.8) — s.3 sources of law (CoK; statutes; English common law/equity/statutes of general application in force 12 August 1897; African customary law).
+Or.1 — parties: joinder, misjoinder, representative suits.
+Or.2 — cause of action: pleadings must disclose reasonable cause of action; embarrassing pleadings struck out.
+Or.3 — plaint: parties, material facts, relief sought, valuation of suit.
+Or.4 — service of summons: primarily personal; modes as per Or.5.
+Or.5 — service: personal (Or.5 r.1), substituted (Or.5 r.13 — court order required), by electronic means (Practice Direction No.2 of 2022 — email, e-filing portal), by post (Or.5 r.16), outside jurisdiction (Or.5 r.21 — leave required; bilateral treaty/MLAT; Hague Service Convention — Kenya not signatory but practice recognised). Time for defence — 15 days (Kenya) or 30 days (outside) from service.
+Or.6 — defence and counterclaim: must be filed within 15/30 days; denial must be specific; counterclaim treated as cross-suit.
+Or.6A — defence to counterclaim.
+Or.7 — judgment on admission: Or.7 r.1 — where defendant admits all or part of claim, plaintiff may apply for judgment without trial; admission must be clear and unequivocal.
+Or.8 — striking out defence: scandalous, embarrassing, irrelevant.
+Or.9 — default judgment: Or.9 r.4 — liquidated demand; Or.9 r.5 — unliquidated (assessment of damages); Or.9 r.7 — setting aside default judgment: two-limb test — (1) sufficient reason for default; (2) arguable defence on merits — both required.
+Or.10 — summary judgment: Or.10 r.1 — after defence filed, plaintiff applies; defendant must show unconditional leave to defend — genuine triable issue (Papanicola v Fagan / Macharia Mwangi test — not merely arguable, must be real); court may give conditional leave (security for amount); no summary judgment on genuine factual disputes.
+Or.11 — discovery and inspection: Or.11 r.2 — list of documents (automatic); Or.11 r.11 — right to inspect; Or.11 r.12 — production to court; privilege — legal professional privilege (LPP), without-prejudice privilege, public interest immunity.
+Or.12 — interrogatories: Or.12 r.1 — must relate to matter in question; not fishing expedition; court may disallow oppressive interrogatories.
+Or.13 — admissions: Or.13 r.1 — party may admit facts or part of claim; judgment on admissions.
+Or.14 — settlement of issues: Or.14 r.1 — court frames list of issues; parties agree issues for trial; agreed statement of facts.
+Or.15 — special case stated: Or.15 r.1 — parties may state case for court's opinion on point of law.
+Or.16 — split trials: Or.16 r.1 — court may order separate trials on distinct issues (e.g., liability then quantum).
+Or.17 — striking out pleadings: Or.17 r.1 — scandalous, embarrassing, irrelevant; Or.17 r.2 — no reasonable cause of action/defence — inherent jurisdiction also available; no evidence admissible on striking out application — court reads pleading at its highest.
+Or.18 — evidence at trial: Or.18 r.1 — witnesses; subpoena (witness summons); Or.18 r.14 — affidavit evidence by agreement or court order; witness statements filed in advance.
+Or.19 — affidavits: deponent, jurat (sworn before Commissioner for Oaths — Oaths and Statutory Declarations Act Cap.15), filing, use in interlocutory applications.
+Or.20 — judgment: Or.20 r.1 — summary of decision; Or.20 r.7 — decree drawn up; consent orders (binding once entered — Purcell v FC Trigell).
+Or.21 — execution: Or.21 r.1 — modes: attachment/sale of movables Or.22; delivery of property Or.23 (now garnishee); garnishee Or.23/25; receivership Or.25/25A; committal Or.41/Or.26; contempt. Time limit — 6 years from decree (Or.21 r.5).
+Or.22 — attachment and sale of movable property: warrant of attachment; inventory and valuation; public auction; surplus returned to debtor.
+Or.23 — garnishee proceedings: Or.23 r.1 — application ex parte; order nisi served on garnishee and judgment debtor; garnishee must attend and disclose debt; order absolute if admitted; garnishee not a party to original suit; amount recovered credited against judgment debt; bank accounts — notice to bank manager; consent of judgment debtor not required.
+Or.24 — charging orders on land: Or.24 r.1 — charging order on judgment debtor's beneficial interest in land; registered at Land Registry; sale of charged land to satisfy judgment (ELC has jurisdiction on sale of land in execution).
+Or.25 — receivers: Or.25 r.1 — court appoints receiver over income/property of debtor; usually for equitable execution or equitable mortgages; receiver's accounts and remuneration.
+Or.25A — examination of judgment debtor: Or.25A r.1 — oral examination as to means and assets; failure to attend — warrant of arrest for contempt.
+Or.26 — injunctions and interim orders: Or.26 r.1 — interlocutory injunction: Kenya test (derived from American Cyanamid [1975] — applied since Giella v Cassman Brown [1973] pre-Cyanamid but same spirit): (1) serious question/prima facie case; (2) balance of convenience (adequacy of damages test — whether damages would adequately compensate); (3) status quo; mandatory injunctions — higher threshold (strong prima facie); undertaking in damages required from applicant; Mareva/freezing orders — ex parte application (serious risk assets will be dissipated; not to deprive defendant of assets to live on; worldwide Mareva with appropriate safeguards); Anton Piller/search orders — ex parte (real possibility evidence will be destroyed; must not be disproportionate — search and take items rather than destroy). Or.26 r.7 — security for costs (defendant may apply if plaintiff outside jurisdiction or nominal plaintiff).
+Or.27 — (now subsumed in Or.53 — judicial review).
+Or.28 — interpleader: Or.28 r.1 — sheriff interpleader (third party claims goods attached); stakeholder interpleader (person holding money/property claimed by two parties).
+Or.29 — receivers by way of equitable execution.
+Or.30 — sale of immovable property in execution: ELC has jurisdiction; warrant of sale issued; public auction; surplus after payment of debt/costs to debtor; reserve price.
+Or.31 — proceedings by/against minor or patient: next friend (for plaintiff); guardian ad litem (for defendant); settlement requires court approval.
+Or.32 — proceedings by/against firm: service on individual partners or at principal place of business; partners jointly and severally liable.
+Or.33 — evidence by commission: Or.33 r.1 — court commissions examination of witness outside jurisdiction; letters of request.
+Or.34 — foreign tribunals: Or.34 r.1 — Evidence (Proceedings in Other Jurisdictions) Act — mutual legal assistance.
+Or.35 — affirmation (non-religious witnesses).
+Or.36 — originating summons: Or.36 r.1 — for construction of documents, simple questions of law, non-contentious matters; inter partes if disputed; widely used for mortgage enforcement, trust, probate, partnership disputes.
+Or.37 — writ of possession: Or.37 r.1 — possession of immovable property; execution of decree for possession.
+Or.38 — security for costs: Or.38 r.1 — defendant may apply if plaintiff ordinarily outside Kenya, nominal plaintiff, or plaintiff has no fixed abode; court orders security within fixed time or suit struck out.
+Or.39 — trial: Or.39 r.1 — hearing date; Or.39 r.20 — conduct of trial; opening statements; examination-in-chief, cross-examination, re-examination; court may call witnesses; judgment reserved or extempore.
+Or.40 — chamber summons: Or.40 r.1 — interlocutory application in a cause or matter; must specify orders sought and grounds; return date; served on opposite party; heard by Judge in chambers or open court; commonly used for: injunctions, attachment before judgment, security for costs, consolidation, amendment of pleadings, third party notices.
+Or.41 — contempt of court: Or.41 r.1 — civil contempt (breach of court order); criminal contempt (scandalising the court); committal to prison; sequestration of property; purging contempt.
+Or.42 — appeals from subordinate courts to High Court: Or.42 r.1 — notice of appeal within 30 days of decision; memorandum of appeal — specific grounds; Or.42 r.11 — record of proceedings from lower court; Or.42 r.15 — set aside ex parte orders; rehearing on record (not oral re-examination of witnesses unless allowed).
+Or.43 — revision by High Court: s.362 CPC — suo motu or on application; High Court reviews Magistrate decisions for errors of law or procedure; more limited than appeal.
+Or.44 — review of judgment: Or.44 r.1 — discovery of new evidence not previously available; mistake or error apparent on face of record; other sufficient reason; application within reasonable time (courts apply 6-month guide).
+Or.45 — reference to High Court: Magistrate states case for HC opinion on point of law.
+Or.46 — miscellaneous proceedings.
+Or.47 — provisional orders: provisional attachment before judgment; security for satisfaction of decree.
+Or.48 — admiralty: admiralty in rem and in personam; Admiralty Court at High Court Mombasa; arrest of ships; bottomry; salvage; collision.
+Or.49 — contempt (supplementary).
+Or.50 — miscellaneous applications.
+Or.51 — general: Or.51 r.7 — overriding objective: just, expeditious, proportionate resolution of disputes.
+Limitation: Limitation of Actions Act (Cap.22) — s.4(1)(a) contract 6 years; s.4(1)(b) tort 3 years; s.7 land 12 years; s.4(2) defamation 12 months; s.26 fraud — time runs from discovery; s.27 disability — time runs when ends; s.28 acknowledgment — fresh accrual; s.29 part payment — fresh accrual. Cannot be shortened by contract — Gabriel Mutava v KPA [2016].
+Costs: Advocates (Remuneration) Order L.N.64/1962 (amended L.N.35/2014, L.N.45/2014) — Schedule 6 (HC), Schedule 7 (Magistrates), Schedule 1 (conveyancing); party-and-party vs advocate-and-client; taxation (Registrar); wasted costs against advocates (s.27A CPA).
+Evidence: Evidence Act (Cap.80) — admissibility (relevance s.5), burden of proof (civil — balance of probabilities; criminal — beyond reasonable doubt s.107), hearsay exceptions (dying declaration s.33(a), business records s.34, bankers' books), confessions (s.25 CPC — voluntary; civil admissions Or.13), documentary evidence (primary — originals; secondary — copies s.67), electronic evidence (KICA Cap.411A s.106A-106I — admissible if integrity/reliability conditions met), opinion evidence (expert — s.49 EA), judicial notice (s.59-60).
+
+════════════════════════════════════════
+COURT OF APPEAL, SUPREME COURT & APPEALS
+════════════════════════════════════════
+Court of Appeal: Appellate Jurisdiction Act (Cap.9), Court of Appeal Rules 2010 (amended 2020). Appeals from HC, ELC, ELRC (law/procedure only). Appeal as of right from final decrees (s.66(1) CPA); interlocutory — leave required (s.66(2)); second appeals — leave. Notice of appeal — r.75 — within 30 days; record of appeal — r.85 — within 60 days; security for costs — r.112. Grounds — specific; no new grounds without leave. Bench of 3 JAs (Art.164(2)). Full Court (5 JAs) — constitutional questions. Stays — Butt v Rent Restriction Tribunal test (nugatory, balance of convenience). Registries — Nairobi, Mombasa, Kisumu, Malindi, Nakuru, Nyeri.
+Supreme Court: Supreme Court Act 2011, Supreme Court Rules 2020. Jurisdiction: Art.163(3)(a) — presidential election petitions (14/21 days); Art.163(3)(b) — appeals from CoA (general public importance); Art.163(3)(c) — advisory opinions; Art.163(4)(a) — constitutional interpretation; Art.163(4)(b) — certified appeals. Certification — Gatirau Peter Munya v Githinji [2014] — not a second bite. Notice of appeal — r.23 — within 14 days. Bench — 5 or 7 Justices. Advisory opinions — binding on all state organs.
+
+════════════════════════════════════════
+JUDICIAL REVIEW & ADMINISTRATIVE LAW
+════════════════════════════════════════
+Judicial review: Law Reform Act (Cap.26), Or.53 CPR. Grounds — illegality, irrationality (Wednesbury), procedural impropriety (audi alteram partem; nemo judex in sua causa), proportionality (Judicial Service Commission v Mbalu Mutuku [2013]). Relief — certiorari, mandamus, prohibition, declaration, injunction, habeas corpus. Or.53 procedure — leave (ex parte — arguable case, within 6 months — Or.53 r.2); substantive hearing (inter partes). Fair Administrative Action Act 2015 (FAAA 2015) — Art.47 CoK — written reasons (s.4(3)); internal review; external review; court review (s.7 — unlawful, unreasonable, irrational, procedurally unfair, bias, disproportionate). Constitutional petitions — Art.22 CoK (locus standi — any person), Art.258, Art.165(3)(b); Constitutional Litigation (Practice and Procedure) Rules 2013; supporting affidavit; notify AG/DPP; remedies: declaration, injunction, compensation, structural interdict.
+
+════════════════════════════════════════
+ADR — ARBITRATION, MEDIATION & KADHIS
+════════════════════════════════════════
+Arbitration Act (Cap.49): Full UNCITRAL Model Law adoption. Arbitration agreement — s.4 (writing, electronic counts). Stay — s.6 (mandatory — Telkom Kenya v Orange SA [2021]). Competence-competence — s.17. Interim measures — s.18 (court or tribunal). Award — s.32 (writing, signed, reasons, date, seat). Setting aside — s.35 (limited grounds: incapacity; invalid agreement; no notice; beyond scope; irregular composition; non-arbitrable; public policy). Enforcement — s.36 (HC leave; equivalent to court judgment). Confidentiality — s.31B. NCIA — NCIA Act 2013, NCIA Rules 2020. Pathological arbitration clauses — Esso (Kenya) Ltd v MV Saruji [1994].
+Mediation: High Court (Mediation (Pilot) Rules 2015 — some divisions mandatory); ELC (mandatory); ELRC (mandatory — ELRC Mediation Rules 2016). Settlement agreement — binding as contract; may be registered as consent judgment. Kadhis' Courts: Kadhis' Courts Act (Cap.11) — personal status, marriage, divorce, inheritance — Muslims only; appeal to HC; Art.170 CoK.
+Traditional dispute resolution: Art.159(2)(c) CoK.
+
+════════════════════════════════════════
+ENVIRONMENT & NATURAL RESOURCES
+════════════════════════════════════════
+EMCA 1999: NEMA — licensing, enforcement. EIA — Second Schedule projects (EMCA EIA Regulations L.N.101/2003) — project report, study, public participation, NEMA approval. National Environment Tribunal (NET) — appeals from NEMA. Polluter pays principle.
+Climate Change Act 2016: National Climate Change Action Plan, County Plans. Kenya NDC under Paris Agreement. Energy Act 2019 — EPRA licensing, renewable energy, PPAs.
+Water: Water Act 2016, WASREB, WRMA. Water abstraction licences.
+Mining: Mining Act 2016 — prospecting, mining, retention licences. Royalties. Community development agreements.
+Wildlife: Wildlife Conservation and Management Act 2013 — KWS, CITES (Appendix I banned, II regulated).
+Forestry: Forest Conservation and Management Act 2016 — KFS, forest reserves, REDD+.
+Fisheries: Fisheries Management and Development Act 2016 — licences, EEZ (200nm — UNCLOS).
+Natural resources: Natural Resources (Transactions Subject to Ratification) Act 2016.
+
+════════════════════════════════════════
+PUBLIC PROCUREMENT
+════════════════════════════════════════
+PPADA 2015: Open tender threshold (goods/services >KES 3,000,000; works >KES 6,000,000). Methods — open tender (s.88), restricted (s.97), direct procurement (s.103), RFP professional services (s.107), RFQ below threshold (s.110), low-value (s.113 — below KES 50,000). Preference — s.157 — 30% youth/women/PWDs. Exclusion — s.36 (corruption, tax non-compliance, poor performance, conflict of interest). Evaluation — technical (pass/fail) then financial (lowest evaluated responsive). Variations — up to 15% without re-tender. PPRA — oversight, standard documents. PPARB — review board (s.167 — complaint within 14 days; automatic 5-day standstill — s.135; hearing within 21 days); appeal — HC within 14 days of PPARB decision.
+
+════════════════════════════════════════
+IMMIGRATION & CITIZENSHIP
+════════════════════════════════════════
+Kenya Citizenship and Immigration Act 2011, Immigration Act (Cap.172): e-visa portal, class G work permit (specific employer), class G2 (investor — USD 100,000 minimum), class I (dependent), class D (student), EAC East African Pass. Deportation — s.26 — procedural safeguards. Citizenship — by birth (Art.14), registration (Art.15), naturalisation (17 years residence or 3 years married to citizen + 7 years). Dual citizenship — permitted (Art.16).
+
+════════════════════════════════════════
+INTERNATIONAL LAW — ALL FRAMEWORKS
+════════════════════════════════════════
+Public international law: Art.38 ICJ Statute (treaties, custom, general principles, judicial decisions). Art.2(6) CoK — ratified treaties form part of Kenyan law (courts: not self-executing without legislation — apply with caution). VCLT 1969 — pacta sunt servanda (Art.26), interpretation (Art.31 — ordinary meaning in context + object/purpose).
+EAC: EAC Treaty 1999 (as amended) — Kenya, Uganda, Tanzania, Rwanda, Burundi, South Sudan, DRC (2023). EAC Common Market Protocol 2010 — free movement (goods, persons, labour, services, capital). EAC Customs Union Protocol 2005 — CET. EACJ — First Instance + Appellate Divisions; jurisdiction — interpretation/application of EAC Treaty; 2-month time limit; CMC Aviation v Uganda Airlines [2018] — EAC Treaty prevails over domestic law.
+COMESA: COMESA Treaty 1994 (19 states). Free trade area (zero tariffs within FTA). Competition — COMESA Competition Regulations. COMESA Court of Justice.
+AfCFTA: AfCFTA Agreement 2018 (in force 2019 — Kenya ratified). Protocols — goods, services, IP, competition, investment, digital trade. Tariff liberalisation — 90% tariff lines over 5 years. Dispute settlement — AfCFTA DSB.
+WTO/GATT: Kenya founding member 1995. GATT 1994, GATS, TRIPS, SPS, TBT. Doha Declaration 2001 — compulsory licences for public health (TRIPS Art.31).
+AGOA: US unilateral duty-free access for qualifying products — Kenya major beneficiary (garments, cut flowers). EU-EAC EPA — in force for Kenya and Rwanda — duty-free/quota-free access to EU.
+Investment treaties: ICSID Convention 1965 (Kenya member). BITs in force — UK (2000), Netherlands (1979), Germany (1996), Switzerland (2007), France (2007), Italy (1999), China (2001), UAE (2014), Mauritius (2014), Kuwait (2012), Qatar (2014), Singapore (2006). MFN, FET, expropriation (Art.40 CoK — public purpose, prompt full compensation), free transfer of funds.
+Arbitration: UNCITRAL Model Law 1985 (2006 amendments — adopted by Kenya). New York Convention 1958 (Kenya acceded 1989) — recognition/enforcement — grounds for refusal Art.V. ICSID — awards self-enforcing in member states (Art.54) — no appeal to national courts.
+Human rights treaties: ICCPR (1966, Kenya 1972); ICCPR Optional Protocol (individual communications to HRC); ICESCR (1966, Kenya 1976); CEDAW (1979, Kenya 1984 — no reservations); CRC (1989, Kenya 1990 — Art.3 best interests, Art.12 participation); CRPD (2006, Kenya 2008 — optional protocol); CAT (1984, Kenya 1997); CERD (Kenya 2001); Banjul Charter (1981, Kenya 1992 — individual + peoples' rights + duties); Maputo Protocol (2003, Kenya 2010); ACRWC (1990, Kenya 2000). AHRC — individual petitions (Kenya has not made declaration — only state referrals available).
+Labour: ILO — Kenya member. Core conventions: C29 Forced Labour (Kenya 1964), C87 Freedom of Association (1964), C98 Collective Bargaining (1964), C100 Equal Remuneration (1964), C105 Abolition of Forced Labour (1964), C111 Discrimination (1964), C138 Minimum Age (1979), C182 Worst Forms of Child Labour (2001). MLC 2006 — Maritime Labour Convention.
+Environment: Paris Agreement 2015 (Kenya ratified) — NDCs, carbon markets (Art.6), loss and damage. CBD 1992 (Kenya 1994) — Nagoya Protocol on ABS (Kenya 2015). Basel Convention (Kenya 1994). Rotterdam Convention (Kenya 2004). Stockholm Convention — POPs (Kenya 2004). UNCLOS 1982 (Kenya 2004) — EEZ 200nm, continental shelf, ITLOS, Annex VII arbitration. Ramsar (Kenya 1990). CITES (Kenya 1978).
+Maritime: SOLAS, MARPOL (IMO — Kenya member). Merchant Shipping Act 2009. Admiralty — Admiralty Court at HC Mombasa.
+Diplomatic & consular: VCDR 1961 (Kenya 1965) — diplomatic immunity (Art.31; inviolability of mission); VCCR 1963 (Kenya 1965) — consular immunity (more limited). Diplomatic Immunities and Privileges Act (Cap.179). International Organisations — Privileges and Immunities Act (Cap.179A) — UN, AU, IOs hosted in Nairobi (UNEP, UN-Habitat).
+Trade instruments: INCOTERMS 2020 (ICC) — EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF. UCP 600 (ICC — letters of credit). CISG (not ratified — persuasive where counterparty is CISG state). UNIDROIT Principles 2016 — gap-filling (Triton Petroleum v Pan Ocean [2017]). UNCITRAL Model Law on Electronic Commerce.
+
+════════════════════════════════════════
+LEAD KENYAN PRECEDENTS (COMPREHENSIVE)
+════════════════════════════════════════
+Constitutional: Samuel Kamau Macharia v KCB [2012] SCK — SC jurisdiction Art.163(4)(a); Mumo Matemu v Trusted Society [2013] CoA — constitutional petition requirements; JSC v Mbalu Mutuku [2013] HC — proportionality in judicial review; Communications Commission of Kenya v Royal Media [2014] SCK — public interest broadcasting.
+Land: Kenya Railways Corporation v Nyutu Agrovet [2016] CoA — compulsory acquisition compensation; Joseph Ombogi v Thomas Nyaboga [2017] ELC — adverse possession under LRA 2012.
+Contract: Hashi Energy Ltd v KRA [2019] HC — Art.2(4) public policy/foreign law; Gabriel Mutava v KPA [2016] CoA — limitation non-waivable; Cooper Motor Corporation v Nyoike [2015] CoA — penalty clause test.
+Employment: Mwangi v Securex [2020] ELRC — non-compete two-stage test; Kenya Hotels v Karanja [2019] CoA — unfair termination procedure; Peter Makau v Barclays Bank [2017] ELRC — redundancy criteria; Amos Kamanga v Dallington [2018] ELRC — constructive dismissal.
+Data: Republic v Safaricom (ODPC) [2023] HC — DPA 2019 purpose limitation.
+IP: Kenya Breweries v Longhorn Publishers [2016] CoA — IP assignment future works; Proctor & Gamble v Doshi International [2015] HC — trade mark/passing off.
+Civil procedure: Owners of MV Lillian S v Caltex Oil [1989] CoA — jurisdiction threshold; Savings & Loan Kenya v Mwangi [2004] CoA — setting aside default judgment; Macharia Mwangi v Robert Maina [2014] CoA — summary judgment test; Mombasa Hardware v Al Abdulla [2021] HC — garnishee; Esso (Kenya) v MV Saruji [1994] CoA — mandatory arbitration stay.
+Arbitration: Telkom Kenya v Orange SA [2021] HC — s.6 mandatory stay; Kenya Pipeline Company v Yomar [2019] HC — award enforcement; Christ for All Nations v Apollo Insurance [2002] HC — NY Convention enforcement.
+Administrative: Republic v IEBC ex parte NASA [2017] CoA — judicial review grounds; Giella v Cassman Brown [1973] HC — injunction test (serious question, balance of convenience, status quo).
+International: CMC Aviation v Uganda Airlines [2018] EACJ — EAC Treaty prevails; Triton Petroleum v Pan Ocean [2017] HC — UNIDROIT gap-filling.
+
+════════════════════════════════════════
+RESPONSE STYLE
+════════════════════════════════════════
+- Use [KE] before Kenyan law/case references; [INT] before international references; [WARN] before risk flags.
+- MAINTAIN CONVERSATION MEMORY: Read entire history before every response. Never repeat. Build on prior exchanges — reference earlier points, update analysis when new facts emerge, ask one targeted follow-up if key facts are missing.
+- Be practitioner-focused: step-by-step actionable advice — filing deadlines, forms, correct court/registry, costs exposure, limitation periods, regulatory clearances.
+- Proactively flag: correct court and pecuniary jurisdiction; exact limitation period; procedural steps; stamp duty; ODPC/KRA/CMA/CAK/NEMA/PPRA clearances required.
+- Never request or expose client-identifying information.
+- Format: **bold** for key points; numbered lists for steps; never truncate when precision matters.`;
+
+// ── Conversation history store ──
+let chatHistory = [];  // [{role:'user'|'assistant', content:string}]
 let chatBusy=false,typingEl=null;
 
-function addMsg(role,html){
+function addMsg(role,html,rawText){
   const c=document.getElementById('msgs');
   const d=document.createElement('div');d.className='msg '+(role==='ai'?'':'user');
   d.innerHTML=`<div class="av ${role==='ai'?'ai':'user'}">${role==='ai'?'⚖':'ME'}</div><div class="bub">${html}</div>`;
@@ -1138,15 +1417,73 @@ function addMsg(role,html){
 }
 function showTyping(){chatBusy=true;const c=document.getElementById('msgs');typingEl=document.createElement('div');typingEl.className='msg';typingEl.innerHTML='<div class="av ai">⚖</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';c.appendChild(typingEl);c.scrollTop=c.scrollHeight;}
 function rmTyping(){chatBusy=false;if(typingEl){typingEl.remove();typingEl=null;}}
+
+async function callAIWithHistory(userMsg, systemPrompt, maxTokens=900){
+  if(!API_KEY||API_KEY.includes('YOUR_')) throw new Error('No API key set.');
+  // Anonymise if needed
+  const hasSensitive=/\b([A-Z][a-z]+ [A-Z][a-z]+)\b/.test(userMsg)||/case no/i.test(userMsg);
+  let query=hasSensitive?userMsg.replace(/\b([A-Z][a-z]+ [A-Z][a-z]+)\b/g,(_,m,i)=>['[Person A]','[Person B]','[Person C]'][i%3]||'[Person A]'):userMsg;
+  if(hasSensitive){const bar=document.getElementById('anon-bar');if(bar){document.getElementById('anon-txt').textContent='Sensitive data anonymised: '+query.substring(0,70)+'…';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),5000);}}
+
+  // Build messages array with full history
+  const messages=[...chatHistory,{role:'user',content:query}];
+
+  if(API_PROVIDER==='groq'){
+    const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
+      body:JSON.stringify({model:MODELS.groq,max_tokens:maxTokens,temperature:0.25,
+        messages:[{role:'system',content:systemPrompt},...messages]})
+    });
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+    return d.choices?.[0]?.message?.content||'';
+  }
+  if(API_PROVIDER==='gemini'){
+    // For Gemini, prepend system prompt to first user message
+    const gemMsgs=messages.map((m,i)=>({
+      role:m.role==='assistant'?'model':'user',
+      parts:[{text:i===0?systemPrompt+'\n\n'+m.content:m.content}]
+    }));
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/${MODELS.gemini}:generateContent?key=${API_KEY}`;
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:gemMsgs,generationConfig:{maxOutputTokens:maxTokens,temperature:0.25}})});
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message);
+    return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  }
+  if(API_PROVIDER==='openrouter'){
+    const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY,'HTTP-Referer':'https://lexai.kenya','X-Title':'DKM Advocate'},
+      body:JSON.stringify({model:MODELS.openrouter,max_tokens:maxTokens,
+        messages:[{role:'system',content:systemPrompt},...messages]})
+    });
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+    return d.choices?.[0]?.message?.content||'';
+  }
+  throw new Error('Unknown API_PROVIDER');
+}
+
 async function sendChat(){
   const el=document.getElementById('chat-input');const txt=el.value.trim();
   if(!txt||chatBusy)return;el.value='';
   addMsg('user',txt);showTyping();
-  try{const r=await callAI(txt,CHAT_SYS);rmTyping();addMsg('ai',fmt(r));}
+  try{
+    const r=await callAIWithHistory(txt,CHAT_SYS,900);
+    rmTyping();
+    // Store in history (raw text, not HTML)
+    chatHistory.push({role:'user',content:txt});
+    chatHistory.push({role:'assistant',content:r});
+    // Keep history to last 20 turns (10 exchanges) to avoid token limits
+    if(chatHistory.length>20)chatHistory=chatHistory.slice(chatHistory.length-20);
+    addMsg('ai',fmt(r));
+  }
   catch(e){rmTyping();addMsg('ai',`<span style="color:var(--danger-text)">Error: ${e.message}. Please check your API key in the HTML file.</span>`);}
 }
 function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
 function useChip(el){document.getElementById('chat-input').value=el.textContent;document.getElementById('chat-input').focus();}
+function clearChat(){chatHistory=[];document.getElementById('msgs').innerHTML=`<div class="msg"><div class="av ai">⚖</div><div class="bub">Chat cleared. How can I assist you?</div></div>`;}
 
 // ══════════════════════════════════════════════
 // CLAUSE EXTRACTOR
@@ -1157,7 +1494,29 @@ async function extractClauses(){
   if(!txt){alert('Please paste some contract text first.');return;}
   const res=document.getElementById('clause-results');
   res.innerHTML='<div style="font-size:13px;color:var(--text2);padding:10px 0">Analysing clauses…</div>';
-  const sys=`You are a Kenyan contract lawyer. Extract clauses and return ONLY a valid JSON array. No markdown, no preamble. Each item: {type, extracted_text(max 120 chars), risk_level(low/medium/high), kenyan_law_note(max 60 chars), international_law_note(max 60 chars), analysis(max 150 chars)}`;
+  const sys=`You are a senior Kenyan contract lawyer. Extract EVERY distinct legal clause from the text provided and return ONLY a valid JSON array — no markdown, no preamble, no explanation outside the JSON.
+
+For each clause, your analysis must apply these Kenyan and international law frameworks:
+- Law of Contract Act (Cap. 23): formation, consideration, capacity, illegality, penalty clauses (must be genuine pre-estimate of loss)
+- Consumer Protection Act 2012: unfair/unconscionable terms in B2C contracts (s.52) are unenforceable
+- Employment Act 2007: non-compete (s.45 + Mwangi v Securex test), notice (s.35), restraint of trade reasonableness
+- Data Protection Act 2019: data sharing, processing, retention clauses — lawful basis (s.30), purpose limitation (s.31), cross-border transfer (s.48)
+- Land Registration Act 2012 / Land Act 2012: property-related obligations
+- Arbitration Act (Cap. 49): ADR clauses — UNCITRAL Model Law adopted; distinguish institutional (NCIA/ICC/LCIA) vs ad hoc
+- Companies Act 2015: ultra vires, director authority
+- Hashi Energy v KRA [2019]: choice of foreign law — Art. 2(4) CoK 2010 public policy may override
+- Telkom Kenya v Orange SA [2021]: broadly-worded arbitration clauses cover tortious claims
+- GDPR (extra-territorial): if clause involves processing EU persons' data
+- UNIDROIT Principles 2016: gap-filling for gaps in Kenyan law
+- ILO conventions: if employment-related
+- Civil Procedure Act (Cap. 21) + Civil Procedure Rules 2010 (Or.1-51): clauses ousting court jurisdiction are void (Art. 48 CoK — access to justice); limitation-shortening clauses void (Limitation of Actions Act Cap. 22 cannot be contracted out — 6 yrs contract, 3 yrs tort)
+- Arbitration Act (Cap. 49) s.6: flag pathological arbitration clauses (no seat, no rules, contradictory — unenforceable); mandatory stay of proceedings for valid arbitration agreements
+- ELRC Act 2011 / ELC Act 2011: clauses excluding exclusive jurisdiction of ELRC (employment) or ELC (land/environment) are void
+- Advocates Act (Cap. 16): contingency/champertous fee clauses — void; costs below Advocates (Remuneration) Order minimum are unenforceable
+- Insolvency Act 2015: ipso facto termination-on-insolvency clauses — enforceable but note administrator's powers (Part IV)
+- Stamp Duty Act (Cap. 480): flag all instruments attracting duty — conveyances (4%), leases, share transfers (1%), debentures
+
+Each JSON item must have: {type, extracted_text(max 150 chars), risk_level("low"|"medium"|"high"), kenyan_law_note(max 80 chars with statute/section), international_law_note(max 80 chars), analysis(max 200 chars — specific, actionable), missing_element(max 80 chars — what is absent that Kenyan law requires or best practice demands, or null)}`;
   try{
     const raw=await callAI(`Extract all legal clauses from this contract text and return ONLY JSON array:\n\n${txt.substring(0,2500)}`,sys,1000);
     let clauses;
@@ -1169,7 +1528,8 @@ async function extractClauses(){
       const rl=(cl.risk_level||'medium').toLowerCase();
       const bc=rl==='low'?'risk-low':rl==='high'?'risk-high':'risk-med';
       const card=document.createElement('div');card.className='clause-card';
-      card.innerHTML=`<div class="cc-head"><span class="cc-type">${cl.type||'Clause'}</span><span class="risk-badge ${bc}">${rl} risk</span></div><div class="cc-body"><div class="cc-quote">"${(cl.extracted_text||'').substring(0,150)}…"</div><div class="cc-analysis">${cl.analysis||''}</div><div class="cc-laws">${cl.kenyan_law_note?`<span class="law-ke">KE: ${cl.kenyan_law_note}</span>`:''} ${cl.international_law_note?`<span class="law-int">INT: ${cl.international_law_note}</span>`:''}</div></div>`;
+      const missingHtml=cl.missing_element?`<div style="margin-top:6px;font-size:11px;background:var(--warn-bg);color:var(--warn-text);border-left:3px solid #fac775;padding:5px 8px;border-radius:0 4px 4px 0"><strong>Missing:</strong> ${cl.missing_element}</div>`:'';
+      card.innerHTML=`<div class="cc-head"><span class="cc-type">${cl.type||'Clause'}</span><span class="risk-badge ${bc}">${rl} risk</span></div><div class="cc-body"><div class="cc-quote">"${(cl.extracted_text||'').substring(0,180)}…"</div><div class="cc-analysis">${cl.analysis||''}</div><div class="cc-laws">${cl.kenyan_law_note?`<span class="law-ke">KE: ${cl.kenyan_law_note}</span>`:''} ${cl.international_law_note?`<span class="law-int">INT: ${cl.international_law_note}</span>`:''}</div>${missingHtml}</div>`;
       res.appendChild(card);
     });
   }catch(e){res.innerHTML=`<div style="font-size:13px;color:var(--danger-text);padding:8px">Error: ${e.message}</div>`;}
@@ -1188,6 +1548,13 @@ const PRECS=[
   {name:'Kenya Breweries v Longhorn Publishers',year:'2016',court:'Court of Appeal of Kenya',tags:['Kenya','IP','Commercial'],principle:'IP assignment clauses must expressly cover future works; general assignments do not transfer rights in subsequently created works.',detail:'Applied domestic Copyright Act (Cap. 130) alongside Berne Convention principles. An IP assignment clause in a marketing services agreement did not cover creative works developed after the contract date. Lesson: IP clauses require specific drafting.'},
   {name:'Mumo Matemu v Trusted Society of Human Rights Alliance',year:'2013',court:'Court of Appeal of Kenya',tags:['Kenya','Constitutional','Administrative'],principle:'Constitutional petitions require demonstration of a nexus between the alleged violation and the fundamental rights guaranteed in the Bill of Rights.',detail:'The Court of Appeal set out principles for constitutional petitions under Art. 22 and 258. Petitioners must particularise how specific constitutional articles have been violated. Relevant for drafting constitutional petitions and judicial review applications.'},
   {name:'Samuel Kamau Macharia v Kenya Commercial Bank',year:'2012',court:'Supreme Court of Kenya',tags:['Kenya','Constitutional','Banking'],principle:'The Supreme Court has jurisdiction to hear appeals where matters of constitutional interpretation and application are raised.',detail:'The Supreme Court clarified its jurisdiction under Art. 163(4)(a). The case established that where constitutional questions are genuine and not merely cosmetic, the apex court will hear the appeal. Key for framing appeals involving constitutional rights.'},
+  {name:'Republic v Independent Electoral and Boundaries Commission ex parte National Super Alliance',year:'2017',court:'Court of Appeal of Kenya',tags:['Kenya','Constitutional','Judicial Review'],principle:'Judicial review under Order 53 CPR is available to challenge public bodies acting ultra vires, in breach of natural justice, or irrationally.',detail:'The Court of Appeal affirmed the three-stage test for judicial review (illegality, irrationality, procedural impropriety) and confirmed that proportionality is now an additional ground post-2010 Constitution. Leave must be obtained ex parte before substantive hearing. Six-month time limit strictly enforced — Or.53 r.2 CPR.'},
+  {name:'Owners of Motor Vessel "Lillian S" v Caltex Oil (Kenya) Ltd',year:'1989',court:'Court of Appeal of Kenya',tags:['Kenya','Civil Procedure','Jurisdiction'],principle:'A court must be satisfied it has jurisdiction before entertaining a matter; jurisdiction goes to the root of the proceedings.',detail:'The Court of Appeal established that jurisdiction is a threshold question. Where a court lacks jurisdiction, all subsequent proceedings are a nullity. Critical when considering the correct forum — High Court, ELC, ELRC or Magistrates Court — and for challenging proceedings filed in the wrong court under Order 1 CPR.'},
+  {name:'Savings & Loan Kenya Ltd v Mwangi',year:'2004',court:'Court of Appeal of Kenya',tags:['Kenya','Civil Procedure','Default Judgment'],principle:'Default judgment under Order 9 CPR must be set aside where the defendant had good reason for non-appearance and a bona fide defence on the merits.',detail:'The Court applied the two-limb test for setting aside default judgment: (1) sufficient reason for default; (2) arguable defence on merits. Mere delay without excuse does not satisfy limb 1. Relevant to Or.9 and Or.10 applications.'},
+  {name:'Gabriel Mutava & 2 Others v Managing Director Kenya Ports Authority',year:'2016',court:'Court of Appeal of Kenya',tags:['Kenya','Civil Procedure','Limitation'],principle:'The Limitation of Actions Act (Cap. 22) limitation periods cannot be waived by agreement; a clause shortening the limitation period for claims is void.',detail:'Confirmed that parties cannot by contract shorten the statutory limitation period under the Limitation of Actions Act. Section 4 — 6 years for contracts, 3 years for tort. Section 7 — 12 years for land claims. Directly relevant when reviewing dispute resolution clauses that purport to impose shorter notification or claim periods.'},
+  {name:'Esso (Kenya) Ltd v The Owners of the Motor Vessel "Saruji"',year:'1994',court:'Court of Appeal of Kenya',tags:['Kenya','Arbitration','Civil Procedure'],principle:'Where a valid arbitration agreement exists, a court must stay proceedings under the Arbitration Act unless the agreement is null and void or inoperative.',detail:'Predecessor to Arbitration Act (Cap. 49) s.6 — the mandatory stay principle. Distinguished pathological arbitration clauses (no seat, contradictory rules) which courts will not enforce. Now codified: s.6 Arbitration Act 1995 as amended — court has no discretion where a valid arbitration agreement covers the dispute.'},
+  {name:'Re Estate of Mugo (Deceased)',year:'2018',court:'High Court of Kenya (Family Division)',tags:['Kenya','Succession','Civil Procedure'],principle:'Probate and administration proceedings are governed by the Law of Succession Act (Cap. 160) and Civil Procedure Rules; orders made in probate are final judgments.',detail:'Confirmed the procedure for grant of probate and letters of administration under the Law of Succession Act. Highlighted that the High Court (Family Division) has exclusive jurisdiction over contested succession matters above the Magistrates Court threshold. Letters of administration must be obtained before estate assets can be collected or distributed.'},
+  {name:'Mombasa Hardware Ltd v Sheikh Nabhan Abdulla Al Abdulla',year:'2021',court:'High Court of Kenya (Commercial Division)',tags:['Kenya','Enforcement','Civil Procedure'],principle:'Garnishee proceedings under Order 23 CPR are an effective post-judgment remedy; third-party debt owed to judgment debtor can be attached.',detail:'Confirmed that Or.23 CPR garnishee orders nisi and absolute are available against third parties who owe money to the judgment debtor. The garnishee must disclose the debt. Useful alongside Or.21 (warrant of attachment), Or.22 (sale of goods), Or.24 (charging orders on land), and Or.26 (receivership). Key enforcement toolkit for Kenyan advocates.'},
 ];
 
 function renderPrecs(list){
@@ -1211,8 +1578,9 @@ async function precAI(q){
   const el=document.getElementById('prec-list');
   const d=document.createElement('div');d.style.cssText='border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;font-size:12px;line-height:1.7;margin-top:8px;color:var(--text);background:var(--bg)';
   d.textContent='Searching AI legal database…';el.appendChild(d);
+  const precSys=`You are a Kenyan legal researcher specialising in case law. For each case you cite: give the full name, year, court (using proper Kenyan court names: Supreme Court of Kenya, Court of Appeal of Kenya, High Court of Kenya, Employment and Labour Relations Court, Environment and Land Court, East African Court of Justice, etc.), the key legal principle established, and its practical significance. Use [KE] for Kenyan courts, [INT] for international/regional tribunals. Be precise — if uncertain of exact citation, say so rather than fabricating.`;
   try{
-    const r=await callAI(`Find 2-3 relevant Kenyan or international legal precedents for: "${q}". For each: CASE NAME | YEAR | COURT | KEY PRINCIPLE. Use [KE] for Kenyan cases, [INT] for international.`,CHAT_SYS,400);
+    const r=await callAI(`Find 2-3 relevant Kenyan or international legal precedents for: "${q}". For each, state: CASE NAME | YEAR | COURT | KEY PRINCIPLE | PRACTICAL SIGNIFICANCE FOR KENYAN PRACTITIONERS. Use [KE] for Kenyan cases, [INT] for international. Cite specific sections of relevant statutes where applicable.`,precSys,600);
     d.innerHTML=fmt(r);
   }catch{d.textContent='Could not retrieve additional cases.';}
 }
@@ -1228,7 +1596,21 @@ async function runCompliance(){
   if(!txt)return;
   const res=document.getElementById('comp-result');
   res.innerHTML='<div style="font-size:13px;color:var(--text2)">Running compliance analysis…</div>';res.classList.add('show');
-  const sys=`You are a Kenyan compliance lawyer. Check against: Constitution of Kenya 2010, Data Protection Act 2019, Law of Contract Act, Employment Act 2007, Consumer Protection Act 2012, EAC Treaty, COMESA, UNCITRAL, NY Convention, ILO conventions. Use [KE] and [INT] tags. Reply format: KENYA_SCORE: X/100 on its own line, INTL_SCORE: Y/100 on its own line, then bullet analysis.`;
+  const sys=`You are a Kenyan compliance counsel with expertise in Kenyan and international law. Analyse the clause or obligation provided against:
+
+KENYAN LAW: Constitution of Kenya 2010 (Art. 2(4) supremacy, Bill of Rights Arts. 19-57, Art. 31 privacy, Art. 35 access to information, Art. 46 consumer rights, Art. 159 ADR), Law of Contract Act (Cap. 23), Employment Act 2007 (s.45 unfair termination, non-compete reasonableness test), Consumer Protection Act 2012 (unfair terms in B2C contracts), Data Protection Act 2019 (lawful basis s.30, purpose limitation s.31, data minimisation s.25, cross-border transfers s.48, ODPC registration), Land Registration Act 2012, Land Act 2012, Companies Act 2015, Competition Act 2010, Banking Act (Cap. 488), Stamp Duty Act (Cap. 480), Tax Procedures Act 2015, Public Procurement and Asset Disposal Act 2015.
+
+PROCEDURAL LAW: Civil Procedure Act (Cap. 21) + Civil Procedure Rules 2010 — flag clauses that oust court jurisdiction (void under CoK Art. 48 — access to justice), clauses prescribing shorter limitation periods than Limitation of Actions Act (Cap. 22) allows (6 years contract, 3 years tort — cannot be contracted out), jurisdiction clauses excluding Kenyan courts where Kenyan law is mandatory, service of process provisions inconsistent with Or.5 CPR. Arbitration Act (Cap. 49) s.6 — court must stay proceedings in favour of valid arbitration agreement. Small Claims Court Act 2016 — certain disputes cannot be excluded from SCC jurisdiction. ELRC Act 2011 — employment disputes exclusively in ELRC; choice of forum clauses purporting to remove ELRC jurisdiction are void. ELC Act 2011 — land disputes exclusively in ELC. Advocates Act (Cap. 16) — contingency fee arrangements regulated; champertous agreements void. Foreign Judgments (Reciprocal Enforcement) Act (Cap. 43) — enforcement conditions. Insolvency Act 2015 — ipso facto clauses on insolvency are enforceable but subject to administrator's powers.
+
+INTERNATIONAL LAW: UNCITRAL Model Law on International Commercial Arbitration (adopted via Arbitration Act Cap. 49), New York Convention 1958, EAC Common Market Protocol, COMESA Treaty, AfCFTA, GDPR (applies extra-territorially for EU persons' data), ILO core conventions (all ratified by Kenya), ICSID Convention, UNIDROIT Principles 2016, INCOTERMS 2020, Berne Convention, Paris Convention (IP), African Charter on Human and Peoples' Rights.
+
+ENFORCEMENT RISKS: Flag: (1) provisions contrary to Kenyan public policy under Art. 2(4) CoK 2010 — courts will refuse to apply; (2) ODPC enforcement powers under DPA 2019; (3) LSK Advocates Act professional conduct rules; (4) KRA transfer pricing scrutiny; (5) Competition Authority of Kenya powers.
+
+Use [KE] before Kenyan law references, [INT] before international references, [WARN] before risk flags.
+Reply format: 
+KENYA_SCORE: X/100 on its own line
+INTL_SCORE: Y/100 on its own line  
+Then: clear structured analysis with specific statute sections cited, practical remediation steps, and enforcement risk level (High/Medium/Low).`;
   try{
     const r=await callAI(`Compliance check: "${txt}"`,sys,600);
     const ke=(r.match(/KENYA_SCORE:\s*(\d+)/i)||[])[1];
@@ -2191,17 +2573,42 @@ async function deleteUser(uid, name){
 // Each doc: { id, name, rawText, anonymised, map, wordCount, tokenCount }
 let reviewDocs   = [];
 let reviewBusy   = false;
+let reviewHistory = []; // multi-turn conversation history for document review chat
 const MAX_DOCS   = 5;
 const MAX_SIZE   = 10 * 1024 * 1024;
 
-const REVIEW_SYS = `You are the personal legal assistant of Advocate Dennis Kimani Mutonga, a Kenyan advocate. You have been given anonymised extracts from one or more legal documents. Anonymised tokens like [PERSON-A], [ID-001], [ADDR-001] represent real values redacted for client confidentiality — treat them consistently across documents (the same token always refers to the same real-world entity). Your job:
-- Summarise documents clearly
-- Identify legal risks and problematic clauses under Kenyan law
-- Flag obligations of each party
-- Compare documents when multiple are loaded (find conflicts, gaps, inconsistencies)
-- Cite relevant Kenyan statutes and case law
-- Give practical advice as a qualified Kenyan advocate
-Use [KE] before Kenyan law citations, [WARN] before risk flags.`;
+const REVIEW_SYS = `You are the personal legal assistant of Advocate Dennis Kimani Mutonga, a Kenyan advocate. You have been given anonymised extracts from one or more legal documents. Anonymised tokens like [PERSON-A], [ID-001], [ADDR-001] represent real values redacted for client confidentiality — treat them consistently across documents.
+
+DEEP KENYAN LAW KNOWLEDGE — apply rigorously:
+- Contract law: Law of Contract Act (Cap. 23) — formation, capacity, illegality, frustration, mistake, misrepresentation. Consumer Protection Act 2012 — unfair terms unenforceable in B2C (s.52). 
+- Land & property: Land Registration Act 2012, Land Act 2012 — distinguish freehold/leasehold/community land. Stamp Duty Act (Cap. 480) — duty on instruments. Sectional Properties Act 2020.
+- Employment: Employment Act 2007 s.45 (unfair termination), s.35 (notice), Labour Relations Act 2007 (collective agreements), Work Injury Benefits Act 2007. Non-competes: Mwangi v Securex [2020] ELRC — two-stage test (legitimate interest + reasonableness of scope/duration/geography).
+- Data protection: Data Protection Act 2019 — lawful basis (s.30), purpose limitation (s.31), cross-border transfers (s.48 — adequate protection or consent required), data subject rights (s.26-29), ODPC registration. Republic v Safaricom (ODPC) [2023].
+- Procedure & limitation: Civil Procedure Act (Cap. 21) + Civil Procedure Rules 2010 (Orders 1-51) — Or.26 injunctions, Or.36 originating summons, Or.40 chamber summons, Or.53 judicial review. Limitation of Actions Act (Cap. 22): 6 years contract, 3 years tort, 12 years land, 1 year defamation. Small Claims Court Act 2016 (≤ KES 1,000,000, no advocates). ELRC Rules 2016 (employment disputes — 3-year limitation, s.90 EA). ELC Rules 2013 (land/environment). Court of Appeal Rules 2010 (30 days notice of appeal, r.75). Insolvency Act 2015. Execution: Or.21-25 CPR — attachment, garnishee (Or.23). Foreign judgments: Foreign Judgments (Reciprocal Enforcement) Act (Cap. 43) — register within 6 years.
+- Costs & fees: Advocates (Remuneration) Order L.N. 64/1962 as amended — note if any clause purports to exclude or cap costs below statutory minimum.
+- Foreign law clauses: Hashi Energy v KRA [2019] — Art. 2(4) CoK 2010 public policy overrides foreign law if performance in Kenya. Judicature Act (Cap. 8) governs applicable law.
+- IP: Copyright Act (Cap. 130) — future works not assigned by general clause (Kenya Breweries v Longhorn [2016]). Industrial Property Act 2001.
+- Companies: Companies Act 2015 — ultra vires doctrine abolished but Memorandum binds third parties with notice.
+- Stamp duty obligations: Note all instruments requiring stamping under Stamp Duty Act (Cap. 480).
+
+INTERNATIONAL FRAMEWORKS:
+- GDPR: Extra-territorial if processing EU persons' data — flag controller/processor obligations
+- EAC Common Market Protocol: Free movement obligations in cross-border contracts; CMC Aviation v Uganda Airlines [2018] EACJ
+- COMESA Treaty: Competition law, trade in goods/services
+- UNCITRAL Model Law: Arbitration clauses, seat of arbitration, institutional vs ad hoc
+- ILO core conventions: Labour standards obligations (all ratified by Kenya)
+- UNIDROIT Principles 2016: Gap-filling where Kenyan law is silent — persuasive (Triton Petroleum v Pan Ocean [2017])
+- New York Convention 1958: Foreign arbitral award enforcement in Kenya
+
+YOUR JOB:
+- Summarise documents clearly and precisely
+- Identify legal risks and problematic clauses under Kenyan and international law with specific statute/section citations
+- Flag obligations of each party with clear attribution
+- Compare documents when multiple are loaded (conflicts, gaps, inconsistencies, cross-document risks)
+- Note any missing clauses that Kenyan law requires or best practice demands
+- Give practical advice as a qualified Kenyan advocate — what should the client do before signing?
+- Reference the conversation history — if the user is asking a follow-up question, build on prior analysis rather than starting fresh
+Use [KE] before Kenyan law citations, [INT] before international citations, [WARN] before risk flags. Bold key risks with **...**. Cite specific sections.`;
 
 // ── ANONYMISATION ENGINE ─────────────────────
 function anonymiseText(text){
@@ -2517,6 +2924,7 @@ function loadScript(src){
 
 function clearReview(){
   reviewDocs = [];
+  reviewHistory = [];
   document.getElementById('review-docs-list').innerHTML = '';
   document.getElementById('review-docs-list').style.display = 'none';
   document.getElementById('review-dropzone').style.display = '';
@@ -2601,18 +3009,47 @@ async function sendReviewChat(){
   showReviewTyping();
 
   try{
-    // Build context from all docs — anonymised only
+    // Build document context — only include in first message or when docs change
     const docsContext = reviewDocs.map((doc, i) => {
       const snippet = doc.anonymised.split(' ').slice(0, Math.floor(2500/reviewDocs.length)).join(' ');
       return `=== DOCUMENT ${i+1}: ${doc.name} ===\n${snippet}`;
     }).join('\n\n');
 
-    const prompt =
-      `You have ${reviewDocs.length} document(s) to review. All content has been anonymised for client confidentiality.\n\n`+
-      docsContext +
-      `\n\n---\nADVOCATE'S QUESTION: ${question}`;
+    // For first message, include full doc context. For follow-ups, use history.
+    let userContent;
+    if(reviewHistory.length === 0){
+      userContent = `You have ${reviewDocs.length} document(s) to review. All content has been anonymised for client confidentiality.\n\n${docsContext}\n\n---\nADVOCATE'S QUESTION: ${question}`;
+    } else {
+      userContent = question; // history already contains the doc context
+    }
 
-    const response = await callAI(prompt, REVIEW_SYS, 1000);
+    // Build messages with history
+    const messages = [...reviewHistory, {role:'user', content: userContent}];
+
+    // Call AI with full conversation history
+    let response;
+    if(API_PROVIDER==='groq'){
+      const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
+        body:JSON.stringify({model:MODELS.groq, max_tokens:1000, temperature:0.25,
+          messages:[{role:'system',content:REVIEW_SYS},...messages]})
+      });
+      const d=await r.json();
+      if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
+      response=d.choices?.[0]?.message?.content||'';
+    } else {
+      // Fallback for other providers via callAI
+      const prompt = `You have ${reviewDocs.length} document(s) to review.\n\n${docsContext}\n\n---\nADVOCATE'S QUESTION: ${question}`;
+      response = await callAI(prompt, REVIEW_SYS, 1000);
+    }
+
+    // Store in history
+    reviewHistory.push({role:'user', content: userContent});
+    reviewHistory.push({role:'assistant', content: response});
+    // Keep to last 16 turns
+    if(reviewHistory.length>16) reviewHistory=reviewHistory.slice(reviewHistory.length-16);
+
     rmReviewTyping();
     addReviewMsg('ai', fmt(response));
     logActivity('doc_review', reviewDocs.map(d=>d.name).join(', ')+': '+question.slice(0,80));
