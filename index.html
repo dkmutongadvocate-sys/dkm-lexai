@@ -1640,7 +1640,7 @@ calcS3();
 // 3. Paste below
 // ══════════════════════════════════════════════
 const SUPABASE_URL  = 'https://luodoituiuruktlihuam.supabase.co';      // e.g. https://xyzabc.supabase.co
-const SUPABASE_ANON = 'sb_publishable_aLe7aC7N-NQ4Mv4MylZpHA_EWPK7Ijr'; // e.g. eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1b2RvaXR1aXVydWt0bGlodWFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzODY5MjgsImV4cCI6MjA5MDk2MjkyOH0.nWcen3PL6C74Si_hkgScw_zmrqWdm5E4y0rPYRtc8mA'; // e.g. eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 // ── REQUIRED SUPABASE TABLES ──────────────────
 // Run these SQL statements in Supabase SQL Editor:
@@ -1732,16 +1732,28 @@ function setAuthMsg(id,text,type){
 }
 
 async function doSignIn(){
-  if(!sbClient){simulateDemoLogin();return;}
+  // Re-init sbClient if SDK loaded after initSupabase ran
+  if(!sbClient && window.supabase && !SUPABASE_URL.includes('YOUR_')){
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  }
+  if(!sbClient){
+    setAuthMsg('si-msg','Cannot connect — check your Supabase keys.','err');
+    return;
+  }
   const email=document.getElementById('si-email').value.trim();
   const pass=document.getElementById('si-pass').value;
   if(!email||!pass){setAuthMsg('si-msg','Please enter your email and password.','err');return;}
   const btn=document.getElementById('si-btn');
   btn.disabled=true;btn.textContent='Signing in…';
-  const {data,error}=await sbClient.auth.signInWithPassword({email,password:pass});
-  btn.disabled=false;btn.textContent='Sign In';
-  if(error){setAuthMsg('si-msg',error.message,'err');return;}
-  onAuthSuccess(data.user);
+  try{
+    const {data,error}=await sbClient.auth.signInWithPassword({email,password:pass});
+    btn.disabled=false;btn.textContent='Sign In';
+    if(error){setAuthMsg('si-msg',error.message,'err');return;}
+    onAuthSuccess(data.user);
+  }catch(e){
+    btn.disabled=false;btn.textContent='Sign In';
+    setAuthMsg('si-msg','Connection error: '+e.message,'err');
+  }
 }
 
 async function doSignUp(){
@@ -2252,8 +2264,7 @@ async function readPDF(file){
   for(let i=1;i<=Math.min(pdf.numPages,30);i++){
     const page=await pdf.getPage(i);
     const content=await page.getTextContent();
-    text+=content.items.map(s=>s.str).join(' ')+'
-';
+    text+=content.items.map(s=>s.str).join(' ')+'\n';
   }
   return text;
 }
