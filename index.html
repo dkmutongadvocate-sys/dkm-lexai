@@ -847,39 +847,40 @@
       <div id="review-top" style="flex-shrink:0;border-bottom:0.5px solid var(--border);background:var(--bg);padding:12px 14px;display:flex;flex-direction:column;gap:10px">
 
         <!-- Header -->
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text)">📄 Document Review Assistant</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:1px">Upload a document — contracts, letters, pleadings, agreements — and chat with the AI about it</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:1px">Upload multiple documents — compare contracts, cross-reference pleadings, analyse a full matter</div>
           </div>
-          <button id="review-clear-btn" onclick="clearReview()" style="display:none;font-size:11px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;white-space:nowrap">✕ Clear document</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="document.getElementById('review-file-input').click()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:0.5px solid var(--gold);background:var(--gold-light);color:var(--gold-dark);cursor:pointer;font-weight:600;white-space:nowrap">+ Add Document</button>
+            <button id="review-clear-btn" onclick="clearReview()" style="display:none;font-size:11px;padding:5px 10px;border-radius:6px;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;white-space:nowrap">✕ Clear all</button>
+          </div>
         </div>
 
-        <!-- Upload zone -->
+        <!-- Drop zone (shown when no docs loaded) -->
         <div id="review-dropzone" onclick="document.getElementById('review-file-input').click()"
-          style="border:1.5px dashed var(--border2);border-radius:var(--radius-lg);padding:20px;text-align:center;cursor:pointer;transition:border-color .15s;background:var(--bg2)"
+          style="border:1.5px dashed var(--border2);border-radius:var(--radius-lg);padding:18px;text-align:center;cursor:pointer;transition:border-color .15s;background:var(--bg2)"
           ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
           ondragleave="this.style.borderColor='var(--border2)'"
           ondrop="handleReviewDrop(event)">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" style="margin-bottom:6px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" style="margin-bottom:6px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
           <div style="font-size:13px;font-weight:600;color:var(--text)">Click to upload or drag &amp; drop</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF (digital or scanned), Word (.docx), images (.jpg/.png), or text — max 10MB</div>
-          <input type="file" id="review-file-input" accept=".pdf,.docx,.txt,.doc,.jpg,.jpeg,.png,.bmp,.tiff,.tif,.webp" style="display:none" onchange="handleReviewFile(this.files[0])"/>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF (digital or scanned), Word, images, text — up to 5 documents, 10MB each</div>
+          <input type="file" id="review-file-input" accept=".pdf,.docx,.txt,.doc,.jpg,.jpeg,.png,.bmp,.tiff,.tif,.webp" style="display:none" multiple onchange="handleReviewFiles(this.files)"/>
         </div>
 
-        <!-- Loaded doc info bar -->
-        <div id="review-doc-info" style="display:none;background:var(--success-bg);border:0.5px solid #97c459;border-radius:var(--radius);padding:9px 12px;display:none;align-items:center;gap:8px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success-text)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <div style="flex:1;min-width:0">
-            <div id="review-doc-name" style="font-size:12px;font-weight:600;color:var(--success-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</div>
-            <div id="review-doc-meta" style="font-size:10px;color:var(--success-text);opacity:.75">—</div>
-          </div>
-          <div id="review-quick-btns" style="display:flex;gap:5px;flex-wrap:wrap">
-            <button onclick="quickReview('summarise')" class="chip" style="font-size:10px;padding:2px 8px">Summarise</button>
-            <button onclick="quickReview('risks')" class="chip" style="font-size:10px;padding:2px 8px">Key risks</button>
-            <button onclick="quickReview('obligations')" class="chip" style="font-size:10px;padding:2px 8px">Obligations</button>
-            <button onclick="quickReview('advice')" class="chip" style="font-size:10px;padding:2px 8px">Advise client</button>
-          </div>
+        <!-- Loaded documents list -->
+        <div id="review-docs-list" style="display:none;display:flex;flex-direction:column;gap:6px"></div>
+
+        <!-- Quick action buttons (shown when docs loaded) -->
+        <div id="review-quick-btns" style="display:none;flex-wrap:wrap;gap:5px">
+          <button onclick="quickReview('summarise')" class="chip" style="font-size:11px">Summarise all</button>
+          <button onclick="quickReview('risks')" class="chip" style="font-size:11px">Key risks</button>
+          <button onclick="quickReview('obligations')" class="chip" style="font-size:11px">Obligations</button>
+          <button onclick="quickReview('compare')" class="chip" style="font-size:11px">Compare docs</button>
+          <button onclick="quickReview('advice')" class="chip" style="font-size:11px">Advise client</button>
+          <button onclick="quickReview('inconsistencies')" class="chip" style="font-size:11px">Find inconsistencies</button>
         </div>
 
       </div>
@@ -2182,384 +2183,394 @@ async function deleteUser(uid, name){
 
 
 // ══════════════════════════════════════════════
-// DOCUMENT REVIEW — with Tesseract OCR + Anonymisation
-// All processing is LOCAL — nothing leaves the browser until
-// text is anonymised. Raw images are NEVER sent to any API.
+// DOCUMENT REVIEW — Multi-doc, Tesseract OCR + Anonymisation
+// All OCR runs locally. Raw content never leaves the browser.
+// Only anonymised text is sent to the AI API.
 // ══════════════════════════════════════════════
 
-let reviewDocText  = '';   // anonymised text
-let reviewRawText  = '';   // pre-anon (never sent externally)
-let reviewDocName  = '';
-let reviewBusy     = false;
-let tesseractWorker = null;
+// Each doc: { id, name, rawText, anonymised, map, wordCount, tokenCount }
+let reviewDocs   = [];
+let reviewBusy   = false;
+const MAX_DOCS   = 5;
+const MAX_SIZE   = 10 * 1024 * 1024;
 
-const REVIEW_SYS = `You are the personal legal assistant of Advocate Dennis Kimani Mutonga, a Kenyan advocate. You have been given an anonymised extract of a document to review. Anonymised tokens like [PERSON-A], [ID-001], [ADDR-001] represent real values that have been redacted for privacy. Your job is to assist the advocate by:
-- Summarising the document clearly and concisely
-- Identifying legal risks, ambiguities and problematic clauses under Kenyan law
-- Flagging obligations of each party
-- Citing relevant Kenyan statutes and case law where applicable
-- Giving practical legal advice as a qualified Kenyan advocate would
-- Answering specific questions about the document
-Use [KE] before Kenyan law citations, [WARN] before risk flags. Be precise and practitioner-focused.`;
+const REVIEW_SYS = `You are the personal legal assistant of Advocate Dennis Kimani Mutonga, a Kenyan advocate. You have been given anonymised extracts from one or more legal documents. Anonymised tokens like [PERSON-A], [ID-001], [ADDR-001] represent real values redacted for client confidentiality — treat them consistently across documents (the same token always refers to the same real-world entity). Your job:
+- Summarise documents clearly
+- Identify legal risks and problematic clauses under Kenyan law
+- Flag obligations of each party
+- Compare documents when multiple are loaded (find conflicts, gaps, inconsistencies)
+- Cite relevant Kenyan statutes and case law
+- Give practical advice as a qualified Kenyan advocate
+Use [KE] before Kenyan law citations, [WARN] before risk flags.`;
 
 // ── ANONYMISATION ENGINE ─────────────────────
 function anonymiseText(text){
   let out = text;
-  const map = {};   // keeps track of substitutions for advocate reference
-  let personCount = 0, idCount = 0, addrCount = 0,
-      caseCount   = 0, contactCount = 0, orgCount = 0,
-      dateCount   = 0, amountCount  = 0, regCount = 0;
+  const map = {};
+  let personCount=0, idCount=0, addrCount=0,
+      caseCount=0, contactCount=0, orgCount=0,
+      amountCount=0, regCount=0;
 
-  // Kenyan ID numbers (7-8 digits)
-  out = out.replace(/\b(\d{7,8})\b/g, (m) => {
+  // Kenyan National ID (7-8 digits)
+  out = out.replace(/\b(\d{7,8})\b/g, m => {
     idCount++;
-    map['[ID-'+String(idCount).padStart(3,'0')+']'] = m;
-    return '[ID-'+String(idCount).padStart(3,'0')+']';
+    const tok='[ID-'+String(idCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
   // Passport numbers
-  out = out.replace(/\b([A-Z]{1,2}\d{6,8})\b/g, (m) => {
+  out = out.replace(/\b([A-Z]{1,2}\d{6,8})\b/g, m => {
     idCount++;
-    map['[PASS-'+String(idCount).padStart(3,'0')+']'] = m;
-    return '[PASS-'+String(idCount).padStart(3,'0')+']';
+    const tok='[PASS-'+String(idCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
   // KRA PIN
-  out = out.replace(/\b([AP]\d{9}[A-Z])\b/g, (m) => {
+  out = out.replace(/\b([AP]\d{9}[A-Z])\b/g, m => {
     regCount++;
-    map['[KRA-'+String(regCount).padStart(3,'0')+']'] = m;
-    return '[KRA-'+String(regCount).padStart(3,'0')+']';
+    const tok='[KRA-'+String(regCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Case numbers e.g. Civil Case No. 123 of 2024
-  out = out.replace(/\b((?:Civil|Criminal|Petition|Cause|Misc|ELC|Constitutional)\s+(?:Case|Application|Petition|Appeal|Suit)\s+No\.?\s*\d+\s+of\s+\d{4})\b/gi, (m) => {
+  // Case numbers
+  out = out.replace(/\b((?:Civil|Criminal|Petition|Cause|Misc|ELC|Constitutional)\s+(?:Case|Application|Petition|Appeal|Suit)\s+No\.?\s*\d+\s+of\s+\d{4})\b/gi, m => {
     caseCount++;
-    map['[CASE-'+String(caseCount).padStart(3,'0')+']'] = m;
-    return '[CASE-'+String(caseCount).padStart(3,'0')+']';
+    const tok='[CASE-'+String(caseCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
   // Phone numbers
-  out = out.replace(/(\+?254|0)?[17]\d{8}\b/g, (m) => {
+  out = out.replace(/(\+?254|0)?[17]\d{8}\b/g, m => {
     contactCount++;
-    map['[PHONE-'+String(contactCount).padStart(3,'0')+']'] = m;
-    return '[PHONE-'+String(contactCount).padStart(3,'0')+']';
+    const tok='[PHONE-'+String(contactCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Email addresses
-  out = out.replace(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g, (m) => {
+  // Email
+  out = out.replace(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g, m => {
     contactCount++;
-    map['[EMAIL-'+String(contactCount).padStart(3,'0')+']'] = m;
-    return '[EMAIL-'+String(contactCount).padStart(3,'0')+']';
+    const tok='[EMAIL-'+String(contactCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Money amounts with KES/Ksh
-  out = out.replace(/(?:KES|Ksh|KSh|Kenya Shillings?)\s*[\d,]+(?:\.\d{2})?/gi, (m) => {
+  // KES amounts
+  out = out.replace(/(?:KES|Ksh|KSh|Kenya Shillings?)\s*[\d,]+(?:\.\d{2})?/gi, m => {
     amountCount++;
-    map['[AMOUNT-'+String(amountCount).padStart(3,'0')+']'] = m;
-    return '[AMOUNT-'+String(amountCount).padStart(3,'0')+']';
+    const tok='[AMOUNT-'+String(amountCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Land parcel / title numbers
-  out = out.replace(/\b(?:LR|Title|L\.R\.)\s*No\.?\s*[\d\/\w]+/gi, (m) => {
+  // Land/title numbers
+  out = out.replace(/\b(?:LR|Title|L\.R\.)\s*No\.?\s*[\d\/\w]+/gi, m => {
     regCount++;
-    map['[TITLE-'+String(regCount).padStart(3,'0')+']'] = m;
-    return '[TITLE-'+String(regCount).padStart(3,'0')+']';
+    const tok='[TITLE-'+String(regCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Company registration numbers
-  out = out.replace(/\b(?:PVT|CPR|BN)\/?\d+\/?\d*\b/gi, (m) => {
+  // Company reg numbers
+  out = out.replace(/\b(?:PVT|CPR|BN)\/?\d+\/?\d*\b/gi, m => {
     regCount++;
-    map['[REGNO-'+String(regCount).padStart(3,'0')+']'] = m;
-    return '[REGNO-'+String(regCount).padStart(3,'0')+']';
+    const tok='[REGNO-'+String(regCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Named persons — Title + two capitalised words
-  const nameRegex = /\b(?:Mr|Mrs|Ms|Miss|Dr|Prof|Hon|Advocate|Adv|Eng|Arch)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\b/g;
-  out = out.replace(nameRegex, (m) => {
+  // Named persons with title
+  out = out.replace(/\b(?:Mr|Mrs|Ms|Miss|Dr|Prof|Hon|Advocate|Adv|Eng|Arch)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\b/g, m => {
     personCount++;
-    const tok = '[PERSON-'+String(personCount).padStart(3,'0')+']';
-    map[tok] = m;
-    return tok;
+    const tok='[PERSON-'+String(personCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Two consecutive capitalised words (likely names) not already replaced
-  const twoCapRegex = /\b([A-Z][a-zA-Z]{1,20})\s+([A-Z][a-zA-Z]{1,20}(?:\s+[A-Z][a-zA-Z]{1,20})?)\b/g;
-  // Only replace if they look like names (not known legal terms)
+  // Two/three capitalised words (likely names)
   const legalTerms = new Set(['High Court','Court Appeal','Supreme Court','Labour Court',
-    'Magistrates Court','Land Court','Constitution Kenya','Laws Kenya',
-    'Kenyan Law','Kenyan Government','Cabinet Secretary','County Government',
-    'Attorney General','Director Public','Public Prosecution','Kenya Revenue',
-    'Revenue Authority','National Hospital','Insurance Authority','Central Bank']);
-  out = out.replace(twoCapRegex, (m) => {
-    if(legalTerms.has(m)) return m;
-    // Skip if already anonymised
-    if(m.startsWith('[')) return m;
-    // Skip if all uppercase (likely an acronym)
-    if(m === m.toUpperCase()) return m;
-    // Skip known place names
+    'Magistrates Court','Land Court','Constitution Kenya','Laws Kenya','Kenyan Law',
+    'Kenyan Government','Cabinet Secretary','County Government','Attorney General',
+    'Director Public','Public Prosecution','Kenya Revenue','Revenue Authority',
+    'National Hospital','Insurance Authority','Central Bank','Law Society']);
+  out = out.replace(/\b([A-Z][a-zA-Z]{1,20})\s+([A-Z][a-zA-Z]{1,20}(?:\s+[A-Z][a-zA-Z]{1,20})?)\b/g, m => {
+    if(legalTerms.has(m)||m.startsWith('[')||m===m.toUpperCase()) return m;
     if(/\b(Nairobi|Mombasa|Kisumu|Nakuru|Eldoret|Thika|Nyeri|Kakamega|Meru|Kitale)\b/i.test(m)) return m;
     personCount++;
-    const tok = '[PERSON-'+String(personCount).padStart(3,'0')+']';
-    map[tok] = m;
-    return tok;
+    const tok='[PERSON-'+String(personCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
-
-  // Physical addresses (P.O. Box)
-  out = out.replace(/P\.?\s*O\.?\s*Box\s+[\d\-]+(?:\s*[-–]\s*[\d]+)?(?:,\s*[A-Z][a-z]+)?/gi, (m) => {
+  // P.O. Box addresses
+  out = out.replace(/P\.?\s*O\.?\s*Box\s+[\d\-]+(?:\s*[-–]\s*[\d]+)?(?:,\s*[A-Z][a-z]+)?/gi, m => {
     addrCount++;
-    map['[ADDR-'+String(addrCount).padStart(3,'0')+']'] = m;
-    return '[ADDR-'+String(addrCount).padStart(3,'0')+']';
+    const tok='[ADDR-'+String(addrCount).padStart(3,'0')+']';
+    map[tok]=m; return tok;
   });
 
   return { anonymised: out, map };
 }
 
-// ── OCR via Tesseract.js ─────────────────────
+// ── OCR ──────────────────────────────────────
 async function loadTesseract(){
   if(window.Tesseract) return;
   await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js');
 }
 
-async function ocrImageFile(file){
+function updateOcrStatus(msg, docId){
+  const el = document.getElementById('ocr-status-'+docId);
+  if(el) el.textContent = msg;
+}
+
+async function ocrImageFile(file, docId){
   await loadTesseract();
   const url = URL.createObjectURL(file);
-  updateOcrStatus('Running OCR on image…');
+  updateOcrStatus('Running OCR…', docId);
   const result = await Tesseract.recognize(url, 'eng', {
     logger: m => {
-      if(m.status === 'recognizing text'){
-        updateOcrStatus('OCR progress: '+Math.round(m.progress*100)+'%');
-      }
+      if(m.status==='recognizing text')
+        updateOcrStatus('OCR: '+Math.round(m.progress*100)+'%', docId);
     }
   });
   URL.revokeObjectURL(url);
   return result.data.text;
 }
 
-async function ocrPDF(file){
+async function ocrPDF(file, docId){
   await loadTesseract();
-  // Load PDF.js
   if(!window.pdfjsLib){
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
     window.pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   }
-  const ab = await file.arrayBuffer();
+  const ab  = await file.arrayBuffer();
   const pdf = await window.pdfjsLib.getDocument({data: ab}).promise;
-  const totalPages = Math.min(pdf.numPages, 20); // cap at 20 pages
+  const totalPages = Math.min(pdf.numPages, 20);
   let fullText = '';
 
-  updateOcrStatus('Checking PDF for text layer…');
-
-  // First try digital text layer
+  // Detect digital vs scanned
+  updateOcrStatus('Checking PDF…', docId);
   let hasTextLayer = false;
-  for(let i = 1; i <= Math.min(3, totalPages); i++){
-    const page = await pdf.getPage(i);
+  for(let i=1; i<=Math.min(3,totalPages); i++){
+    const page    = await pdf.getPage(i);
     const content = await page.getTextContent();
-    const pageText = content.items.map(s => s.str).join(' ').trim();
-    if(pageText.length > 50){ hasTextLayer = true; break; }
+    if(content.items.map(s=>s.str).join(' ').trim().length > 50){ hasTextLayer=true; break; }
   }
 
   if(hasTextLayer){
-    // Digital PDF — extract text directly (no OCR needed, nothing sent externally)
-    updateOcrStatus('Digital PDF detected — extracting text…');
-    for(let i = 1; i <= totalPages; i++){
-      const page = await pdf.getPage(i);
+    updateOcrStatus('Extracting text…', docId);
+    for(let i=1; i<=totalPages; i++){
+      const page    = await pdf.getPage(i);
       const content = await page.getTextContent();
-      fullText += content.items.map(s => s.str).join(' ') + '\n';
-      updateOcrStatus('Extracting page '+i+' of '+totalPages+'…');
+      fullText += content.items.map(s=>s.str).join(' ') + '\n';
+      updateOcrStatus('Page '+i+'/'+totalPages, docId);
     }
   } else {
-    // Scanned PDF — render each page to canvas, OCR locally
-    updateOcrStatus('Scanned PDF detected — starting local OCR (no data leaves your device)…');
+    updateOcrStatus('Scanned — local OCR starting…', docId);
     const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    for(let i = 1; i <= totalPages; i++){
-      updateOcrStatus('OCR page '+i+' of '+totalPages+' — please wait…');
-      const page = await pdf.getPage(i);
-      const viewport = page.getViewport({scale: 2.0}); // 2x for better OCR accuracy
-      canvas.width  = viewport.width;
-      canvas.height = viewport.height;
-      await page.render({canvasContext: ctx, viewport}).promise;
-
-      // Get image blob from canvas — stays in browser
-      const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    const ctx    = canvas.getContext('2d');
+    for(let i=1; i<=totalPages; i++){
+      updateOcrStatus('OCR page '+i+'/'+totalPages, docId);
+      const page     = await pdf.getPage(i);
+      const viewport = page.getViewport({scale:2.0});
+      canvas.width=viewport.width; canvas.height=viewport.height;
+      await page.render({canvasContext:ctx, viewport}).promise;
+      const blob = await new Promise(r=>canvas.toBlob(r,'image/png'));
       const url  = URL.createObjectURL(blob);
-
-      const result = await Tesseract.recognize(url, 'eng', {
+      const res  = await Tesseract.recognize(url, 'eng', {
         logger: m => {
-          if(m.status === 'recognizing text'){
-            updateOcrStatus('OCR page '+i+'/'+totalPages+': '+Math.round(m.progress*100)+'%');
-          }
+          if(m.status==='recognizing text')
+            updateOcrStatus('OCR p'+i+'/'+totalPages+': '+Math.round(m.progress*100)+'%', docId);
         }
       });
       URL.revokeObjectURL(url);
-      fullText += result.data.text + '\n';
+      fullText += res.data.text + '\n';
     }
   }
   return fullText;
 }
 
-function updateOcrStatus(msg){
-  const el = document.getElementById('ocr-status');
-  if(el) el.textContent = msg;
-}
-
-// ── FILE HANDLER ─────────────────────────────
+// ── FILE HANDLING ─────────────────────────────
 function handleReviewDrop(e){
   e.preventDefault();
-  document.getElementById('review-dropzone').style.borderColor = 'var(--border2)';
-  const file = e.dataTransfer.files[0];
-  if(file) handleReviewFile(file);
+  document.getElementById('review-dropzone').style.borderColor='var(--border2)';
+  handleReviewFiles(e.dataTransfer.files);
 }
 
-async function handleReviewFile(file){
-  if(!file) return;
-  const maxSize = 10*1024*1024;
-  if(file.size > maxSize){ alert('File too large. Please upload a file under 10MB.'); return; }
+async function handleReviewFiles(fileList){
+  const files = Array.from(fileList);
+  if(!files.length) return;
 
-  const ext = file.name.split('.').pop().toLowerCase();
-  const allowed = ['pdf','docx','txt','doc','jpg','jpeg','png','bmp','tiff','tif','webp'];
-  if(!allowed.includes(ext)){
-    alert('Unsupported file type. Supported: PDF, Word, images (JPG/PNG), or text files.');
+  if(reviewDocs.length + files.length > MAX_DOCS){
+    alert('Maximum '+MAX_DOCS+' documents allowed. Remove some first.');
     return;
   }
 
-  // Show loading state with OCR status
-  const dz = document.getElementById('review-dropzone');
-  dz.innerHTML = `
-    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px">
-      <svg class="spin" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
-      <div id="ocr-status" style="font-size:12px;color:var(--text2);text-align:center">Loading…</div>
-      <div style="font-size:10px;color:var(--text3)">🔒 All processing is local — no data leaves your device until anonymised</div>
-    </div>`;
+  const allowed = ['pdf','docx','txt','doc','jpg','jpeg','png','bmp','tiff','tif','webp'];
 
-  try{
-    let rawText = '';
-
-    if(['jpg','jpeg','png','bmp','tiff','tif','webp'].includes(ext)){
-      rawText = await ocrImageFile(file);
-    } else if(ext === 'pdf'){
-      rawText = await ocrPDF(file);
-    } else if(ext === 'txt'){
-      rawText = await file.text();
-    } else if(ext === 'docx' || ext === 'doc'){
-      rawText = await readDOCX(file);
+  for(const file of files){
+    const ext = file.name.split('.').pop().toLowerCase();
+    if(!allowed.includes(ext)){
+      addReviewMsg('ai','⚠️ Skipped <strong>'+file.name+'</strong> — unsupported file type.');
+      continue;
     }
-
-    if(!rawText || rawText.trim().length < 10){
-      throw new Error('Could not extract text. The scan quality may be too low — try a clearer image.');
+    if(file.size > MAX_SIZE){
+      addReviewMsg('ai','⚠️ Skipped <strong>'+file.name+'</strong> — file exceeds 10MB limit.');
+      continue;
     }
-
-    reviewRawText = rawText.trim();
-
-    // ── ANONYMISE before anything else ──
-    updateOcrStatus('Anonymising sensitive data…');
-    const { anonymised, map } = anonymiseText(reviewRawText);
-    reviewDocText = anonymised;
-    reviewDocName = file.name;
-
-    const tokenCount = Object.keys(map).length;
-    const wordCount  = reviewDocText.split(/\s+/).length;
-
-    // Update UI
-    dz.style.display = 'none';
-    const info = document.getElementById('review-doc-info');
-    info.style.display = 'flex';
-    document.getElementById('review-doc-name').textContent = file.name;
-    document.getElementById('review-doc-meta').textContent =
-      wordCount.toLocaleString()+' words · '+tokenCount+' sensitive items anonymised · 🔒 Safe to analyse';
-    document.getElementById('review-clear-btn').style.display = 'block';
-
-    // Show anonymisation summary
-    const anonSummary = tokenCount > 0
-      ? `🔒 <strong>${tokenCount} sensitive items anonymised</strong> before analysis (names, IDs, phone numbers, amounts, addresses, case numbers). The AI will never see the raw values.`
-      : '✅ No sensitive personal data detected in this document.';
-
-    addReviewMsg('ai',
-      `✅ <strong>${file.name}</strong> loaded and anonymised.<br><br>${anonSummary}<br><br>Use the quick buttons or ask me anything about the document.`
-    );
-
-  }catch(e){
-    dz.innerHTML = `
-      <div style="color:var(--danger-text);font-size:13px;padding:10px;text-align:center">
-        ❌ ${e.message}
-      </div>
-      <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">
-        Try a higher quality scan or convert to PDF first.
-      </div>`;
-    setTimeout(() => resetDropzone(), 5000);
+    await processOneFile(file);
   }
 }
 
-async function readDOCX(file){
-  if(!window.mammoth){
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+async function processOneFile(file){
+  const docId = 'doc-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+  const ext   = file.name.split('.').pop().toLowerCase();
+
+  // Hide dropzone, show doc list
+  document.getElementById('review-dropzone').style.display = 'none';
+  document.getElementById('review-docs-list').style.display = 'flex';
+  document.getElementById('review-clear-btn').style.display = 'block';
+
+  // Add a loading card to the list
+  const docsList = document.getElementById('review-docs-list');
+  const card = document.createElement('div');
+  card.id = 'card-'+docId;
+  card.style.cssText = 'background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:9px 12px;display:flex;align-items:center;gap:10px';
+  card.innerHTML = `
+    <svg class="spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${file.name}</div>
+      <div id="ocr-status-${docId}" style="font-size:10px;color:var(--text3)">Loading… 🔒 Processing locally</div>
+    </div>`;
+  docsList.appendChild(card);
+
+  try{
+    let rawText = '';
+    const imgExts = ['jpg','jpeg','png','bmp','tiff','tif','webp'];
+
+    if(imgExts.includes(ext)){
+      rawText = await ocrImageFile(file, docId);
+    } else if(ext==='pdf'){
+      rawText = await ocrPDF(file, docId);
+    } else if(ext==='txt'){
+      rawText = await file.text();
+    } else if(ext==='docx'||ext==='doc'){
+      rawText = await readDOCX(file, docId);
+    }
+
+    if(!rawText||rawText.trim().length<10)
+      throw new Error('Could not extract text — scan quality may be too low.');
+
+    updateOcrStatus('Anonymising…', docId);
+    const { anonymised, map } = anonymiseText(rawText.trim());
+    const tokenCount = Object.keys(map).length;
+    const wordCount  = anonymised.split(/\s+/).length;
+
+    // Store doc
+    const doc = { id:docId, name:file.name, rawText:rawText.trim(),
+                  anonymised, map, wordCount, tokenCount };
+    reviewDocs.push(doc);
+
+    // Update card to success state
+    card.style.borderColor = '#97c459';
+    card.style.background  = 'var(--success-bg)';
+    card.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success-text)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600;color:var(--success-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${file.name}</div>
+        <div style="font-size:10px;color:var(--success-text);opacity:.8">${wordCount.toLocaleString()} words · ${tokenCount} items anonymised · 🔒 Safe</div>
+      </div>
+      <button onclick="removeDoc('${docId}')" title="Remove this document"
+        style="border:none;background:none;cursor:pointer;color:var(--success-text);opacity:.6;padding:2px;border-radius:4px;font-size:14px;line-height:1">✕</button>`;
+
+    // Show quick buttons
+    document.getElementById('review-quick-btns').style.display = 'flex';
+
+    // Announce in chat
+    const docLabel = reviewDocs.length > 1 ? 'Document '+reviewDocs.length : 'Document';
+    addReviewMsg('ai',
+      `✅ <strong>${docLabel}: ${file.name}</strong> loaded.<br>`+
+      `<span style="font-size:11px;color:var(--text3)">🔒 ${tokenCount} sensitive items anonymised — AI will only see redacted text.</span>`+
+      (reviewDocs.length > 1 ? '<br><span style="font-size:11px;color:var(--info-text)">💡 You can now ask me to compare documents or analyse them together.</span>' : '')
+    );
+
+    logActivity('doc_review', 'Loaded: '+file.name);
+
+  } catch(e){
+    card.style.borderColor = 'var(--danger-bg)';
+    card.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--danger-text)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600;color:var(--danger-text)">${file.name} — failed</div>
+        <div style="font-size:10px;color:var(--danger-text);opacity:.8">${e.message}</div>
+      </div>
+      <button onclick="this.closest('[id]').remove()" style="border:none;background:none;cursor:pointer;color:var(--danger-text);opacity:.6;padding:2px;font-size:14px">✕</button>`;
   }
+}
+
+function removeDoc(docId){
+  reviewDocs = reviewDocs.filter(d => d.id !== docId);
+  const card = document.getElementById('card-'+docId);
+  if(card) card.remove();
+  if(reviewDocs.length === 0){
+    document.getElementById('review-dropzone').style.display = '';
+    document.getElementById('review-docs-list').style.display = 'none';
+    document.getElementById('review-quick-btns').style.display = 'none';
+    document.getElementById('review-clear-btn').style.display = 'none';
+  }
+  addReviewMsg('ai', '🗑 Document removed. '+reviewDocs.length+' document(s) remaining.');
+}
+
+async function readDOCX(file, docId){
+  updateOcrStatus && updateOcrStatus('Reading Word doc…', docId);
+  if(!window.mammoth)
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
   const ab = await file.arrayBuffer();
-  const result = await window.mammoth.extractRawText({arrayBuffer: ab});
+  const result = await window.mammoth.extractRawText({arrayBuffer:ab});
   return result.value;
 }
 
 function loadScript(src){
   return new Promise((resolve, reject) => {
-    // Check if already loaded
-    if(document.querySelector(`script[src="${src}"]`)){
-      resolve(); return;
-    }
+    if(document.querySelector(`script[src="${src}"]`)){ resolve(); return; }
     const s = document.createElement('script');
-    s.src = src; s.onload = resolve; s.onerror = reject;
+    s.src=src; s.onload=resolve; s.onerror=reject;
     document.head.appendChild(s);
   });
 }
 
+function clearReview(){
+  reviewDocs = [];
+  document.getElementById('review-docs-list').innerHTML = '';
+  document.getElementById('review-docs-list').style.display = 'none';
+  document.getElementById('review-dropzone').style.display = '';
+  document.getElementById('review-quick-btns').style.display = 'none';
+  document.getElementById('review-clear-btn').style.display = 'none';
+  document.getElementById('review-msgs').innerHTML = `
+    <div class="msg">
+      <div class="av ai">⚖</div>
+      <div class="bub">Upload one or more documents and I will act as your legal assistant — summarising, comparing, identifying risks, extracting obligations, and advising on Kenyan law.<br><br>
+      <span style="font-size:11px;color:var(--text3)">🔒 Scanned documents use local OCR. All sensitive data is anonymised before any AI analysis — nothing raw leaves your device.</span></div>
+    </div>`;
+  resetDropzone();
+}
+
 function resetDropzone(){
   const dz = document.getElementById('review-dropzone');
+  if(!dz) return;
   dz.style.display = '';
   dz.innerHTML = `
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" style="margin-bottom:6px">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" style="margin-bottom:6px">
       <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
       <polyline points="14 2 14 8 20 8"/>
       <line x1="12" y1="18" x2="12" y2="12"/>
       <line x1="9" y1="15" x2="15" y2="15"/>
     </svg>
     <div style="font-size:13px;font-weight:600;color:var(--text)">Click to upload or drag &amp; drop</div>
-    <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF (digital or scanned), Word (.docx), images (.jpg/.png), or text — max 10MB</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:3px">PDF (digital or scanned), Word, images, text — up to 5 documents, 10MB each</div>
     <input type="file" id="review-file-input" accept=".pdf,.docx,.txt,.doc,.jpg,.jpeg,.png,.bmp,.tiff,.tif,.webp"
-      style="display:none" onchange="handleReviewFile(this.files[0])"/>`;
+      style="display:none" multiple onchange="handleReviewFiles(this.files)"/>`;
 }
 
-function clearReview(){
-  reviewDocText = ''; reviewRawText = ''; reviewDocName = '';
-  document.getElementById('review-doc-info').style.display = 'none';
-  document.getElementById('review-dropzone').style.display = '';
-  document.getElementById('review-clear-btn').style.display = 'none';
-  document.getElementById('review-msgs').innerHTML = `
-    <div class="msg">
-      <div class="av ai">⚖</div>
-      <div class="bub">Upload a document above and I will act as your legal assistant — summarising, identifying risks, extracting obligations, advising on Kenyan law, or answering any specific questions you have about it.<br><br>
-      <span style="font-size:11px;color:var(--text3)">🔒 Scanned documents are processed locally via OCR. Sensitive data (names, IDs, amounts) is anonymised before any AI analysis.</span></div>
-    </div>`;
-  resetDropzone();
-}
-
+// ── CHAT ─────────────────────────────────────
 function addReviewMsg(role, html){
   const c = document.getElementById('review-msgs');
   const d = document.createElement('div');
-  d.className = 'msg '+(role === 'ai' ? '' : 'user');
-  d.innerHTML = `<div class="av ${role === 'ai' ? 'ai' : 'user'}">${role === 'ai' ? '⚖' : 'ME'}</div><div class="bub">${html}</div>`;
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
+  d.className = 'msg '+(role==='ai'?'':'user');
+  d.innerHTML = `<div class="av ${role==='ai'?'ai':'user'}">${role==='ai'?'⚖':'ME'}</div><div class="bub">${html}</div>`;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
 }
 
 function showReviewTyping(){
   reviewBusy = true;
   const c = document.getElementById('review-msgs');
   const t = document.createElement('div');
-  t.className = 'msg'; t.id = 'review-typing';
-  t.innerHTML = '<div class="av ai">⚖</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';
-  c.appendChild(t);
-  c.scrollTop = c.scrollHeight;
+  t.className='msg'; t.id='review-typing';
+  t.innerHTML='<div class="av ai">⚖</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';
+  c.appendChild(t); c.scrollTop = c.scrollHeight;
 }
 
 function rmReviewTyping(){
@@ -2569,12 +2580,15 @@ function rmReviewTyping(){
 }
 
 function quickReview(type){
-  if(!reviewDocText){ alert('Please upload a document first.'); return; }
+  if(!reviewDocs.length){ alert('Please upload at least one document first.'); return; }
+  const multi = reviewDocs.length > 1;
   const prompts = {
-    summarise:   'Please provide a clear executive summary of this document — the parties, purpose, key terms and duration.',
-    risks:       'Identify all legal risks, red flags and problematic clauses in this document under Kenyan law. Flag anything that could expose my client to liability.',
-    obligations: 'List all obligations of each party in this document clearly and precisely.',
-    advice:      'As my legal assistant, what advice would you give to my client based on this document? What should they be aware of before signing?'
+    summarise:       multi ? 'Please summarise each document and then give an overall summary of the matter.' : 'Please provide a clear executive summary — parties, purpose, key terms and duration.',
+    risks:           'Identify all legal risks, red flags and problematic clauses under Kenyan law. Flag anything that could expose my client to liability.',
+    obligations:     'List all obligations of each party in '+(multi?'each document':'this document')+' clearly and precisely.',
+    compare:         'Compare these documents — identify conflicts, gaps, inconsistencies, and any provisions in one document that contradict or are missing from another.',
+    advice:          'As my legal assistant, what practical advice would you give my client based on '+(multi?'these documents':'this document')+'? What should they be aware of before signing or proceeding?',
+    inconsistencies: 'Find all internal inconsistencies, contradictions, or ambiguities '+(multi?'within and across these documents':'within this document')+'.',
   };
   document.getElementById('review-input').value = prompts[type];
   sendReviewChat();
@@ -2585,8 +2599,8 @@ async function sendReviewChat(){
   const el = document.getElementById('review-input');
   const question = el.value.trim();
   if(!question) return;
-  if(!reviewDocText){
-    addReviewMsg('ai', '⚠️ Please upload a document first before asking questions.');
+  if(!reviewDocs.length){
+    addReviewMsg('ai', '⚠️ Please upload at least one document first.');
     return;
   }
   el.value = '';
@@ -2594,29 +2608,28 @@ async function sendReviewChat(){
   showReviewTyping();
 
   try{
-    // Send only anonymised text — raw values never leave the browser
-    const docSnippet = reviewDocText.split(' ').slice(0, 3000).join(' ');
-    const prompt = `DOCUMENT NAME: ${reviewDocName}
+    // Build context from all docs — anonymised only
+    const docsContext = reviewDocs.map((doc, i) => {
+      const snippet = doc.anonymised.split(' ').slice(0, Math.floor(2500/reviewDocs.length)).join(' ');
+      return `=== DOCUMENT ${i+1}: ${doc.name} ===\n${snippet}`;
+    }).join('\n\n');
 
-NOTE: This document has been automatically anonymised. Tokens like [PERSON-001], [ID-001], [AMOUNT-001] etc. represent real values that have been redacted for client confidentiality. Please treat them as such in your analysis.
+    const prompt =
+      `You have ${reviewDocs.length} document(s) to review. All content has been anonymised for client confidentiality.\n\n`+
+      docsContext +
+      `\n\n---\nADVOCATE'S QUESTION: ${question}`;
 
-ANONYMISED DOCUMENT CONTENT:
-${docSnippet}
-
----
-ADVOCATE'S QUESTION: ${question}`;
-
-    const response = await callAI(prompt, REVIEW_SYS, 900);
+    const response = await callAI(prompt, REVIEW_SYS, 1000);
     rmReviewTyping();
     addReviewMsg('ai', fmt(response));
-    logActivity('doc_review', reviewDocName+': '+question.slice(0, 80));
+    logActivity('doc_review', reviewDocs.map(d=>d.name).join(', ')+': '+question.slice(0,80));
   }catch(e){
     rmReviewTyping();
-    addReviewMsg('ai', '<span style="color:var(--danger-text)">Error: '+e.message+'</span>');
+    addReviewMsg('ai','<span style="color:var(--danger-text)">Error: '+e.message+'</span>');
   }
 }
 
-function reviewChatKey(e){ if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendReviewChat(); } }
+function reviewChatKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendReviewChat(); } }
 
 // ── BOOTSTRAP ─────────────────────────────────
 document.addEventListener('DOMContentLoaded', initSupabase);
