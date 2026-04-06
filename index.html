@@ -79,6 +79,8 @@
   .fee-calc-btn{background:var(--gold);color:white;border:none;border-radius:var(--radius);padding:0 16px;height:34px;font-size:12px;font-weight:600;cursor:pointer;width:100%}
   .fee-calc-btn:hover{background:var(--gold-dark)}
   .fee-disclaimer{background:var(--warn-bg);border:0.5px solid #fac775;border-radius:var(--radius);padding:10px 12px;font-size:11px;color:var(--warn-text);line-height:1.6}
+  .fee-panel{display:flex;flex-direction:column;gap:8px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);display:flex;flex-direction:column;margin:0}
   a{color:var(--info-text)}
@@ -621,222 +623,373 @@
   </div><!-- /views -->
 
     <!-- ════ FEE CALCULATOR ════ -->
-    <div id="v-fees" class="view" style="display:none;flex-direction:column;overflow-y:auto;padding:16px;gap:14px">
-      <div class="fee-hero">
+    <div id="v-fees" class="view" style="display:none;flex-direction:column;overflow-y:auto;padding:12px 14px;gap:10px">
+      <div class="fee-hero" style="padding:12px 14px">
         <div class="fee-hero-title">⚖ Advocates Fee Calculator</div>
-        <div class="fee-hero-sub">Advocates (Remuneration) Order — Laws of Kenya (L.N. 64/1962, as amended L.N. 35/2014 &amp; L.N. 45/2014)</div>
-      </div>
-      <div class="fee-disclaimer">
-        <strong>Note:</strong> These are minimum scale fees prescribed by the Advocates (Remuneration) Order. An advocate may charge more by agreement with the client (Schedule 5) but <em>not less</em> than the scale fee (paragraph 3 of the Order). VAT at 16% and disbursements (stamp duty, registration fees, searches) are charged separately.
+        <div class="fee-hero-sub">Advocates (Remuneration) Order — L.N. 64/1962, as amended L.N. 35/2014 &amp; L.N. 45/2014. All fees are minimum scale fees exclusive of VAT (16%) and disbursements.</div>
       </div>
 
-      <div class="fee-grid">
+      <!-- COMPACT CALCULATOR PANEL -->
+      <div class="fee-card" style="max-width:520px">
+        <div class="fee-body" style="gap:9px">
 
-        <!-- SCHEDULE 1 — SALE/PURCHASE OF LAND -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#639922"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-            <div><div class="fee-card-title">Sale / Purchase of Land</div><div class="fee-card-sub">Schedule 1 — Land Act 2012 / Registration of Land Act</div></div>
+          <!-- Category selector -->
+          <div class="fee-row">
+            <div class="fee-label">Category</div>
+            <select class="fee-sel" id="fc-cat" onchange="feeShowPanel()">
+              <optgroup label="─ Conveyancing &amp; Property ─">
+                <option value="sale">Sale / Purchase of Land (Sch. 1)</option>
+                <option value="lease">Lease / Tenancy Agreement (Sch. 2)</option>
+                <option value="mortgage">Mortgage / Charge Creation (Sch. 1 — 2nd scale)</option>
+              </optgroup>
+              <optgroup label="─ Litigation ─">
+                <option value="hc">High Court Litigation (Sch. 6)</option>
+                <option value="mc">Magistrates Court Litigation (Sch. 7)</option>
+                <option value="elrc">ELRC / ELC Litigation (Sch. 6 basis)</option>
+              </optgroup>
+              <optgroup label="─ Family &amp; Succession ─">
+                <option value="divorce">Divorce / Judicial Separation (Marriage Act 2014)</option>
+                <option value="custody">Child Custody / Maintenance (Children Act 2022)</option>
+                <option value="matrimonial">Matrimonial Property Division (MPA 2013)</option>
+                <option value="probate">Probate &amp; Administration of Estate (Sch. 10)</option>
+                <option value="succession_dispute">Contested Succession / Family Division HC</option>
+              </optgroup>
+              <optgroup label="─ Commercial ─">
+                <option value="debt">Non-Contentious Debt Collection (Sch. 5)</option>
+                <option value="company">Company &amp; Business Registration (Sch. 3)</option>
+                <option value="trademark">Trademark / IP (Sch. 4)</option>
+                <option value="arbitration">Arbitration (Arbitration Act, Cap. 49)</option>
+              </optgroup>
+              <optgroup label="─ Criminal ─">
+                <option value="criminal_hc">Criminal — High Court / Sessions</option>
+                <option value="criminal_mc">Criminal — Magistrates Court</option>
+              </optgroup>
+              <optgroup label="─ Miscellaneous Applications ─">
+                <option value="misc_app">Miscellaneous Application / Chamber Summons</option>
+                <option value="injunction">Injunction / Conservatory Order</option>
+                <option value="judicial_review">Judicial Review / Constitutional Petition</option>
+                <option value="stamping">Stamping of Documents (Stamp Duty Act)</option>
+              </optgroup>
+            </select>
           </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Consideration / Value (KES)</div><input class="fee-input" id="s1-val" type="number" placeholder="e.g. 10,000,000" oninput="calcS1()"/></div>
-            <div class="fee-row"><div class="fee-label">Acting for</div>
-              <select class="fee-sel" id="s1-role" onchange="calcS1()">
-                <option value="both">Both vendor &amp; purchaser</option>
-                <option value="vendor">Vendor only</option>
-                <option value="purchaser">Purchaser only</option>
-              </select>
-            </div>
-            <div class="fee-row"><div class="fee-label">Agreement for sale prepared?</div>
-              <select class="fee-sel" id="s1-agr" onchange="calcS1()">
-                <option value="yes">Yes — full scale fee</option>
-                <option value="no">No — vendor's fee reduced by 1/3</option>
-              </select>
-            </div>
-            <div class="fee-result" id="s1-result">
-              <div class="fee-result-label">Minimum Scale Fee</div>
-              <div class="fee-result-main" id="s1-main"></div>
-              <div class="fee-result-breakdown" id="s1-bd"></div>
-              <div class="fee-note">Exclusive of VAT (16%), stamp duty (4% residential / 2% commercial), Land Registry fees, and search fees. Registration fees are payable by the purchaser unless otherwise agreed.</div>
-            </div>
-          </div>
-        </div>
 
-        <!-- SCHEDULE 2 — LEASES -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#378ADD"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
-            <div><div class="fee-card-title">Lease / Tenancy Agreement</div><div class="fee-card-sub">Schedule 2 — Landlord &amp; Tenant Acts</div></div>
+          <!-- ── SALE / PURCHASE ── -->
+          <div id="fp-sale" class="fee-panel">
+            <div class="fee-row"><div class="fee-label">Consideration / Value (KES)</div><input class="fee-input" id="s1-val" type="number" placeholder="e.g. 10,000,000" oninput="calcFee()"/></div>
+            <div class="fee-row two-col">
+              <div><div class="fee-label">Acting for</div>
+                <select class="fee-sel" id="s1-role" onchange="calcFee()">
+                  <option value="both">Both parties</option>
+                  <option value="vendor">Vendor only</option>
+                  <option value="purchaser">Purchaser only</option>
+                </select>
+              </div>
+              <div><div class="fee-label">Agreement for sale?</div>
+                <select class="fee-sel" id="s1-agr" onchange="calcFee()">
+                  <option value="yes">Yes (full fee)</option>
+                  <option value="no">No (vendor −1/3)</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Annual Rent (KES)</div><input class="fee-input" id="s2-rent" type="number" placeholder="e.g. 1,200,000" oninput="calcS2()"/></div>
+
+          <!-- ── LEASE ── -->
+          <div id="fp-lease" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Annual Rent (KES)</div><input class="fee-input" id="s2-rent" type="number" placeholder="e.g. 1,200,000" oninput="calcFee()"/></div>
             <div class="fee-row"><div class="fee-label">Role</div>
-              <select class="fee-sel" id="s2-role" onchange="calcS2()">
-                <option value="lessor">Lessor's advocate (preparing lease)</option>
-                <option value="lessee">Lessee's advocate (perusing lease)</option>
+              <select class="fee-sel" id="s2-role" onchange="calcFee()">
+                <option value="lessor">Lessor's advocate (preparing)</option>
+                <option value="lessee">Lessee's advocate (perusing — 50%)</option>
               </select>
             </div>
-            <div class="fee-result" id="s2-result">
-              <div class="fee-result-label">Minimum Scale Fee</div>
-              <div class="fee-result-main" id="s2-main"></div>
-              <div class="fee-result-breakdown" id="s2-bd"></div>
-              <div class="fee-note">Lessee's advocate (perusing) is entitled to 50% of the lessor's fee. Stamp duty on leases and registration fees are disbursements charged separately. VAT at 16% applies.</div>
-            </div>
           </div>
-        </div>
 
-        <!-- SCHEDULE 1 (2nd) — MORTGAGE / CHARGE -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#993C1D"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-            <div><div class="fee-card-title">Mortgage / Charge (Creation)</div><div class="fee-card-sub">Schedule 1, Second Scale — Charge &amp; Debenture fees</div></div>
-          </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Secured Amount (KES)</div><input class="fee-input" id="s1b-val" type="number" placeholder="e.g. 15,000,000" oninput="calcS1b()"/></div>
+          <!-- ── MORTGAGE ── -->
+          <div id="fp-mortgage" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Secured Amount (KES)</div><input class="fee-input" id="s1b-val" type="number" placeholder="e.g. 15,000,000" oninput="calcFee()"/></div>
             <div class="fee-row"><div class="fee-label">Role</div>
-              <select class="fee-sel" id="s1b-role" onchange="calcS1b()">
-                <option value="grantee">Grantee's advocate (lender) — full scale</option>
-                <option value="grantor">Grantor's advocate (borrower) — 50% of grantee fee</option>
-                <option value="both">Both grantee &amp; grantor</option>
+              <select class="fee-sel" id="s1b-role" onchange="calcFee()">
+                <option value="grantee">Lender's advocate (full scale)</option>
+                <option value="grantor">Borrower's advocate (50%)</option>
+                <option value="both">Both parties</option>
               </select>
             </div>
-            <div class="fee-result" id="s1b-result">
-              <div class="fee-result-label">Minimum Scale Fee</div>
-              <div class="fee-result-main" id="s1b-main"></div>
-              <div class="fee-result-breakdown" id="s1b-bd"></div>
-              <div class="fee-note">Where one advocate acts for both parties: full grantee fee + 50% of grantor fee. Grantor typically pays both sets of fees (para 9, Sch.1). VAT at 16% applies.</div>
-            </div>
           </div>
-        </div>
 
-        <!-- SCHEDULE 6 — HIGH COURT LITIGATION -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#534AB7"><svg viewBox="0 0 24 24"><path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/></svg></div>
-            <div><div class="fee-card-title">High Court Litigation</div><div class="fee-card-sub">Schedule 6 — Civil Procedure Act (Cap. 21)</div></div>
-          </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Value of Claim (KES)</div><input class="fee-input" id="s6-val" type="number" placeholder="e.g. 2,000,000" oninput="calcS6()"/></div>
-            <div class="fee-row"><div class="fee-label">Proceeding type</div>
-              <select class="fee-sel" id="s6-type" onchange="calcS6()">
-                <option value="undefended">Undefended / no appearance entered (65% of 1b)</option>
-                <option value="summary">Determined summarily without full trial (75% of 1b)</option>
-                <option value="settled_pre">Settled before 1st hearing date (85% of 1b)</option>
-                <option value="uncontested">Contested — no defence filed (scale 1a)</option>
-                <option value="contested">Fully contested — defence filed (scale 1b)</option>
-              </select>
-            </div>
-            <div class="fee-row"><div class="fee-label">Costs basis</div>
-              <select class="fee-sel" id="s6-basis" onchange="calcS6()">
-                <option value="pp">Party &amp; party (standard)</option>
-                <option value="ac">Advocate &amp; client (+50% on party &amp; party)</option>
-              </select>
-            </div>
-            <div class="fee-result" id="s6-result">
-              <div class="fee-result-label">Minimum Instruction Fee</div>
-              <div class="fee-result-main" id="s6-main"></div>
-              <div class="fee-result-breakdown" id="s6-bd"></div>
-              <div class="fee-note">Instruction fee only. Additional charges apply: drawing (KES 250/folio), perusing (KES 70/folio), attendances (KES 1,000/15 min), correspondence (KES 300/letter). Senior counsel certificate increases instruction fee by 50%.</div>
+          <!-- ── HIGH COURT LITIGATION ── -->
+          <div id="fp-hc" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Value of Claim (KES)</div><input class="fee-input" id="s6-val" type="number" placeholder="e.g. 2,000,000" oninput="calcFee()"/></div>
+            <div class="fee-row two-col">
+              <div><div class="fee-label">Proceeding type</div>
+                <select class="fee-sel" id="s6-type" onchange="calcFee()">
+                  <option value="contested">Fully contested (scale 1b)</option>
+                  <option value="uncontested">Uncontested / no defence (scale 1a)</option>
+                  <option value="settled_pre">Settled before 1st hearing (85% 1b)</option>
+                  <option value="summary">Summary determination (75% 1b)</option>
+                  <option value="undefended">Undefended / no appearance (65% 1b)</option>
+                </select>
+              </div>
+              <div><div class="fee-label">Costs basis</div>
+                <select class="fee-sel" id="s6-basis" onchange="calcFee()">
+                  <option value="pp">Party &amp; party</option>
+                  <option value="ac">Advocate &amp; client (+50%)</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- SCHEDULE 7 — MAGISTRATES COURT -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#5F5E5A"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-            <div><div class="fee-card-title">Magistrates Court Litigation</div><div class="fee-card-sub">Schedule 7 — Lower and Higher Scale</div></div>
-          </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Value of Claim (KES)</div><input class="fee-input" id="s7-val" type="number" placeholder="e.g. 500,000" oninput="calcS7()"/></div>
+          <!-- ── MAGISTRATES COURT ── -->
+          <div id="fp-mc" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Value of Claim (KES)</div><input class="fee-input" id="s7-val" type="number" placeholder="e.g. 500,000" oninput="calcFee()"/></div>
             <div class="fee-row"><div class="fee-label">Scale</div>
-              <select class="fee-sel" id="s7-scale" onchange="calcS7()">
+              <select class="fee-sel" id="s7-scale" onchange="calcFee()">
                 <option value="lower">Lower scale (standard)</option>
-                <option value="higher">Higher scale (complex / opposed matters)</option>
+                <option value="higher">Higher scale (complex / opposed)</option>
               </select>
             </div>
-            <div class="fee-result" id="s7-result">
-              <div class="fee-result-label">Minimum Instruction Fee</div>
-              <div class="fee-result-main" id="s7-main"></div>
-              <div class="fee-result-breakdown" id="s7-bd"></div>
-              <div class="fee-note">Schedule 7 as amended by L.N. 45/2014. For amounts over KES 2,000,000, the fee is as for KES 2,000,000 plus 25% of the excess.</div>
+          </div>
+
+          <!-- ── ELRC / ELC ── -->
+          <div id="fp-elrc" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Value of Claim / Salary Claimed (KES)</div><input class="fee-input" id="selrc-val" type="number" placeholder="e.g. 1,200,000" oninput="calcFee()"/></div>
+            <div class="fee-row"><div class="fee-label">Court</div>
+              <select class="fee-sel" id="selrc-court" onchange="calcFee()">
+                <option value="elrc">Employment &amp; Labour Relations Court (ELRC)</option>
+                <option value="elc">Environment &amp; Land Court (ELC)</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Proceeding type</div>
+              <select class="fee-sel" id="selrc-type" onchange="calcFee()">
+                <option value="contested">Fully contested</option>
+                <option value="uncontested">Uncontested</option>
+                <option value="settled_pre">Settled before 1st hearing</option>
+              </select>
             </div>
           </div>
-        </div>
 
-        <!-- SCHEDULE 10 — PROBATE & ESTATE -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#D4537E"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-            <div><div class="fee-card-title">Probate &amp; Administration of Estate</div><div class="fee-card-sub">Schedule 10 — Law of Succession Act (Cap. 160)</div></div>
+          <!-- ── DIVORCE ── -->
+          <div id="fp-divorce" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Type of matter</div>
+              <select class="fee-sel" id="sdiv-type" onchange="calcFee()">
+                <option value="uncontested">Uncontested divorce (consent)</option>
+                <option value="contested">Contested divorce</option>
+                <option value="judicial_sep">Judicial separation</option>
+                <option value="nullity">Nullity of marriage</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Property / estate involved? (KES)</div><input class="fee-input" id="sdiv-val" type="number" placeholder="0 if none" oninput="calcFee()"/></div>
           </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Gross Estate Value (KES)</div><input class="fee-input" id="s10-val" type="number" placeholder="e.g. 5,000,000" oninput="calcS10()"/></div>
+
+          <!-- ── CHILD CUSTODY / MAINTENANCE ── -->
+          <div id="fp-custody" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Application type</div>
+              <select class="fee-sel" id="scust-type" onchange="calcFee()">
+                <option value="custody_consent">Custody / care &amp; control (consent)</option>
+                <option value="custody_contested">Custody (contested)</option>
+                <option value="maintenance">Maintenance / child support order</option>
+                <option value="adoption">Adoption (Children Act 2022)</option>
+                <option value="guardianship">Guardianship order</option>
+                <option value="variation">Variation of existing order</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Monthly maintenance / value involved (KES)</div><input class="fee-input" id="scust-val" type="number" placeholder="e.g. 50,000/month" oninput="calcFee()"/></div>
+          </div>
+
+          <!-- ── MATRIMONIAL PROPERTY ── -->
+          <div id="fp-matrimonial" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Net matrimonial property value (KES)</div><input class="fee-input" id="smat-val" type="number" placeholder="e.g. 8,000,000" oninput="calcFee()"/></div>
             <div class="fee-row"><div class="fee-label">Matter type</div>
-              <select class="fee-sel" id="s10-type" onchange="calcS10()">
+              <select class="fee-sel" id="smat-type" onchange="calcFee()">
+                <option value="consent">Consent / settlement (out of court)</option>
+                <option value="contested">Contested division (High Court)</option>
+                <option value="antenuptial">Antenuptial contract (drafting)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── PROBATE ── -->
+          <div id="fp-probate" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Gross Estate Value (KES)</div><input class="fee-input" id="s10-val" type="number" placeholder="e.g. 5,000,000" oninput="calcFee()"/></div>
+            <div class="fee-row"><div class="fee-label">Matter type</div>
+              <select class="fee-sel" id="s10-type" onchange="calcFee()">
                 <option value="grant">Grant of probate / letters of administration</option>
                 <option value="admin">Full estate administration</option>
+                <option value="small">Small estate (summary — s.73 LSA, ≤ KES 100k)</option>
               </select>
             </div>
-            <div class="fee-result" id="s10-result">
-              <div class="fee-result-label">Minimum Scale Fee</div>
-              <div class="fee-result-main" id="s10-main"></div>
-              <div class="fee-result-breakdown" id="s10-bd"></div>
-              <div class="fee-note">Full administration includes all work from obtaining the grant through distribution to beneficiaries. Court filing fees, advertisement fees, and stamp duty on assents are separate disbursements.</div>
+          </div>
+
+          <!-- ── SUCCESSION DISPUTE ── -->
+          <div id="fp-succession_dispute" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Disputed estate value (KES)</div><input class="fee-input" id="ssucc-val" type="number" placeholder="e.g. 10,000,000" oninput="calcFee()"/></div>
+            <div class="fee-row"><div class="fee-label">Stage</div>
+              <select class="fee-sel" id="ssucc-type" onchange="calcFee()">
+                <option value="contested">Fully contested (High Court Family Division)</option>
+                <option value="settled">Settled / consent orders</option>
+              </select>
             </div>
           </div>
-        </div>
 
-        <!-- SCHEDULE 5 — DEBT COLLECTION -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#B8860B"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-            <div><div class="fee-card-title">Non-Contentious Debt Collection</div><div class="fee-card-sub">Schedule 5, Para 7 — Inclusive scale</div></div>
-          </div>
-          <div class="fee-body">
-            <div class="fee-row"><div class="fee-label">Debt Amount (KES)</div><input class="fee-input" id="s5-val" type="number" placeholder="e.g. 800,000" oninput="calcS5()"/></div>
+          <!-- ── DEBT COLLECTION ── -->
+          <div id="fp-debt" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Debt Amount (KES)</div><input class="fee-input" id="s5-val" type="number" placeholder="e.g. 800,000" oninput="calcFee()"/></div>
             <div class="fee-row"><div class="fee-label">Stage reached</div>
-              <select class="fee-sel" id="s5-stage" onchange="calcS5()">
+              <select class="fee-sel" id="s5-stage" onchange="calcFee()">
                 <option value="demand">Demand letter only (50% of scale)</option>
                 <option value="full">Full non-contentious recovery</option>
               </select>
             </div>
-            <div class="fee-result" id="s5-result">
-              <div class="fee-result-label">Minimum Scale Fee</div>
-              <div class="fee-result-main" id="s5-main"></div>
-              <div class="fee-result-breakdown" id="s5-bd"></div>
-              <div class="fee-note">If proceedings are instituted, the Schedule 5 inclusive scale does not apply and fees revert to Schedule 6/7. VAT at 16% applies.</div>
-            </div>
           </div>
-        </div>
 
-        <!-- SCHEDULE 3 — COMPANY FORMATION -->
-        <div class="fee-card">
-          <div class="fee-card-hd">
-            <div class="fee-card-icon" style="background:#1a2744"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
-            <div><div class="fee-card-title">Company Formation / Trademark</div><div class="fee-card-sub">Schedules 3 &amp; 4 — Companies Act 2015 / Trade Marks Act</div></div>
-          </div>
-          <div class="fee-body">
+          <!-- ── COMPANY ── -->
+          <div id="fp-company" class="fee-panel" style="display:none">
             <div class="fee-row"><div class="fee-label">Matter type</div>
-              <select class="fee-sel" id="s3-type" onchange="calcS3()">
-                <option value="company_local">Company incorporation (local)</option>
+              <select class="fee-sel" id="s3-type" onchange="calcFee()">
+                <option value="company_local">Company incorporation (private limited)</option>
                 <option value="company_foreign">Foreign company registration</option>
-                <option value="tm_one">Trademark — single class</option>
-                <option value="tm_two">Trademark — 2nd mark (same proprietor)</option>
-                <option value="tm_renew">Trademark renewal (1 class)</option>
-                <option value="tm_assign">Trademark assignment (1 mark)</option>
+                <option value="llp">LLP registration</option>
+                <option value="amendment">Amendment of M&amp;A / change of directors</option>
               </select>
             </div>
-            <div class="fee-result show" id="s3-result">
-              <div class="fee-result-label">Minimum Scale Fee</div>
-              <div class="fee-result-main" id="s3-main">KES 60,000</div>
-              <div class="fee-result-breakdown" id="s3-bd"><div class="fee-br-row"><span>Company incorporation (Schedule 3)</span><span>KES 60,000</span></div></div>
-              <div class="fee-note">Schedule 3 & 4 fees are minimum amounts; the advocate may charge more by agreement depending on complexity. Kenya Revenue Authority filing fees and government levies are separate disbursements.</div>
+          </div>
+
+          <!-- ── TRADEMARK ── -->
+          <div id="fp-trademark" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Matter type</div>
+              <select class="fee-sel" id="s4-type" onchange="calcFee()">
+                <option value="tm_one">TM application — 1 mark, 1 class</option>
+                <option value="tm_two">TM — 2nd mark, same proprietor</option>
+                <option value="tm_renew">TM renewal (1 class)</option>
+                <option value="tm_assign">TM assignment (1 mark)</option>
+                <option value="patent">Patent application (Industrial Property Act)</option>
+                <option value="copyright">Copyright registration / assignment</option>
+              </select>
             </div>
           </div>
-        </div>
 
-      </div><!-- /fee-grid -->
+          <!-- ── ARBITRATION ── -->
+          <div id="fp-arbitration" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Amount in Dispute (KES)</div><input class="fee-input" id="sarb-val" type="number" placeholder="e.g. 5,000,000" oninput="calcFee()"/></div>
+            <div class="fee-row"><div class="fee-label">Arbitration type</div>
+              <select class="fee-sel" id="sarb-type" onchange="calcFee()">
+                <option value="domestic">Domestic (NCIA / ad hoc)</option>
+                <option value="international">International arbitration</option>
+                <option value="enforcement">Enforcement of award (s.36 Arb. Act)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── CRIMINAL HC ── -->
+          <div id="fp-criminal_hc" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Offence / charge type</div>
+              <select class="fee-sel" id="scrihc-type" onchange="calcFee()">
+                <option value="murder">Murder / manslaughter</option>
+                <option value="robbery">Robbery with violence / Sch. 1 offence</option>
+                <option value="sexual">Sexual offence (Sexual Offences Act 2006)</option>
+                <option value="corruption">Corruption / POCAMLA</option>
+                <option value="other_hc">Other High Court criminal matter</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Stage</div>
+              <select class="fee-sel" id="scrihc-stage" onchange="calcFee()">
+                <option value="full_trial">Full trial</option>
+                <option value="plea">Plea / guilty plea (early)</option>
+                <option value="bail">Bail application only</option>
+                <option value="appeal">Criminal appeal</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── CRIMINAL MC ── -->
+          <div id="fp-criminal_mc" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Offence category</div>
+              <select class="fee-sel" id="scrimc-type" onchange="calcFee()">
+                <option value="traffic">Traffic / minor offence</option>
+                <option value="theft">Theft / obtaining by false pretences</option>
+                <option value="assault">Assault / affray</option>
+                <option value="other_mc">Other Magistrates Court criminal</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Stage</div>
+              <select class="fee-sel" id="scrimc-stage" onchange="calcFee()">
+                <option value="full_trial">Full trial</option>
+                <option value="plea">Guilty plea / TIC</option>
+                <option value="bail">Bail application</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── MISC APPLICATION ── -->
+          <div id="fp-misc_app" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Application type</div>
+              <select class="fee-sel" id="smisc-type" onchange="calcFee()">
+                <option value="chamber_summons">Chamber summons (Or. 40 CPR)</option>
+                <option value="originating_summons">Originating summons (Or. 36 CPR)</option>
+                <option value="notice_motion">Notice of motion</option>
+                <option value="statutory_demand">Statutory demand (Insolvency Act)</option>
+                <option value="garnishee">Garnishee proceedings (Or. 23 CPR)</option>
+                <option value="execution">Execution / attachment proceedings</option>
+                <option value="default_judgment">Default judgment application</option>
+                <option value="review">Application for review / setting aside</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Amount involved (KES)</div><input class="fee-input" id="smisc-val" type="number" placeholder="e.g. 1,000,000" oninput="calcFee()"/></div>
+          </div>
+
+          <!-- ── INJUNCTION ── -->
+          <div id="fp-injunction" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Injunction type</div>
+              <select class="fee-sel" id="sinj-type" onchange="calcFee()">
+                <option value="interlocutory">Interlocutory injunction (Or. 26 CPR)</option>
+                <option value="mareva">Mareva / freezing order</option>
+                <option value="anton_piller">Anton Piller / search order</option>
+                <option value="conservatory">Conservatory order (constitutional petition)</option>
+                <option value="stay">Stay of execution</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Approximate subject matter value (KES)</div><input class="fee-input" id="sinj-val" type="number" placeholder="e.g. 5,000,000" oninput="calcFee()"/></div>
+          </div>
+
+          <!-- ── JUDICIAL REVIEW ── -->
+          <div id="fp-judicial_review" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Matter type</div>
+              <select class="fee-sel" id="sjr-type" onchange="calcFee()">
+                <option value="judicial_review">Judicial review (Or. 53 CPR / FAAA 2015)</option>
+                <option value="constitutional_petition">Constitutional petition (Art. 22 CoK)</option>
+                <option value="coa_appeal">Court of Appeal (CoA Rules 2010)</option>
+                <option value="sc_appeal">Supreme Court (SC Rules 2020)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── STAMPING ── -->
+          <div id="fp-stamping" class="fee-panel" style="display:none">
+            <div class="fee-row"><div class="fee-label">Document type</div>
+              <select class="fee-sel" id="sstamp-type" onchange="calcFee()">
+                <option value="conveyance">Conveyance / transfer of land (4%)</option>
+                <option value="lease_stamp">Lease — stamp duty</option>
+                <option value="share_transfer">Share transfer (1%)</option>
+                <option value="debenture">Debenture (0.1%)</option>
+              </select>
+            </div>
+            <div class="fee-row"><div class="fee-label">Instrument value (KES)</div><input class="fee-input" id="sstamp-val" type="number" placeholder="e.g. 5,000,000" oninput="calcFee()"/></div>
+          </div>
+
+          <!-- RESULT BOX — shared -->
+          <div class="fee-result" id="fc-result" style="margin-top:2px">
+            <div class="fee-result-label" id="fc-result-label">Minimum Scale Fee</div>
+            <div class="fee-result-main" id="fc-main"></div>
+            <div class="fee-result-breakdown" id="fc-bd"></div>
+            <div class="fee-note" id="fc-note"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="fee-disclaimer" style="font-size:10px">
+        All figures are <strong>minimum scale fees</strong> under the Advocates (Remuneration) Order. VAT at 16%, court filing fees, stamp duty, and disbursements are charged separately. Family law and criminal fees shown are typical ranges based on Schedule 6 instruction fee principles and established practice — consult the Order for the precise applicable schedule. An advocate and client may agree higher fees in writing (para. 3 of the Order).
+      </div>
+
     </div><!-- /v-fees -->
 
     <!-- ════ ADMIN PANEL ════ -->
@@ -1054,85 +1207,62 @@
 
 <script>
 // ══════════════════════════════════════════════
-// API KEY — paste your Anthropic API key here
 // ══════════════════════════════════════════════
+// LEGAL KNOWLEDGE BASE — Full encyclopedia stored locally
+// Relevant sections retrieved per query to stay within Groq's token limits
 // ══════════════════════════════════════════════
-// FREE AI API CONFIGURATION
-// Get a free Gemini API key at:
-//   https://aistudio.google.com/app/apikey
-// No credit card required. 1,500 free requests/day.
-//
-// Alternative free options:
-//   Groq (Llama 3):  https://console.groq.com
-//   OpenRouter free: https://openrouter.ai
-// Change API_PROVIDER below to switch.
-// ══════════════════════════════════════════════
-const API_KEY      = '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';
-const API_PROVIDER = 'groq'; // 'gemini' | 'groq' | 'openrouter'
+const LEGAL_INTRO = "You are a senior advocate and legal intelligence assistant for the law firm of Dennis Kimani Mutonga, Advocate, Nairobi, Kenya. You have encyclopaedic knowledge of ALL Kenyan legislation, subsidiary legislation, rules, practice directions, and international law binding on Kenya.";
+const LEGAL_SECTIONS = [{"title": "KENYAN CONSTITUTIONAL & DEVOLUTION LAW", "content": "Constitution of Kenya 2010 (CoK 2010): Chapter 1 Sovereignty (Art.1-4); Chapter 2 Republic; Chapter 3 Citizenship (Arts.12-18); Chapter 4 Bill of Rights (Arts.19-57) — Art.20 application, Art.21 implementation, Art.22 enforcement, Art.23 remedies, Art.24 limitation, Art.25 non-derogable rights, Art.26 life, Art.27 equality/non-discrimination, Art.28 dignity, Art.29 liberty, Art.30 slavery, Art.31 privacy, Art.32 conscience, Art.33 expression, Art.34 media, Art.35 information, Art.36 association, Art.37 assembly, Art.38 political rights, Art.39 movement, Art.40 property, Art.41 labour, Art.42 environment, Art.43 economic/social rights, Art.44 language/culture, Art.45 family, Art.46 consumer rights, Art.47 fair administration, Art.48 access to justice, Art.49 arrested persons, Art.50 fair hearing, Art.51 detained persons; Chapter 5 Land (Arts.60-72); Chapter 6 Leadership & Integrity (Arts.73-80, Leadership & Integrity Act 2012, Public Officer Ethics Act 2003); Chapter 7 Representation (Elections); Chapter 8 Legislature; Chapter 9 Executive; Chapter 10 Judiciary (Arts.159-173); Chapter 11 Devolution (Arts.174-200); Chapter 12 Public Finance (Arts.201-231); Chapter 13 National Security; Chapter 14 National Values (Art.10); Chapter 15 Commissions & Independent Offices; Chapter 16 Amendment (Art.255-257); Sixth Schedule (transitional).\nDevolution: County Governments Act 2012, Intergovernmental Relations Act 2012, Urban Areas and Cities Act 2011, Transition to Devolved Government Act 2012, Division of Revenue Act (annual), County Allocation of Revenue Act (annual). Council of Governors. Senate jurisdiction over county legislation.\nElections: Elections Act 2011, Election Offences Act 2016, Political Parties Act 2011, IEBC Act 2011, Election Campaign Financing Act 2013. Presidential petition — Supreme Court, 14-day hearing, 21-day determination (Art.163(3)(a)). Other petition — High Court/ELC (21+21 days)."}, {"title": "LAND LAW & CONVEYANCING", "content": "Principal statutes: Land Act 2012, Land Registration Act 2012 (LRA 2012 — replaced RLA Cap.300, GLA Cap.280, RTA Cap.281), National Land Commission Act 2012, Community Land Act 2016, Sectional Properties Act 2020, Physical and Land Use Planning Act 2019 (PLUPA 2019), Survey Act (Cap.299).\nLand categories (Art.61 CoK): Public land (NLC holds in trust — Art.62), Community land (Art.63), Private land (Art.64). Conversion — NLC approval.\nTenure: Freehold (absolute proprietorship), Leasehold (government leases — 99 years standard; 33 years agricultural; 999 years private), Commonhold (sectional — Sectional Properties Act 2020). Non-citizens — leasehold only max 99 years (Art.65 CoK).\nRegistration: LRA 2012 — first registration (s.15), dealings (Part VI), rectification (s.80), indemnity (s.81). Title absolute (s.26 — indefeasibility subject to fraud). Caution — s.71 (60-day lapse unless extended). Restriction — s.76. Inhibition — s.78. Overriding interests — s.28 LRA.\nTransfers: Agreement for sale (Land Regulations 2017), stamp duty (Stamp Duty Act Cap.480 — 4% residential; 2% agricultural), registration fees (Land Registration (Fees) Rules). Spousal consent — s.12 Matrimonial Property Act 2013. Succession — assent under s.82 LRA + probate.\nCharges/mortgages: Part IX LRA 2012, Movable Property Security Rights Act 2017 (MPSRA). Enforcement — statutory power of sale (s.90 LRA), foreclosure. Consumer protection on residential charges — s.44 LRA.\nELC procedure: ELC Act 2011, ELC (Procedure) Rules 2013. Mandatory ADR attempt. Land Acquisition: Land Act 2012 Part VIII — compulsory acquisition, prompt and full compensation (Art.40(3) CoK), NLC role.\nSectional properties: Sectional Properties Act 2020 (Regulations 2021) — body corporate, management committee, unit title, common property.\nPlanning: PLUPA 2019 — county spatial plans, development permission (county government), change of use, EIA (EMCA 1999). Building Code — county by-laws.\nStamp duty: Stamp Duty Act (Cap.480) — conveyances 4%, leases (graduated), debentures 0.1%, share transfers 1%. Exemptions (s.105). Commissioner of Domestic Taxes — adjudication."}, {"title": "CONTRACT & COMMERCIAL LAW", "content": "Formation: Law of Contract Act (Cap.23) — offer (objective test), acceptance (postal rule), consideration (past consideration invalid, adequacy vs sufficiency), capacity (Age of Majority Act Cap.33 — 18 years; mental capacity), legality, formality (contracts for land s.3(3) — written + signed). Electronic contracts: Kenya Information and Communications Act (Cap.411A), Electronic Transactions Act 2007 (e-signatures valid).\nVitiating factors: Misrepresentation (fraudulent/negligent/innocent), duress, undue influence (presumed — fiduciary), mistake (common/mutual/unilateral), illegality (void vs unenforceable).\nTerms: Express vs implied (fact, law, custom). Exclusion clauses — UCTA principles; Consumer Protection Act 2012 s.52 (unfair terms void in B2C). Penalty clauses — Dunlop v New Garage test (penalty void). Force majeure — must be expressly drafted. Frustration — Law of Contract Act s.18.\nRemedies: Damages (expectation, reliance, restitution), specific performance (equitable, not for personal services), injunctions (Or.26 CPR), rescission, rectification, account of profits.\nSale of Goods: Sale of Goods Act (Cap.31) — implied terms (title s.14, description s.15, quality/fitness s.16, sample s.17), property passing (s.18 rules 1-5), risk, remedies. CISG — not ratified but persuasive.\nConsumer protection: Consumer Protection Act 2012 — unfair practices, product liability, right of return. Competition Act 2010 — abuse of dominance, mergers (CAK approval >KES 1 billion), restrictive trade practices.\nAgency: Common law — actual/ostensible/apparent authority. Powers of Attorney Act (Cap.53) — irrevocable powers, registration.\nSuretyship: Guarantee vs indemnity. Writing requirement (s.3(1)(d) Law of Contract). Discharge — material variation, time given.\nUnjust enrichment: Quasi-contract — money had and received, quantum meruit. UNIDROIT Art.3.2.7 (persuasive). Triton Petroleum v Pan Ocean [2017]."}, {"title": "COMPANY, COMMERCIAL & INSOLVENCY LAW", "content": "Companies Act 2015: Incorporation — private (min.1 shareholder, 1 director), public (min.2 directors, company secretary required), unlimited, guarantee. Memorandum & Articles — Table A (default articles). Share capital — authorisation, allotment (pre-emption rights s.265), transfer (stock transfer form, stamp duty 1%), buyback. Directors — fiduciary duties (s.143: act within powers, promote success, exercise independent judgment, avoid conflicts, not accept benefits, declare interests); shadow directors; disqualification (s.168). Accounts — s.640 filing with Registrar within 6 months (private), 3 months (listed). Charges — registration with BRS within 30 days (s.887) — void against liquidator if unregistered. Meetings — AGM (s.337), notice (21 days — s.317), resolutions (ordinary/special 75%). Foreign companies — s.971 registration within 30 days.\nInsolvency Act 2015: Voluntary liquidation (s.375/s.380), compulsory winding up — s.399 (statutory demand KES 100,000, 21 days; commercial/balance sheet insolvency), official receiver, liquidator, proof of debts, priority (s.381 — employees wages 4 months, NSSF/NHIF contributions, KRA 12 months; secured; unsecured). Administration (Part IV — moratorium). Voluntary arrangement (Part II — CVA, 75% creditors). Cross-border insolvency (Part VI — UNCITRAL Model Law). Preferences and transactions at undervalue — s.522 (6 months/2 years connected parties). Fraudulent trading — s.530. Wrongful trading — s.531.\nCapital markets: Capital Markets Act (Cap.485A), CMA — fund managers, investment advisers, stockbrokers. NSE listing requirements. Prospectus requirements (s.30). Insider trading — Capital Markets (Insider Trading) Regulations 2003.\nPartnerships: Partnership Act (Cap.29). Limited Liability Partnership Act 2011.\nTrusts: Trustees Act (Cap.167), Public Trustee Act (Cap.168). Express, resulting, constructive. Public Benefit Organisations Act 2013.\nBusiness registration: Business Registration Service Act 2015 (BRS) — one-stop shop. eCitizen portal."}, {"title": "EMPLOYMENT & LABOUR LAW", "content": "Employment Act 2007: Written particulars (s.10, within 2 months), probation (max 6 months renewable once — s.42(1)), notice (s.35 — 28 days/one month/one pay period), summary dismissal (s.44 — gross misconduct), termination (s.45 — valid reason + fair procedure: show cause, hearing, appeal — Kenya Hotels v Karanja test), unfair termination (s.45(2) — compensation max 12 months), wrongful dismissal (common law), constructive dismissal, redundancy (s.40 — 1 month notice, NSSF paid, LIFO criteria), maternity leave (s.29 — 3 months full pay), paternity leave (s.29A — 2 weeks full pay), annual leave (s.28 — 21 days), sick leave (s.30 — 7 days full + 7 days half), public holidays (Public Holidays Act Cap.110). Sexual harassment — s.6. Child labour — prohibited under 16 (s.56). Minimum wages — Regulation of Wages (Cabinet Secretary orders, annually revised). PAYE deductions — Income Tax Act.\nLabour Relations Act 2007: Trade union recognition (s.54 — 51% membership), CBAs (binding when registered with ELRC — s.59), industrial action (s.76 — 7-day notice; essential services — notice only), check-off (s.49).\nWIBA 2007: Employer liability for occupational injuries/diseases. DOSH. Compensation — degree of disablement x earnings x multiplier.\nRetirement Benefits Act 1997: RBA registration, trust deed, fund manager, custodian, actuary. Contributions — employer minimum 5%. Portability — s.38.\nNSSF Act 2013: Tier I (KES 2,160/month each), Tier II (6% above lower earnings limit). SHA/Social Health Insurance Act 2023 (replacing NHIF).\nELRC: ELRC Act 2011, ELRC Rules 2016 — Claim Form A (unfair termination), B (wages), C (trade dispute). Mandatory mediation first. 3-year limitation (s.90 EA). Registries — Nairobi, Mombasa, Kisumu, Nakuru, Nyeri, Eldoret, Malindi. Appeal to Court of Appeal on law only."}, {"title": "CRIMINAL LAW & PROCEDURE", "content": "Substantive: Penal Code (Cap.63) — general principles (mens rea, actus reus, attempts, conspiracy, aiding/abetting), murder (s.203), manslaughter (s.202), theft (s.275), robbery (s.296/297), burglary (s.304), fraud (s.317), forgery (s.345), defamation. Sexual Offences Act 2006 — rape (s.3), defilement (s.8 — under 18, strict liability, 15 years minimum), gang rape (s.10), sentence-doubling (s.36). Domestic Violence Act 2015. Children Act 2022 — diversion, Children's Court. ACECA 2003 — corruption (EACC). POCAMLA 2009 — money laundering (s.3 — predicate offences, placement/layering/integration), forfeiture (civil s.55; criminal s.54), STRs to FRC. Computer Misuse and Cybercrimes Act 2018 (CMCA) — unauthorised access (s.3), computer fraud (s.14), cyber harassment (s.27), identity theft (s.26), interception (s.11). Prevention of Terrorism Act 2012. Narcotic Drugs and Psychotropic Substances (Control) Act 1994. Firearms Act (Cap.114). Wildlife Conservation and Management Act 2013. Traffic Act (Cap.403).\nCriminal procedure: CPC (Cap.75) — charge (s.89), warrant/summons (s.73/89A), arrest (s.29-39), bail (s.123 CPC; Art.49(1)(h) CoK — as of right for bailable offences; bail review s.123A; denial — capital/likely to abscond/witness interference/public safety), plea (s.207 — equivocal plea), remand (s.72 — 15 days Magistrate, 30 days HC), DPP nol pros (Art.157(6)(b)), committal (s.240 — to HC for capital), trial, evidence (Evidence Act Cap.80 — beyond reasonable doubt, confessions s.25/26 CPC, dying declarations s.33 EA, electronic evidence KICA Cap.411A), sentencing (Sentencing Guidelines 2023), appeal (s.347 — Magistrate to HC; HC to CoA; CoA to SC on constitutional questions). Plea bargaining — Criminal Procedure (Plea Agreements) Rules 2017. Victim Protection Act 2014.\nDPP: Art.157 CoK — independent; power to direct investigations, take over/discontinue; consent required for certain offences. National Prosecution Policy 2013.\nBail: Anti-terrorism — no bail (Prevention of Terrorism Act). Sexual offences against children under 11 — court discretion (s.8 SOA). Robbery with violence (s.296(2) PC) — Schedule 1 offence — bail in HC only.\nWitness protection: Witness Protection Act 2006. Evidence via CCTV/screens — Children Act 2022 s.214.\nInquests: CPC Part VIII (s.387-406) — Chief Magistrate — sudden/unnatural deaths."}, {"title": "FAMILY, MATRIMONIAL & SUCCESSION LAW", "content": "Marriage: Marriage Act 2014 — civil, Christian, customary, Hindu, Islamic. Age — 18 years. Prohibited degrees (s.11). Registration. Monogamy vs polygamy (Art.45(4) CoK — Islamic/customary permit polygamy).\nMatrimonial property: Matrimonial Property Act 2013 — matrimonial home (s.12 — cannot dispose without spouse consent), matrimonial property (equal share presumption s.7/8 — contribution: monetary + non-monetary including domestic work). Antenuptial contracts — s.6 MPA (must be registered).\nDivorce: Marriage Act 2014 Part VI — irretrievable breakdown (s.66) — separation 3 years; cruelty; adultery; desertion 3 years; exceptional depravity. Judicial separation (s.79). Decrees — nisi (6 weeks) → absolute. Domestic Violence Act 2015 — protection orders.\nChildren: Children Act 2022 — best interests paramount (s.4); parental responsibility (s.25); custody/care/access (s.89-100); child maintenance (s.103-118); adoption (s.160-190 — HC; intercountry adoption); child labour (s.10 — under 16 prohibited); Children's Court; corporal punishment abolished (s.19); FGM — Female Genital Mutilation Act 2011.\nSuccession: Law of Succession Act (Cap.160) — testate (s.8 — writing, signed, 2 simultaneous witnesses, no beneficiary as witness), intestate (s.32-44 — spouse takes personal chattels + life interest; children share residue), grants (probate s.51, letters of administration s.66, small estates s.73 — summary procedure KES 100,000), revocation (s.72), distribution (s.83). High Court Family Division — contested succession. Kadhis Court — Muslim succession. Assent under s.82 LRA."}, {"title": "DATA PROTECTION & PRIVACY LAW", "content": "Data Protection Act 2019: Personal data, sensitive data (health, biometric, genetic, sexual orientation, race, religion, criminal record, financial — s.2). Principles (s.25) — lawfulness, fairness, transparency; purpose limitation; data minimisation; accuracy; storage limitation; integrity/confidentiality; accountability. Lawful bases (s.30) — consent; contract; legal obligation; vital interests; public interest; legitimate interests. Consent (s.32) — freely given, specific, informed, unambiguous; withdrawal any time. Sensitive data — explicit consent + one s.30 ground. Data subject rights (s.26-29) — access (s.26), rectification (s.27), erasure (s.28), objection (s.29), portability, not subject to automated decisions. DPO — mandatory for public entities and high-risk processing (s.24). DPIA — mandatory for high-risk processing. Cross-border transfers (s.48) — adequate protection or explicit consent or binding corporate rules. Breach notification (s.43) — ODPC within 72 hours; data subjects promptly. ODPC — registration (s.17); enforcement notices; penalties up to KES 5,000,000 or 1% of annual turnover. Regulations — Registration Regulations 2021, Compliance and Enforcement Regulations 2021, General Regulations 2021."}, {"title": "INTELLECTUAL PROPERTY LAW", "content": "Copyright: Copyright Act (Cap.130) — literary, musical, artistic, sound recordings, films, broadcasts; economic rights (reproduction, distribution, public performance, communication, adaptation); duration (life + 50 years; 50 years from publication for corporate works); assignment (writing — s.35; future works not covered by general assignment — Kenya Breweries v Longhorn [2016]); licences; KECOBO enforcement; fair dealing (criticism, news, research — s.26); software as literary work; employer owns works in course of employment (s.32).\nIndustrial property: Industrial Property Act 2001 (KIPI) — patents (20 years, PCT national phase), utility models (10 years), industrial designs (15 years), layout designs (10 years). Compulsory licences (s.73 — public health). TRIPS compliance.\nTrade marks: Trade Marks Act (Cap.506) — KIPI registration (Part A/B), duration (10 years + renewal), assignment, licensing, infringement, passing off (goodwill + misrepresentation + damage). Madrid Protocol (Kenya 1998). Well-known marks (s.15A). Geographical Indications Act 2013.\nAnti-counterfeit: Anti-Counterfeit Act 2008 — ACA; seizure powers; criminal penalties. KRA border enforcement."}, {"title": "TAX LAW", "content": "Income Tax Act (Cap.470): Resident (183 days or incorporated in Kenya). PAYE — graduated (10% to KES 24,000; 25% to KES 32,333; 30% above — subject to Finance Acts). Business income deductions (s.15 — wholly and exclusively). Capital allowances — investment deduction 100%, wear and tear. Withholding taxes — dividends 5% resident/15% non-resident; interest 15% non-resident; royalties 5% resident/20% non-resident; management fees 5.625% resident/20% non-resident. Capital Gains Tax — 5% marketable securities; 15% land/buildings. Turnover tax (TOT) — 3% for KES 1-50 million turnover. Transfer pricing — Income Tax (Transfer Pricing) Rules 2006 — arm's length.\nVAT Act 2013: Standard rate 16%, zero-rated, exempt. Input tax credits. Reverse charge (imported services). Digital service tax (DST — Finance Act 2020 amendments).\nTax Procedures Act 2015: Assessments, amended returns. Objections (30 days) → Tax Appeals Tribunal (TAT) → High Court → Court of Appeal. Penalties — late filing (5% + 1% per month). KRA audit powers. Advance rulings (s.88).\nExcise Duty Act 2015: Alcohol, cigarettes, fuels, telecoms, financial services, insurance premiums (40%).\nCustoms: EACCMA 2004 — common external tariff, WTO Customs Valuation Agreement, rules of origin (EAC, COMESA, AfCFTA).\nDouble tax treaties: UK, Canada, India, Norway, Sweden, Denmark, France, Germany, Zambia, UAE, Qatar, Mauritius (in force)."}, {"title": "BANKING, FINANCE & INSURANCE", "content": "Banking Act (Cap.488): CBK licensing — commercial banks, mortgage finance companies, microfinance banks. Prudential guidelines — CAR 14.5% (Basel III), liquidity 20%, large exposures, AML/CFT. CBK Act (Cap.491) — monetary policy, lender of last resort. Deposit Protection Fund.\nMobile money: National Payment System Act 2011, NPS Regulations 2014 — PSP licensing. M-Pesa regulatory framework (CBK). AML/CFT — POCAMLA applies to all PSPs.\nMicrofinance: Microfinance Act 2006, Microfinance (Deposit-Taking) Regulations 2008 — DTM licensing.\nSACCO: SACCO Societies Act 2008, SACCO Societies (Deposit-Taking) Regulations 2010 — SASRA licensing.\nCapital markets: CMA Act (Cap.485A) — broker-dealer, investment adviser, fund manager, custodian, REIT manager licensing. NSE — Listing Manual, GEMS. CMA (Securities) (Public Offers, Listing and Disclosures) Regulations 2002. REITs — Real Estate Investment Trusts Regulations 2013.\nInsurance: Insurance Act (Cap.487), IRA — classes of insurance, minimum capital, solvency margins, reinsurance, claims handling. Motor Third Party Liability — MVTPI Act (Cap.405) — compulsory. Marine — Marine Insurance Act (Cap.390).\nAML/CFT: POCAMLA 2009, AML/CFT Regulations 2023, FRC — STRs, KYC, beneficial ownership (PSC register). Counter-Financing of Terrorism Act 2010."}, {"title": "CIVIL PROCEDURE — COMPLETE ORDERS 1-51", "content": "Governing law: Civil Procedure Act (Cap.21), Civil Procedure Rules 2010 (L.N.151/2010 — 51 Orders), Judicature Act (Cap.8) — s.3 sources of law (CoK; statutes; English common law/equity/statutes of general application in force 12 August 1897; African customary law).\nOr.1 — parties: joinder, misjoinder, representative suits.\nOr.2 — cause of action: pleadings must disclose reasonable cause of action; embarrassing pleadings struck out.\nOr.3 — plaint: parties, material facts, relief sought, valuation of suit.\nOr.4 — service of summons: primarily personal; modes as per Or.5.\nOr.5 — service: personal (Or.5 r.1), substituted (Or.5 r.13 — court order required), by electronic means (Practice Direction No.2 of 2022 — email, e-filing portal), by post (Or.5 r.16), outside jurisdiction (Or.5 r.21 — leave required; bilateral treaty/MLAT; Hague Service Convention — Kenya not signatory but practice recognised). Time for defence — 15 days (Kenya) or 30 days (outside) from service.\nOr.6 — defence and counterclaim: must be filed within 15/30 days; denial must be specific; counterclaim treated as cross-suit.\nOr.6A — defence to counterclaim.\nOr.7 — judgment on admission: Or.7 r.1 — where defendant admits all or part of claim, plaintiff may apply for judgment without trial; admission must be clear and unequivocal.\nOr.8 — striking out defence: scandalous, embarrassing, irrelevant.\nOr.9 — default judgment: Or.9 r.4 — liquidated demand; Or.9 r.5 — unliquidated (assessment of damages); Or.9 r.7 — setting aside default judgment: two-limb test — (1) sufficient reason for default; (2) arguable defence on merits — both required.\nOr.10 — summary judgment: Or.10 r.1 — after defence filed, plaintiff applies; defendant must show unconditional leave to defend — genuine triable issue (Papanicola v Fagan / Macharia Mwangi test — not merely arguable, must be real); court may give conditional leave (security for amount); no summary judgment on genuine factual disputes.\nOr.11 — discovery and inspection: Or.11 r.2 — list of documents (automatic); Or.11 r.11 — right to inspect; Or.11 r.12 — production to court; privilege — legal professional privilege (LPP), without-prejudice privilege, public interest immunity.\nOr.12 — interrogatories: Or.12 r.1 — must relate to matter in question; not fishing expedition; court may disallow oppressive interrogatories.\nOr.13 — admissions: Or.13 r.1 — party may admit facts or part of claim; judgment on admissions.\nOr.14 — settlement of issues: Or.14 r.1 — court frames list of issues; parties agree issues for trial; agreed statement of facts.\nOr.15 — special case stated: Or.15 r.1 — parties may state case for court's opinion on point of law.\nOr.16 — split trials: Or.16 r.1 — court may order separate trials on distinct issues (e.g., liability then quantum).\nOr.17 — striking out pleadings: Or.17 r.1 — scandalous, embarrassing, irrelevant; Or.17 r.2 — no reasonable cause of action/defence — inherent jurisdiction also available; no evidence admissible on striking out application — court reads pleading at its highest.\nOr.18 — evidence at trial: Or.18 r.1 — witnesses; subpoena (witness summons); Or.18 r.14 — affidavit evidence by agreement or court order; witness statements filed in advance.\nOr.19 — affidavits: deponent, jurat (sworn before Commissioner for Oaths — Oaths and Statutory Declarations Act Cap.15), filing, use in interlocutory applications.\nOr.20 — judgment: Or.20 r.1 — summary of decision; Or.20 r.7 — decree drawn up; consent orders (binding once entered — Purcell v FC Trigell).\nOr.21 — execution: Or.21 r.1 — modes: attachment/sale of movables Or.22; delivery of property Or.23 (now garnishee); garnishee Or.23/25; receivership Or.25/25A; committal Or.41/Or.26; contempt. Time limit — 6 years from decree (Or.21 r.5).\nOr.22 — attachment and sale of movable property: warrant of attachment; inventory and valuation; public auction; surplus returned to debtor.\nOr.23 — garnishee proceedings: Or.23 r.1 — application ex parte; order nisi served on garnishee and judgment debtor; garnishee must attend and disclose debt; order absolute if admitted; garnishee not a party to original suit; amount recovered credited against judgment debt; bank accounts — notice to bank manager; consent of judgment debtor not required.\nOr.24 — charging orders on land: Or.24 r.1 — charging order on judgment debtor's beneficial interest in land; registered at Land Registry; sale of charged land to satisfy judgment (ELC has jurisdiction on sale of land in execution).\nOr.25 — receivers: Or.25 r.1 — court appoints receiver over income/property of debtor; usually for equitable execution or equitable mortgages; receiver's accounts and remuneration.\nOr.25A — examination of judgment debtor: Or.25A r.1 — oral examination as to means and assets; failure to attend — warrant of arrest for contempt.\nOr.26 — injunctions and interim orders: Or.26 r.1 — interlocutory injunction: Kenya test (derived from American Cyanamid [1975] — applied since Giella v Cassman Brown [1973] pre-Cyanamid but same spirit): (1) serious question/prima facie case; (2) balance of convenience (adequacy of damages test — whether damages would adequately compensate); (3) status quo; mandatory injunctions — higher threshold (strong prima facie); undertaking in damages required from applicant; Mareva/freezing orders — ex parte application (serious risk assets will be dissipated; not to deprive defendant of assets to live on; worldwide Mareva with appropriate safeguards); Anton Piller/search orders — ex parte (real possibility evidence will be destroyed; must not be disproportionate — search and take items rather than destroy). Or.26 r.7 — security for costs (defendant may apply if plaintiff outside jurisdiction or nominal plaintiff).\nOr.27 — (now subsumed in Or.53 — judicial review).\nOr.28 — interpleader: Or.28 r.1 — sheriff interpleader (third party claims goods attached); stakeholder interpleader (person holding money/property claimed by two parties).\nOr.29 — receivers by way of equitable execution.\nOr.30 — sale of immovable property in execution: ELC has jurisdiction; warrant of sale issued; public auction; surplus after payment of debt/costs to debtor; reserve price.\nOr.31 — proceedings by/against minor or patient: next friend (for plaintiff); guardian ad litem (for defendant); settlement requires court approval.\nOr.32 — proceedings by/against firm: service on individual partners or at principal place of business; partners jointly and severally liable.\nOr.33 — evidence by commission: Or.33 r.1 — court commissions examination of witness outside jurisdiction; letters of request.\nOr.34 — foreign tribunals: Or.34 r.1 — Evidence (Proceedings in Other Jurisdictions) Act — mutual legal assistance.\nOr.35 — affirmation (non-religious witnesses).\nOr.36 — originating summons: Or.36 r.1 — for construction of documents, simple questions of law, non-contentious matters; inter partes if disputed; widely used for mortgage enforcement, trust, probate, partnership disputes.\nOr.37 — writ of possession: Or.37 r.1 — possession of immovable property; execution of decree for possession.\nOr.38 — security for costs: Or.38 r.1 — defendant may apply if plaintiff ordinarily outside Kenya, nominal plaintiff, or plaintiff has no fixed abode; court orders security within fixed time or suit struck out.\nOr.39 — trial: Or.39 r.1 — hearing date; Or.39 r.20 — conduct of trial; opening statements; examination-in-chief, cross-examination, re-examination; court may call witnesses; judgment reserved or extempore.\nOr.40 — chamber summons: Or.40 r.1 — interlocutory application in a cause or matter; must specify orders sought and grounds; return date; served on opposite party; heard by Judge in chambers or open court; commonly used for: injunctions, attachment before judgment, security for costs, consolidation, amendment of pleadings, third party notices.\nOr.41 — contempt of court: Or.41 r.1 — civil contempt (breach of court order); criminal contempt (scandalising the court); committal to prison; sequestration of property; purging contempt.\nOr.42 — appeals from subordinate courts to High Court: Or.42 r.1 — notice of appeal within 30 days of decision; memorandum of appeal — specific grounds; Or.42 r.11 — record of proceedings from lower court; Or.42 r.15 — set aside ex parte orders; rehearing on record (not oral re-examination of witnesses unless allowed).\nOr.43 — revision by High Court: s.362 CPC — suo motu or on application; High Court reviews Magistrate decisions for errors of law or procedure; more limited than appeal.\nOr.44 — review of judgment: Or.44 r.1 — discovery of new evidence not previously available; mistake or error apparent on face of record; other sufficient reason; application within reasonable time (courts apply 6-month guide).\nOr.45 — reference to High Court: Magistrate states case for HC opinion on point of law.\nOr.46 — miscellaneous proceedings.\nOr.47 — provisional orders: provisional attachment before judgment; security for satisfaction of decree.\nOr.48 — admiralty: admiralty in rem and in personam; Admiralty Court at High Court Mombasa; arrest of ships; bottomry; salvage; collision.\nOr.49 — contempt (supplementary).\nOr.50 — miscellaneous applications.\nOr.51 — general: Or.51 r.7 — overriding objective: just, expeditious, proportionate resolution of disputes.\nLimitation: Limitation of Actions Act (Cap.22) — s.4(1)(a) contract 6 years; s.4(1)(b) tort 3 years; s.7 land 12 years; s.4(2) defamation 12 months; s.26 fraud — time runs from discovery; s.27 disability — time runs when ends; s.28 acknowledgment — fresh accrual; s.29 part payment — fresh accrual. Cannot be shortened by contract — Gabriel Mutava v KPA [2016].\nCosts: Advocates (Remuneration) Order L.N.64/1962 (amended L.N.35/2014, L.N.45/2014) — Schedule 6 (HC), Schedule 7 (Magistrates), Schedule 1 (conveyancing); party-and-party vs advocate-and-client; taxation (Registrar); wasted costs against advocates (s.27A CPA).\nEvidence: Evidence Act (Cap.80) — admissibility (relevance s.5), burden of proof (civil — balance of probabilities; criminal — beyond reasonable doubt s.107), hearsay exceptions (dying declaration s.33(a), business records s.34, bankers' books), confessions (s.25 CPC — voluntary; civil admissions Or.13), documentary evidence (primary — originals; secondary — copies s.67), electronic evidence (KICA Cap.411A s.106A-106I — admissible if integrity/reliability conditions met), opinion evidence (expert — s.49 EA), judicial notice (s.59-60)."}, {"title": "COURT OF APPEAL, SUPREME COURT & APPEALS", "content": "Court of Appeal: Appellate Jurisdiction Act (Cap.9), Court of Appeal Rules 2010 (amended 2020). Appeals from HC, ELC, ELRC (law/procedure only). Appeal as of right from final decrees (s.66(1) CPA); interlocutory — leave required (s.66(2)); second appeals — leave. Notice of appeal — r.75 — within 30 days; record of appeal — r.85 — within 60 days; security for costs — r.112. Grounds — specific; no new grounds without leave. Bench of 3 JAs (Art.164(2)). Full Court (5 JAs) — constitutional questions. Stays — Butt v Rent Restriction Tribunal test (nugatory, balance of convenience). Registries — Nairobi, Mombasa, Kisumu, Malindi, Nakuru, Nyeri.\nSupreme Court: Supreme Court Act 2011, Supreme Court Rules 2020. Jurisdiction: Art.163(3)(a) — presidential election petitions (14/21 days); Art.163(3)(b) — appeals from CoA (general public importance); Art.163(3)(c) — advisory opinions; Art.163(4)(a) — constitutional interpretation; Art.163(4)(b) — certified appeals. Certification — Gatirau Peter Munya v Githinji [2014] — not a second bite. Notice of appeal — r.23 — within 14 days. Bench — 5 or 7 Justices. Advisory opinions — binding on all state organs."}, {"title": "JUDICIAL REVIEW & ADMINISTRATIVE LAW", "content": "Judicial review: Law Reform Act (Cap.26), Or.53 CPR. Grounds — illegality, irrationality (Wednesbury), procedural impropriety (audi alteram partem; nemo judex in sua causa), proportionality (Judicial Service Commission v Mbalu Mutuku [2013]). Relief — certiorari, mandamus, prohibition, declaration, injunction, habeas corpus. Or.53 procedure — leave (ex parte — arguable case, within 6 months — Or.53 r.2); substantive hearing (inter partes). Fair Administrative Action Act 2015 (FAAA 2015) — Art.47 CoK — written reasons (s.4(3)); internal review; external review; court review (s.7 — unlawful, unreasonable, irrational, procedurally unfair, bias, disproportionate). Constitutional petitions — Art.22 CoK (locus standi — any person), Art.258, Art.165(3)(b); Constitutional Litigation (Practice and Procedure) Rules 2013; supporting affidavit; notify AG/DPP; remedies: declaration, injunction, compensation, structural interdict."}, {"title": "ADR — ARBITRATION, MEDIATION & KADHIS", "content": "Arbitration Act (Cap.49): Full UNCITRAL Model Law adoption. Arbitration agreement — s.4 (writing, electronic counts). Stay — s.6 (mandatory — Telkom Kenya v Orange SA [2021]). Competence-competence — s.17. Interim measures — s.18 (court or tribunal). Award — s.32 (writing, signed, reasons, date, seat). Setting aside — s.35 (limited grounds: incapacity; invalid agreement; no notice; beyond scope; irregular composition; non-arbitrable; public policy). Enforcement — s.36 (HC leave; equivalent to court judgment). Confidentiality — s.31B. NCIA — NCIA Act 2013, NCIA Rules 2020. Pathological arbitration clauses — Esso (Kenya) Ltd v MV Saruji [1994].\nMediation: High Court (Mediation (Pilot) Rules 2015 — some divisions mandatory); ELC (mandatory); ELRC (mandatory — ELRC Mediation Rules 2016). Settlement agreement — binding as contract; may be registered as consent judgment. Kadhis Courts: Kadhis Courts Act (Cap.11) — personal status, marriage, divorce, inheritance — Muslims only; appeal to HC; Art.170 CoK.\nTraditional dispute resolution: Art.159(2)(c) CoK."}, {"title": "ENVIRONMENT & NATURAL RESOURCES", "content": "EMCA 1999: NEMA — licensing, enforcement. EIA — Second Schedule projects (EMCA EIA Regulations L.N.101/2003) — project report, study, public participation, NEMA approval. National Environment Tribunal (NET) — appeals from NEMA. Polluter pays principle.\nClimate Change Act 2016: National Climate Change Action Plan, County Plans. Kenya NDC under Paris Agreement. Energy Act 2019 — EPRA licensing, renewable energy, PPAs.\nWater: Water Act 2016, WASREB, WRMA. Water abstraction licences.\nMining: Mining Act 2016 — prospecting, mining, retention licences. Royalties. Community development agreements.\nWildlife: Wildlife Conservation and Management Act 2013 — KWS, CITES (Appendix I banned, II regulated).\nForestry: Forest Conservation and Management Act 2016 — KFS, forest reserves, REDD+.\nFisheries: Fisheries Management and Development Act 2016 — licences, EEZ (200nm — UNCLOS).\nNatural resources: Natural Resources (Transactions Subject to Ratification) Act 2016."}, {"title": "PUBLIC PROCUREMENT", "content": "PPADA 2015: Open tender threshold (goods/services >KES 3,000,000; works >KES 6,000,000). Methods — open tender (s.88), restricted (s.97), direct procurement (s.103), RFP professional services (s.107), RFQ below threshold (s.110), low-value (s.113 — below KES 50,000). Preference — s.157 — 30% youth/women/PWDs. Exclusion — s.36 (corruption, tax non-compliance, poor performance, conflict of interest). Evaluation — technical (pass/fail) then financial (lowest evaluated responsive). Variations — up to 15% without re-tender. PPRA — oversight, standard documents. PPARB — review board (s.167 — complaint within 14 days; automatic 5-day standstill — s.135; hearing within 21 days); appeal — HC within 14 days of PPARB decision."}, {"title": "IMMIGRATION & CITIZENSHIP", "content": "Kenya Citizenship and Immigration Act 2011, Immigration Act (Cap.172): e-visa portal, class G work permit (specific employer), class G2 (investor — USD 100,000 minimum), class I (dependent), class D (student), EAC East African Pass. Deportation — s.26 — procedural safeguards. Citizenship — by birth (Art.14), registration (Art.15), naturalisation (17 years residence or 3 years married to citizen + 7 years). Dual citizenship — permitted (Art.16)."}, {"title": "INTERNATIONAL LAW — ALL FRAMEWORKS", "content": "Public international law: Art.38 ICJ Statute (treaties, custom, general principles, judicial decisions). Art.2(6) CoK — ratified treaties form part of Kenyan law (courts: not self-executing without legislation — apply with caution). VCLT 1969 — pacta sunt servanda (Art.26), interpretation (Art.31 — ordinary meaning in context + object/purpose).\nEAC: EAC Treaty 1999 (as amended) — Kenya, Uganda, Tanzania, Rwanda, Burundi, South Sudan, DRC (2023). EAC Common Market Protocol 2010 — free movement (goods, persons, labour, services, capital). EAC Customs Union Protocol 2005 — CET. EACJ — First Instance + Appellate Divisions; jurisdiction — interpretation/application of EAC Treaty; 2-month time limit; CMC Aviation v Uganda Airlines [2018] — EAC Treaty prevails over domestic law.\nCOMESA: COMESA Treaty 1994 (19 states). Free trade area (zero tariffs within FTA). Competition — COMESA Competition Regulations. COMESA Court of Justice.\nAfCFTA: AfCFTA Agreement 2018 (in force 2019 — Kenya ratified). Protocols — goods, services, IP, competition, investment, digital trade. Tariff liberalisation — 90% tariff lines over 5 years. Dispute settlement — AfCFTA DSB.\nWTO/GATT: Kenya founding member 1995. GATT 1994, GATS, TRIPS, SPS, TBT. Doha Declaration 2001 — compulsory licences for public health (TRIPS Art.31).\nAGOA: US unilateral duty-free access for qualifying products — Kenya major beneficiary (garments, cut flowers). EU-EAC EPA — in force for Kenya and Rwanda — duty-free/quota-free access to EU.\nInvestment treaties: ICSID Convention 1965 (Kenya member). BITs in force — UK (2000), Netherlands (1979), Germany (1996), Switzerland (2007), France (2007), Italy (1999), China (2001), UAE (2014), Mauritius (2014), Kuwait (2012), Qatar (2014), Singapore (2006). MFN, FET, expropriation (Art.40 CoK — public purpose, prompt full compensation), free transfer of funds.\nArbitration: UNCITRAL Model Law 1985 (2006 amendments — adopted by Kenya). New York Convention 1958 (Kenya acceded 1989) — recognition/enforcement — grounds for refusal Art.V. ICSID — awards self-enforcing in member states (Art.54) — no appeal to national courts.\nHuman rights treaties: ICCPR (1966, Kenya 1972); ICCPR Optional Protocol (individual communications to HRC); ICESCR (1966, Kenya 1976); CEDAW (1979, Kenya 1984 — no reservations); CRC (1989, Kenya 1990 — Art.3 best interests, Art.12 participation); CRPD (2006, Kenya 2008 — optional protocol); CAT (1984, Kenya 1997); CERD (Kenya 2001); Banjul Charter (1981, Kenya 1992 — individual + peoples' rights + duties); Maputo Protocol (2003, Kenya 2010); ACRWC (1990, Kenya 2000). AHRC — individual petitions (Kenya has not made declaration — only state referrals available).\nLabour: ILO — Kenya member. Core conventions: C29 Forced Labour (Kenya 1964), C87 Freedom of Association (1964), C98 Collective Bargaining (1964), C100 Equal Remuneration (1964), C105 Abolition of Forced Labour (1964), C111 Discrimination (1964), C138 Minimum Age (1979), C182 Worst Forms of Child Labour (2001). MLC 2006 — Maritime Labour Convention.\nEnvironment: Paris Agreement 2015 (Kenya ratified) — NDCs, carbon markets (Art.6), loss and damage. CBD 1992 (Kenya 1994) — Nagoya Protocol on ABS (Kenya 2015). Basel Convention (Kenya 1994). Rotterdam Convention (Kenya 2004). Stockholm Convention — POPs (Kenya 2004). UNCLOS 1982 (Kenya 2004) — EEZ 200nm, continental shelf, ITLOS, Annex VII arbitration. Ramsar (Kenya 1990). CITES (Kenya 1978).\nMaritime: SOLAS, MARPOL (IMO — Kenya member). Merchant Shipping Act 2009. Admiralty — Admiralty Court at HC Mombasa.\nDiplomatic & consular: VCDR 1961 (Kenya 1965) — diplomatic immunity (Art.31; inviolability of mission); VCCR 1963 (Kenya 1965) — consular immunity (more limited). Diplomatic Immunities and Privileges Act (Cap.179). International Organisations — Privileges and Immunities Act (Cap.179A) — UN, AU, IOs hosted in Nairobi (UNEP, UN-Habitat).\nTrade instruments: INCOTERMS 2020 (ICC) — EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF. UCP 600 (ICC — letters of credit). CISG (not ratified — persuasive where counterparty is CISG state). UNIDROIT Principles 2016 — gap-filling (Triton Petroleum v Pan Ocean [2017]). UNCITRAL Model Law on Electronic Commerce."}, {"title": "LEAD KENYAN PRECEDENTS (COMPREHENSIVE)", "content": "Constitutional: Samuel Kamau Macharia v KCB [2012] SCK — SC jurisdiction Art.163(4)(a); Mumo Matemu v Trusted Society [2013] CoA — constitutional petition requirements; JSC v Mbalu Mutuku [2013] HC — proportionality in judicial review; Communications Commission of Kenya v Royal Media [2014] SCK — public interest broadcasting.\nLand: Kenya Railways Corporation v Nyutu Agrovet [2016] CoA — compulsory acquisition compensation; Joseph Ombogi v Thomas Nyaboga [2017] ELC — adverse possession under LRA 2012.\nContract: Hashi Energy Ltd v KRA [2019] HC — Art.2(4) public policy/foreign law; Gabriel Mutava v KPA [2016] CoA — limitation non-waivable; Cooper Motor Corporation v Nyoike [2015] CoA — penalty clause test.\nEmployment: Mwangi v Securex [2020] ELRC — non-compete two-stage test; Kenya Hotels v Karanja [2019] CoA — unfair termination procedure; Peter Makau v Barclays Bank [2017] ELRC — redundancy criteria; Amos Kamanga v Dallington [2018] ELRC — constructive dismissal.\nData: Republic v Safaricom (ODPC) [2023] HC — DPA 2019 purpose limitation.\nIP: Kenya Breweries v Longhorn Publishers [2016] CoA — IP assignment future works; Proctor & Gamble v Doshi International [2015] HC — trade mark/passing off.\nCivil procedure: Owners of MV Lillian S v Caltex Oil [1989] CoA — jurisdiction threshold; Savings & Loan Kenya v Mwangi [2004] CoA — setting aside default judgment; Macharia Mwangi v Robert Maina [2014] CoA — summary judgment test; Mombasa Hardware v Al Abdulla [2021] HC — garnishee; Esso (Kenya) v MV Saruji [1994] CoA — mandatory arbitration stay.\nArbitration: Telkom Kenya v Orange SA [2021] HC — s.6 mandatory stay; Kenya Pipeline Company v Yomar [2019] HC — award enforcement; Christ for All Nations v Apollo Insurance [2002] HC — NY Convention enforcement.\nAdministrative: Republic v IEBC ex parte NASA [2017] CoA — judicial review grounds; Giella v Cassman Brown [1973] HC — injunction test (serious question, balance of convenience, status quo).\nInternational: CMC Aviation v Uganda Airlines [2018] EACJ — EAC Treaty prevails; Triton Petroleum v Pan Ocean [2017] HC — UNIDROIT gap-filling."}, {"title": "RESPONSE STYLE", "content": "- Use [KE] before Kenyan law/case references; [INT] before international references; [WARN] before risk flags.\n- MAINTAIN CONVERSATION MEMORY: Read entire history before every response. Never repeat. Build on prior exchanges — reference earlier points, update analysis when new facts emerge, ask one targeted follow-up if key facts are missing.\n- Be practitioner-focused: step-by-step actionable advice — filing deadlines, forms, correct court/registry, costs exposure, limitation periods, regulatory clearances.\n- Proactively flag: correct court and pecuniary jurisdiction; exact limitation period; procedural steps; stamp duty; ODPC/KRA/CMA/CAK/NEMA/PPRA clearances required.\n- Never request or expose client-identifying information.\n- Format: **bold** for key points; numbered lists for steps; never truncate when precision matters."}];
+const KEYWORD_MAP = [["constitution|devolution|county|governor|senate|bill of rights", 0], ["land|title|leasehold|freehold|convey|mortgage|charge|transfer|registration|sectional", 1], ["contract|sale of goods|offer|acceptance|consideration|misrepresent|frustrat|consumer|agency|guarantee", 2], ["company|companies|director|shareholder|insolvency|liquidat|winding|administration", 3], ["employment|employ|labour|redundan|termination|dismiss|trade union|elrc|maternity|wiba", 4], ["criminal|penal|murder|theft|robbery|fraud|bail|charge|prosecution|dpp|police|arrest", 5], ["family|marriage|matrimon|divorce|succession|will|probate|children|custody|inheritance", 6], ["data protection|privacy|odpc|personal data|processing|consent|breach", 7], ["copyright|trademark|patent|intellectual property|kipi|industrial", 8], ["tax|income tax|vat|paye|kra|customs|excise|withholding|capital gains", 9], ["bank|banking|cbk|insurance|capital market|nse|cma|sacco|mobile money", 10], ["civil procedure|cpr|plaint|summons|defence|limitation|costs|execution|garnishee|injunction", 11], ["court of appeal|supreme court|appeal|certif", 12], ["judicial review|administrative|certiorari|mandamus|wednesbury", 13], ["arbitration|mediation|adr|ncia|award|seat|kadhi", 14], ["environment|nema|eia|climate|energy|water|mining|wildlife", 15], ["procurement|ppada|ppra|tender|pparb|bid", 16], ["immigration|visa|work permit|citizenship|naturalisation", 17], ["international|eac|comesa|afcfta|wto|icsid|treaty|convention|unidroit|incoterms", 18], ["precedent|case law|hashi|mwangi|cmc|telkom|giella|safaricom", 19]];
 
-// Model per provider
-const MODELS = {
-  gemini:     'gemini-1.5-flash',     // free, fast, capable
-  groq:       'llama-3.3-70b-versatile', // free, very fast
-  openrouter: 'mistralai/mistral-7b-instruct:free'
-};
+function retrieveLegalContext(query) {
+  const q = query.toLowerCase();
+  const matched = new Set([19]); // always include precedents
+  for (const [pattern, idx] of KEYWORD_MAP) {
+    if (new RegExp(pattern, 'i').test(q)) matched.add(idx);
+  }
+  let context = LEGAL_INTRO.substring(0, 250) + '\n\n';
+  let budget = 2200;
+  for (const idx of matched) {
+    const sec = LEGAL_SECTIONS[idx];
+    if (!sec || budget <= 0) break;
+    const chunk = sec.content.substring(0, Math.min(budget, 900));
+    context += `=== ${sec.title} ===\n${chunk}\n\n`;
+    budget -= chunk.length;
+  }
+  return context.trim();
+}
 
-// ── Shared AI call ──
-async function callAI(userMsg, system, maxTokens=700){
+const CHAT_SYS_BASE = `You are a senior advocate and legal intelligence assistant for Dennis Kimani Mutonga Advocate, Nairobi, Kenya. You have encyclopaedic knowledge of ALL Kenyan law and international law binding on Kenya. Use [KE] before Kenyan law refs, [INT] before international refs, [WARN] before risk flags. Bold key points with **text**. Cite specific statute sections. Be practitioner-focused with actionable advice. Never expose client-identifying information.`;
+const CHAT_SYS = CHAT_SYS_BASE; // alias used by sendChat
+
+// ── Groq API call ──
+const API_KEY    = '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';
+const GROQ_MODEL = 'llama-3.1-8b-instant';
+
+async function groqCall(messages, maxTokens=700){
+  const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
+    body:JSON.stringify({model:GROQ_MODEL, max_tokens:maxTokens, temperature:0.3, messages})
+  });
+  const d = await r.json();
+  if(d.error) throw new Error(d.error.message||JSON.stringify(d.error));
+  return d.choices?.[0]?.message?.content || '';
+}
+
+// callAI — injects relevant encyclopedia context per query
+async function callAI(userMsg, system, maxTokens=600){
   const hasSensitive = /\b([A-Z][a-z]+ [A-Z][a-z]+)\b/.test(userMsg)||/case no/i.test(userMsg);
   let query = hasSensitive ? userMsg.replace(/\b([A-Z][a-z]+ [A-Z][a-z]+)\b/g,(_,m,i)=>['[Person A]','[Person B]','[Person C]'][i%3]||'[Person A]') : userMsg;
   if(hasSensitive){
     const bar=document.getElementById('anon-bar');
-    if(bar){document.getElementById('anon-txt').textContent='Sensitive data anonymised before lookup: '+query.substring(0,70)+'…';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),5000);}
+    if(bar){document.getElementById('anon-txt').textContent='Sensitive data anonymised: '+query.substring(0,70)+'…';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),5000);}
   }
-
-  if(!API_KEY || API_KEY.includes('YOUR_')){
-    throw new Error('No API key set. Open this HTML file in a text editor and paste your free Gemini key where it says YOUR_GEMINI_API_KEY_HERE. Get one free at aistudio.google.com');
-  }
-
-  const fullPrompt = system ? `${system}\n\n${query}` : query;
-
-  // ── Gemini (Google AI Studio — FREE) ──
-  if(API_PROVIDER === 'gemini'){
-    const model = MODELS.gemini;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
-    const body = {
-      contents:[{parts:[{text: fullPrompt}]}],
-      generationConfig:{maxOutputTokens: maxTokens, temperature:0.3}
-    };
-    const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const d = await r.json();
-    if(d.error) throw new Error(d.error.message);
-    return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  }
-
-  // ── Groq (Llama 3 — FREE) ──
-  if(API_PROVIDER === 'groq'){
-    const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
-      body:JSON.stringify({model:MODELS.groq, max_tokens:maxTokens, temperature:0.3,
-        messages:[{role:'system',content:system||'You are a helpful assistant.'},{role:'user',content:query}]})
-    });
-    const d = await r.json();
-    if(d.error) throw new Error(d.error.message||JSON.stringify(d.error));
-    return d.choices?.[0]?.message?.content || '';
-  }
-
-  // ── OpenRouter (free models) ──
-  if(API_PROVIDER === 'openrouter'){
-    const r = await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY,'HTTP-Referer':'https://lexai.kenya','X-Title':'Dennis Kimani Mutonga Advocate'},
-      body:JSON.stringify({model:MODELS.openrouter, max_tokens:maxTokens,
-        messages:[{role:'system',content:system||'You are a helpful assistant.'},{role:'user',content:query}]})
-    });
-    const d = await r.json();
-    if(d.error) throw new Error(d.error.message||JSON.stringify(d.error));
-    return d.choices?.[0]?.message?.content || '';
-  }
-
-  throw new Error('Unknown API_PROVIDER: '+API_PROVIDER);
+  // Retrieve relevant context from the local encyclopedia
+  const legalCtx = retrieveLegalContext(query);
+  const sysPrompt = (system || CHAT_SYS_BASE) + '\n\nRELEVANT LEGAL KNOWLEDGE:\n' + legalCtx;
+  return groqCall([{role:'system',content:sysPrompt},{role:'user',content:query}], maxTokens);
 }
 
 function fmt(t){
@@ -1153,316 +1283,32 @@ function nav(el,t){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.
 // ══════════════════════════════════════════════
 // CHAT
 // ══════════════════════════════════════════════
-const CHAT_SYS=`You are a senior advocate and legal intelligence assistant for the law firm of Dennis Kimani Mutonga, Advocate, Nairobi, Kenya. You have encyclopaedic knowledge of ALL Kenyan legislation, subsidiary legislation, rules, practice directions, and international law binding on Kenya.
-
-════════════════════════════════════════
-KENYAN CONSTITUTIONAL & DEVOLUTION LAW
-════════════════════════════════════════
-Constitution of Kenya 2010 (CoK 2010): Chapter 1 Sovereignty (Art.1-4); Chapter 2 Republic; Chapter 3 Citizenship (Arts.12-18); Chapter 4 Bill of Rights (Arts.19-57) — Art.20 application, Art.21 implementation, Art.22 enforcement, Art.23 remedies, Art.24 limitation, Art.25 non-derogable rights, Art.26 life, Art.27 equality/non-discrimination, Art.28 dignity, Art.29 liberty, Art.30 slavery, Art.31 privacy, Art.32 conscience, Art.33 expression, Art.34 media, Art.35 information, Art.36 association, Art.37 assembly, Art.38 political rights, Art.39 movement, Art.40 property, Art.41 labour, Art.42 environment, Art.43 economic/social rights, Art.44 language/culture, Art.45 family, Art.46 consumer rights, Art.47 fair administration, Art.48 access to justice, Art.49 arrested persons, Art.50 fair hearing, Art.51 detained persons; Chapter 5 Land (Arts.60-72); Chapter 6 Leadership & Integrity (Arts.73-80, Leadership & Integrity Act 2012, Public Officer Ethics Act 2003); Chapter 7 Representation (Elections); Chapter 8 Legislature; Chapter 9 Executive; Chapter 10 Judiciary (Arts.159-173); Chapter 11 Devolution (Arts.174-200); Chapter 12 Public Finance (Arts.201-231); Chapter 13 National Security; Chapter 14 National Values (Art.10); Chapter 15 Commissions & Independent Offices; Chapter 16 Amendment (Art.255-257); Sixth Schedule (transitional).
-Devolution: County Governments Act 2012, Intergovernmental Relations Act 2012, Urban Areas and Cities Act 2011, Transition to Devolved Government Act 2012, Division of Revenue Act (annual), County Allocation of Revenue Act (annual). Council of Governors. Senate jurisdiction over county legislation.
-Elections: Elections Act 2011, Election Offences Act 2016, Political Parties Act 2011, IEBC Act 2011, Election Campaign Financing Act 2013. Presidential petition — Supreme Court, 14-day hearing, 21-day determination (Art.163(3)(a)). Other petition — High Court/ELC (21+21 days).
-
-════════════════════════════════════════
-LAND LAW & CONVEYANCING
-════════════════════════════════════════
-Principal statutes: Land Act 2012, Land Registration Act 2012 (LRA 2012 — replaced RLA Cap.300, GLA Cap.280, RTA Cap.281), National Land Commission Act 2012, Community Land Act 2016, Sectional Properties Act 2020, Physical and Land Use Planning Act 2019 (PLUPA 2019), Survey Act (Cap.299).
-Land categories (Art.61 CoK): Public land (NLC holds in trust — Art.62), Community land (Art.63), Private land (Art.64). Conversion — NLC approval.
-Tenure: Freehold (absolute proprietorship), Leasehold (government leases — 99 years standard; 33 years agricultural; 999 years private), Commonhold (sectional — Sectional Properties Act 2020). Non-citizens — leasehold only max 99 years (Art.65 CoK).
-Registration: LRA 2012 — first registration (s.15), dealings (Part VI), rectification (s.80), indemnity (s.81). Title absolute (s.26 — indefeasibility subject to fraud). Caution — s.71 (60-day lapse unless extended). Restriction — s.76. Inhibition — s.78. Overriding interests — s.28 LRA.
-Transfers: Agreement for sale (Land Regulations 2017), stamp duty (Stamp Duty Act Cap.480 — 4% residential; 2% agricultural), registration fees (Land Registration (Fees) Rules). Spousal consent — s.12 Matrimonial Property Act 2013. Succession — assent under s.82 LRA + probate.
-Charges/mortgages: Part IX LRA 2012, Movable Property Security Rights Act 2017 (MPSRA). Enforcement — statutory power of sale (s.90 LRA), foreclosure. Consumer protection on residential charges — s.44 LRA.
-ELC procedure: ELC Act 2011, ELC (Procedure) Rules 2013. Mandatory ADR attempt. Land Acquisition: Land Act 2012 Part VIII — compulsory acquisition, prompt and full compensation (Art.40(3) CoK), NLC role.
-Sectional properties: Sectional Properties Act 2020 (Regulations 2021) — body corporate, management committee, unit title, common property.
-Planning: PLUPA 2019 — county spatial plans, development permission (county government), change of use, EIA (EMCA 1999). Building Code — county by-laws.
-Stamp duty: Stamp Duty Act (Cap.480) — conveyances 4%, leases (graduated), debentures 0.1%, share transfers 1%. Exemptions (s.105). Commissioner of Domestic Taxes — adjudication.
-
-════════════════════════════════════════
-CONTRACT & COMMERCIAL LAW
-════════════════════════════════════════
-Formation: Law of Contract Act (Cap.23) — offer (objective test), acceptance (postal rule), consideration (past consideration invalid, adequacy vs sufficiency), capacity (Age of Majority Act Cap.33 — 18 years; mental capacity), legality, formality (contracts for land s.3(3) — written + signed). Electronic contracts: Kenya Information and Communications Act (Cap.411A), Electronic Transactions Act 2007 (e-signatures valid).
-Vitiating factors: Misrepresentation (fraudulent/negligent/innocent), duress, undue influence (presumed — fiduciary), mistake (common/mutual/unilateral), illegality (void vs unenforceable).
-Terms: Express vs implied (fact, law, custom). Exclusion clauses — UCTA principles; Consumer Protection Act 2012 s.52 (unfair terms void in B2C). Penalty clauses — Dunlop v New Garage test (penalty void). Force majeure — must be expressly drafted. Frustration — Law of Contract Act s.18.
-Remedies: Damages (expectation, reliance, restitution), specific performance (equitable, not for personal services), injunctions (Or.26 CPR), rescission, rectification, account of profits.
-Sale of Goods: Sale of Goods Act (Cap.31) — implied terms (title s.14, description s.15, quality/fitness s.16, sample s.17), property passing (s.18 rules 1-5), risk, remedies. CISG — not ratified but persuasive.
-Consumer protection: Consumer Protection Act 2012 — unfair practices, product liability, right of return. Competition Act 2010 — abuse of dominance, mergers (CAK approval >KES 1 billion), restrictive trade practices.
-Agency: Common law — actual/ostensible/apparent authority. Powers of Attorney Act (Cap.53) — irrevocable powers, registration.
-Suretyship: Guarantee vs indemnity. Writing requirement (s.3(1)(d) Law of Contract). Discharge — material variation, time given.
-Unjust enrichment: Quasi-contract — money had and received, quantum meruit. UNIDROIT Art.3.2.7 (persuasive). Triton Petroleum v Pan Ocean [2017].
-
-════════════════════════════════════════
-COMPANY, COMMERCIAL & INSOLVENCY LAW
-════════════════════════════════════════
-Companies Act 2015: Incorporation — private (min.1 shareholder, 1 director), public (min.2 directors, company secretary required), unlimited, guarantee. Memorandum & Articles — Table A (default articles). Share capital — authorisation, allotment (pre-emption rights s.265), transfer (stock transfer form, stamp duty 1%), buyback. Directors — fiduciary duties (s.143: act within powers, promote success, exercise independent judgment, avoid conflicts, not accept benefits, declare interests); shadow directors; disqualification (s.168). Accounts — s.640 filing with Registrar within 6 months (private), 3 months (listed). Charges — registration with BRS within 30 days (s.887) — void against liquidator if unregistered. Meetings — AGM (s.337), notice (21 days — s.317), resolutions (ordinary/special 75%). Foreign companies — s.971 registration within 30 days.
-Insolvency Act 2015: Voluntary liquidation (s.375/s.380), compulsory winding up — s.399 (statutory demand KES 100,000, 21 days; commercial/balance sheet insolvency), official receiver, liquidator, proof of debts, priority (s.381 — employees wages 4 months, NSSF/NHIF contributions, KRA 12 months; secured; unsecured). Administration (Part IV — moratorium). Voluntary arrangement (Part II — CVA, 75% creditors). Cross-border insolvency (Part VI — UNCITRAL Model Law). Preferences and transactions at undervalue — s.522 (6 months/2 years connected parties). Fraudulent trading — s.530. Wrongful trading — s.531.
-Capital markets: Capital Markets Act (Cap.485A), CMA — fund managers, investment advisers, stockbrokers. NSE listing requirements. Prospectus requirements (s.30). Insider trading — Capital Markets (Insider Trading) Regulations 2003.
-Partnerships: Partnership Act (Cap.29). Limited Liability Partnership Act 2011.
-Trusts: Trustees Act (Cap.167), Public Trustee Act (Cap.168). Express, resulting, constructive. Public Benefit Organisations Act 2013.
-Business registration: Business Registration Service Act 2015 (BRS) — one-stop shop. eCitizen portal.
-
-════════════════════════════════════════
-EMPLOYMENT & LABOUR LAW
-════════════════════════════════════════
-Employment Act 2007: Written particulars (s.10, within 2 months), probation (max 6 months renewable once — s.42(1)), notice (s.35 — 28 days/one month/one pay period), summary dismissal (s.44 — gross misconduct), termination (s.45 — valid reason + fair procedure: show cause, hearing, appeal — Kenya Hotels v Karanja test), unfair termination (s.45(2) — compensation max 12 months), wrongful dismissal (common law), constructive dismissal, redundancy (s.40 — 1 month notice, NSSF paid, LIFO criteria), maternity leave (s.29 — 3 months full pay), paternity leave (s.29A — 2 weeks full pay), annual leave (s.28 — 21 days), sick leave (s.30 — 7 days full + 7 days half), public holidays (Public Holidays Act Cap.110). Sexual harassment — s.6. Child labour — prohibited under 16 (s.56). Minimum wages — Regulation of Wages (Cabinet Secretary orders, annually revised). PAYE deductions — Income Tax Act.
-Labour Relations Act 2007: Trade union recognition (s.54 — 51% membership), CBAs (binding when registered with ELRC — s.59), industrial action (s.76 — 7-day notice; essential services — notice only), check-off (s.49).
-WIBA 2007: Employer liability for occupational injuries/diseases. DOSH. Compensation — degree of disablement x earnings x multiplier.
-Retirement Benefits Act 1997: RBA registration, trust deed, fund manager, custodian, actuary. Contributions — employer minimum 5%. Portability — s.38.
-NSSF Act 2013: Tier I (KES 2,160/month each), Tier II (6% above lower earnings limit). SHA/Social Health Insurance Act 2023 (replacing NHIF).
-ELRC: ELRC Act 2011, ELRC Rules 2016 — Claim Form A (unfair termination), B (wages), C (trade dispute). Mandatory mediation first. 3-year limitation (s.90 EA). Registries — Nairobi, Mombasa, Kisumu, Nakuru, Nyeri, Eldoret, Malindi. Appeal to Court of Appeal on law only.
-
-════════════════════════════════════════
-CRIMINAL LAW & PROCEDURE
-════════════════════════════════════════
-Substantive: Penal Code (Cap.63) — general principles (mens rea, actus reus, attempts, conspiracy, aiding/abetting), murder (s.203), manslaughter (s.202), theft (s.275), robbery (s.296/297), burglary (s.304), fraud (s.317), forgery (s.345), defamation. Sexual Offences Act 2006 — rape (s.3), defilement (s.8 — under 18, strict liability, 15 years minimum), gang rape (s.10), sentence-doubling (s.36). Domestic Violence Act 2015. Children Act 2022 — diversion, Children's Court. ACECA 2003 — corruption (EACC). POCAMLA 2009 — money laundering (s.3 — predicate offences, placement/layering/integration), forfeiture (civil s.55; criminal s.54), STRs to FRC. Computer Misuse and Cybercrimes Act 2018 (CMCA) — unauthorised access (s.3), computer fraud (s.14), cyber harassment (s.27), identity theft (s.26), interception (s.11). Prevention of Terrorism Act 2012. Narcotic Drugs and Psychotropic Substances (Control) Act 1994. Firearms Act (Cap.114). Wildlife Conservation and Management Act 2013. Traffic Act (Cap.403).
-Criminal procedure: CPC (Cap.75) — charge (s.89), warrant/summons (s.73/89A), arrest (s.29-39), bail (s.123 CPC; Art.49(1)(h) CoK — as of right for bailable offences; bail review s.123A; denial — capital/likely to abscond/witness interference/public safety), plea (s.207 — equivocal plea), remand (s.72 — 15 days Magistrate, 30 days HC), DPP nol pros (Art.157(6)(b)), committal (s.240 — to HC for capital), trial, evidence (Evidence Act Cap.80 — beyond reasonable doubt, confessions s.25/26 CPC, dying declarations s.33 EA, electronic evidence KICA Cap.411A), sentencing (Sentencing Guidelines 2023), appeal (s.347 — Magistrate to HC; HC to CoA; CoA to SC on constitutional questions). Plea bargaining — Criminal Procedure (Plea Agreements) Rules 2017. Victim Protection Act 2014.
-DPP: Art.157 CoK — independent; power to direct investigations, take over/discontinue; consent required for certain offences. National Prosecution Policy 2013.
-Bail: Anti-terrorism — no bail (Prevention of Terrorism Act). Sexual offences against children under 11 — court discretion (s.8 SOA). Robbery with violence (s.296(2) PC) — Schedule 1 offence — bail in HC only.
-Witness protection: Witness Protection Act 2006. Evidence via CCTV/screens — Children Act 2022 s.214.
-Inquests: CPC Part VIII (s.387-406) — Chief Magistrate — sudden/unnatural deaths.
-
-════════════════════════════════════════
-FAMILY, MATRIMONIAL & SUCCESSION LAW
-════════════════════════════════════════
-Marriage: Marriage Act 2014 — civil, Christian, customary, Hindu, Islamic. Age — 18 years. Prohibited degrees (s.11). Registration. Monogamy vs polygamy (Art.45(4) CoK — Islamic/customary permit polygamy).
-Matrimonial property: Matrimonial Property Act 2013 — matrimonial home (s.12 — cannot dispose without spouse consent), matrimonial property (equal share presumption s.7/8 — contribution: monetary + non-monetary including domestic work). Antenuptial contracts — s.6 MPA (must be registered).
-Divorce: Marriage Act 2014 Part VI — irretrievable breakdown (s.66) — separation 3 years; cruelty; adultery; desertion 3 years; exceptional depravity. Judicial separation (s.79). Decrees — nisi (6 weeks) → absolute. Domestic Violence Act 2015 — protection orders.
-Children: Children Act 2022 — best interests paramount (s.4); parental responsibility (s.25); custody/care/access (s.89-100); child maintenance (s.103-118); adoption (s.160-190 — HC; intercountry adoption); child labour (s.10 — under 16 prohibited); Children's Court; corporal punishment abolished (s.19); FGM — Female Genital Mutilation Act 2011.
-Succession: Law of Succession Act (Cap.160) — testate (s.8 — writing, signed, 2 simultaneous witnesses, no beneficiary as witness), intestate (s.32-44 — spouse takes personal chattels + life interest; children share residue), grants (probate s.51, letters of administration s.66, small estates s.73 — summary procedure KES 100,000), revocation (s.72), distribution (s.83). High Court Family Division — contested succession. Kadhis' Court — Muslim succession. Assent under s.82 LRA.
-
-════════════════════════════════════════
-DATA PROTECTION & PRIVACY LAW
-════════════════════════════════════════
-Data Protection Act 2019: Personal data, sensitive data (health, biometric, genetic, sexual orientation, race, religion, criminal record, financial — s.2). Principles (s.25) — lawfulness, fairness, transparency; purpose limitation; data minimisation; accuracy; storage limitation; integrity/confidentiality; accountability. Lawful bases (s.30) — consent; contract; legal obligation; vital interests; public interest; legitimate interests. Consent (s.32) — freely given, specific, informed, unambiguous; withdrawal any time. Sensitive data — explicit consent + one s.30 ground. Data subject rights (s.26-29) — access (s.26), rectification (s.27), erasure (s.28), objection (s.29), portability, not subject to automated decisions. DPO — mandatory for public entities and high-risk processing (s.24). DPIA — mandatory for high-risk processing. Cross-border transfers (s.48) — adequate protection or explicit consent or binding corporate rules. Breach notification (s.43) — ODPC within 72 hours; data subjects promptly. ODPC — registration (s.17); enforcement notices; penalties up to KES 5,000,000 or 1% of annual turnover. Regulations — Registration Regulations 2021, Compliance and Enforcement Regulations 2021, General Regulations 2021.
-
-════════════════════════════════════════
-INTELLECTUAL PROPERTY LAW
-════════════════════════════════════════
-Copyright: Copyright Act (Cap.130) — literary, musical, artistic, sound recordings, films, broadcasts; economic rights (reproduction, distribution, public performance, communication, adaptation); duration (life + 50 years; 50 years from publication for corporate works); assignment (writing — s.35; future works not covered by general assignment — Kenya Breweries v Longhorn [2016]); licences; KECOBO enforcement; fair dealing (criticism, news, research — s.26); software as literary work; employer owns works in course of employment (s.32).
-Industrial property: Industrial Property Act 2001 (KIPI) — patents (20 years, PCT national phase), utility models (10 years), industrial designs (15 years), layout designs (10 years). Compulsory licences (s.73 — public health). TRIPS compliance.
-Trade marks: Trade Marks Act (Cap.506) — KIPI registration (Part A/B), duration (10 years + renewal), assignment, licensing, infringement, passing off (goodwill + misrepresentation + damage). Madrid Protocol (Kenya 1998). Well-known marks (s.15A). Geographical Indications Act 2013.
-Anti-counterfeit: Anti-Counterfeit Act 2008 — ACA; seizure powers; criminal penalties. KRA border enforcement.
-
-════════════════════════════════════════
-TAX LAW
-════════════════════════════════════════
-Income Tax Act (Cap.470): Resident (183 days or incorporated in Kenya). PAYE — graduated (10% to KES 24,000; 25% to KES 32,333; 30% above — subject to Finance Acts). Business income deductions (s.15 — wholly and exclusively). Capital allowances — investment deduction 100%, wear and tear. Withholding taxes — dividends 5% resident/15% non-resident; interest 15% non-resident; royalties 5% resident/20% non-resident; management fees 5.625% resident/20% non-resident. Capital Gains Tax — 5% marketable securities; 15% land/buildings. Turnover tax (TOT) — 3% for KES 1-50 million turnover. Transfer pricing — Income Tax (Transfer Pricing) Rules 2006 — arm's length.
-VAT Act 2013: Standard rate 16%, zero-rated, exempt. Input tax credits. Reverse charge (imported services). Digital service tax (DST — Finance Act 2020 amendments).
-Tax Procedures Act 2015: Assessments, amended returns. Objections (30 days) → Tax Appeals Tribunal (TAT) → High Court → Court of Appeal. Penalties — late filing (5% + 1% per month). KRA audit powers. Advance rulings (s.88).
-Excise Duty Act 2015: Alcohol, cigarettes, fuels, telecoms, financial services, insurance premiums (40%).
-Customs: EACCMA 2004 — common external tariff, WTO Customs Valuation Agreement, rules of origin (EAC, COMESA, AfCFTA).
-Double tax treaties: UK, Canada, India, Norway, Sweden, Denmark, France, Germany, Zambia, UAE, Qatar, Mauritius (in force).
-
-════════════════════════════════════════
-BANKING, FINANCE & INSURANCE
-════════════════════════════════════════
-Banking Act (Cap.488): CBK licensing — commercial banks, mortgage finance companies, microfinance banks. Prudential guidelines — CAR 14.5% (Basel III), liquidity 20%, large exposures, AML/CFT. CBK Act (Cap.491) — monetary policy, lender of last resort. Deposit Protection Fund.
-Mobile money: National Payment System Act 2011, NPS Regulations 2014 — PSP licensing. M-Pesa regulatory framework (CBK). AML/CFT — POCAMLA applies to all PSPs.
-Microfinance: Microfinance Act 2006, Microfinance (Deposit-Taking) Regulations 2008 — DTM licensing.
-SACCO: SACCO Societies Act 2008, SACCO Societies (Deposit-Taking) Regulations 2010 — SASRA licensing.
-Capital markets: CMA Act (Cap.485A) — broker-dealer, investment adviser, fund manager, custodian, REIT manager licensing. NSE — Listing Manual, GEMS. CMA (Securities) (Public Offers, Listing and Disclosures) Regulations 2002. REITs — Real Estate Investment Trusts Regulations 2013.
-Insurance: Insurance Act (Cap.487), IRA — classes of insurance, minimum capital, solvency margins, reinsurance, claims handling. Motor Third Party Liability — MVTPI Act (Cap.405) — compulsory. Marine — Marine Insurance Act (Cap.390).
-AML/CFT: POCAMLA 2009, AML/CFT Regulations 2023, FRC — STRs, KYC, beneficial ownership (PSC register). Counter-Financing of Terrorism Act 2010.
-
-════════════════════════════════════════
-CIVIL PROCEDURE — COMPLETE ORDERS 1-51
-════════════════════════════════════════
-Governing law: Civil Procedure Act (Cap.21), Civil Procedure Rules 2010 (L.N.151/2010 — 51 Orders), Judicature Act (Cap.8) — s.3 sources of law (CoK; statutes; English common law/equity/statutes of general application in force 12 August 1897; African customary law).
-Or.1 — parties: joinder, misjoinder, representative suits.
-Or.2 — cause of action: pleadings must disclose reasonable cause of action; embarrassing pleadings struck out.
-Or.3 — plaint: parties, material facts, relief sought, valuation of suit.
-Or.4 — service of summons: primarily personal; modes as per Or.5.
-Or.5 — service: personal (Or.5 r.1), substituted (Or.5 r.13 — court order required), by electronic means (Practice Direction No.2 of 2022 — email, e-filing portal), by post (Or.5 r.16), outside jurisdiction (Or.5 r.21 — leave required; bilateral treaty/MLAT; Hague Service Convention — Kenya not signatory but practice recognised). Time for defence — 15 days (Kenya) or 30 days (outside) from service.
-Or.6 — defence and counterclaim: must be filed within 15/30 days; denial must be specific; counterclaim treated as cross-suit.
-Or.6A — defence to counterclaim.
-Or.7 — judgment on admission: Or.7 r.1 — where defendant admits all or part of claim, plaintiff may apply for judgment without trial; admission must be clear and unequivocal.
-Or.8 — striking out defence: scandalous, embarrassing, irrelevant.
-Or.9 — default judgment: Or.9 r.4 — liquidated demand; Or.9 r.5 — unliquidated (assessment of damages); Or.9 r.7 — setting aside default judgment: two-limb test — (1) sufficient reason for default; (2) arguable defence on merits — both required.
-Or.10 — summary judgment: Or.10 r.1 — after defence filed, plaintiff applies; defendant must show unconditional leave to defend — genuine triable issue (Papanicola v Fagan / Macharia Mwangi test — not merely arguable, must be real); court may give conditional leave (security for amount); no summary judgment on genuine factual disputes.
-Or.11 — discovery and inspection: Or.11 r.2 — list of documents (automatic); Or.11 r.11 — right to inspect; Or.11 r.12 — production to court; privilege — legal professional privilege (LPP), without-prejudice privilege, public interest immunity.
-Or.12 — interrogatories: Or.12 r.1 — must relate to matter in question; not fishing expedition; court may disallow oppressive interrogatories.
-Or.13 — admissions: Or.13 r.1 — party may admit facts or part of claim; judgment on admissions.
-Or.14 — settlement of issues: Or.14 r.1 — court frames list of issues; parties agree issues for trial; agreed statement of facts.
-Or.15 — special case stated: Or.15 r.1 — parties may state case for court's opinion on point of law.
-Or.16 — split trials: Or.16 r.1 — court may order separate trials on distinct issues (e.g., liability then quantum).
-Or.17 — striking out pleadings: Or.17 r.1 — scandalous, embarrassing, irrelevant; Or.17 r.2 — no reasonable cause of action/defence — inherent jurisdiction also available; no evidence admissible on striking out application — court reads pleading at its highest.
-Or.18 — evidence at trial: Or.18 r.1 — witnesses; subpoena (witness summons); Or.18 r.14 — affidavit evidence by agreement or court order; witness statements filed in advance.
-Or.19 — affidavits: deponent, jurat (sworn before Commissioner for Oaths — Oaths and Statutory Declarations Act Cap.15), filing, use in interlocutory applications.
-Or.20 — judgment: Or.20 r.1 — summary of decision; Or.20 r.7 — decree drawn up; consent orders (binding once entered — Purcell v FC Trigell).
-Or.21 — execution: Or.21 r.1 — modes: attachment/sale of movables Or.22; delivery of property Or.23 (now garnishee); garnishee Or.23/25; receivership Or.25/25A; committal Or.41/Or.26; contempt. Time limit — 6 years from decree (Or.21 r.5).
-Or.22 — attachment and sale of movable property: warrant of attachment; inventory and valuation; public auction; surplus returned to debtor.
-Or.23 — garnishee proceedings: Or.23 r.1 — application ex parte; order nisi served on garnishee and judgment debtor; garnishee must attend and disclose debt; order absolute if admitted; garnishee not a party to original suit; amount recovered credited against judgment debt; bank accounts — notice to bank manager; consent of judgment debtor not required.
-Or.24 — charging orders on land: Or.24 r.1 — charging order on judgment debtor's beneficial interest in land; registered at Land Registry; sale of charged land to satisfy judgment (ELC has jurisdiction on sale of land in execution).
-Or.25 — receivers: Or.25 r.1 — court appoints receiver over income/property of debtor; usually for equitable execution or equitable mortgages; receiver's accounts and remuneration.
-Or.25A — examination of judgment debtor: Or.25A r.1 — oral examination as to means and assets; failure to attend — warrant of arrest for contempt.
-Or.26 — injunctions and interim orders: Or.26 r.1 — interlocutory injunction: Kenya test (derived from American Cyanamid [1975] — applied since Giella v Cassman Brown [1973] pre-Cyanamid but same spirit): (1) serious question/prima facie case; (2) balance of convenience (adequacy of damages test — whether damages would adequately compensate); (3) status quo; mandatory injunctions — higher threshold (strong prima facie); undertaking in damages required from applicant; Mareva/freezing orders — ex parte application (serious risk assets will be dissipated; not to deprive defendant of assets to live on; worldwide Mareva with appropriate safeguards); Anton Piller/search orders — ex parte (real possibility evidence will be destroyed; must not be disproportionate — search and take items rather than destroy). Or.26 r.7 — security for costs (defendant may apply if plaintiff outside jurisdiction or nominal plaintiff).
-Or.27 — (now subsumed in Or.53 — judicial review).
-Or.28 — interpleader: Or.28 r.1 — sheriff interpleader (third party claims goods attached); stakeholder interpleader (person holding money/property claimed by two parties).
-Or.29 — receivers by way of equitable execution.
-Or.30 — sale of immovable property in execution: ELC has jurisdiction; warrant of sale issued; public auction; surplus after payment of debt/costs to debtor; reserve price.
-Or.31 — proceedings by/against minor or patient: next friend (for plaintiff); guardian ad litem (for defendant); settlement requires court approval.
-Or.32 — proceedings by/against firm: service on individual partners or at principal place of business; partners jointly and severally liable.
-Or.33 — evidence by commission: Or.33 r.1 — court commissions examination of witness outside jurisdiction; letters of request.
-Or.34 — foreign tribunals: Or.34 r.1 — Evidence (Proceedings in Other Jurisdictions) Act — mutual legal assistance.
-Or.35 — affirmation (non-religious witnesses).
-Or.36 — originating summons: Or.36 r.1 — for construction of documents, simple questions of law, non-contentious matters; inter partes if disputed; widely used for mortgage enforcement, trust, probate, partnership disputes.
-Or.37 — writ of possession: Or.37 r.1 — possession of immovable property; execution of decree for possession.
-Or.38 — security for costs: Or.38 r.1 — defendant may apply if plaintiff ordinarily outside Kenya, nominal plaintiff, or plaintiff has no fixed abode; court orders security within fixed time or suit struck out.
-Or.39 — trial: Or.39 r.1 — hearing date; Or.39 r.20 — conduct of trial; opening statements; examination-in-chief, cross-examination, re-examination; court may call witnesses; judgment reserved or extempore.
-Or.40 — chamber summons: Or.40 r.1 — interlocutory application in a cause or matter; must specify orders sought and grounds; return date; served on opposite party; heard by Judge in chambers or open court; commonly used for: injunctions, attachment before judgment, security for costs, consolidation, amendment of pleadings, third party notices.
-Or.41 — contempt of court: Or.41 r.1 — civil contempt (breach of court order); criminal contempt (scandalising the court); committal to prison; sequestration of property; purging contempt.
-Or.42 — appeals from subordinate courts to High Court: Or.42 r.1 — notice of appeal within 30 days of decision; memorandum of appeal — specific grounds; Or.42 r.11 — record of proceedings from lower court; Or.42 r.15 — set aside ex parte orders; rehearing on record (not oral re-examination of witnesses unless allowed).
-Or.43 — revision by High Court: s.362 CPC — suo motu or on application; High Court reviews Magistrate decisions for errors of law or procedure; more limited than appeal.
-Or.44 — review of judgment: Or.44 r.1 — discovery of new evidence not previously available; mistake or error apparent on face of record; other sufficient reason; application within reasonable time (courts apply 6-month guide).
-Or.45 — reference to High Court: Magistrate states case for HC opinion on point of law.
-Or.46 — miscellaneous proceedings.
-Or.47 — provisional orders: provisional attachment before judgment; security for satisfaction of decree.
-Or.48 — admiralty: admiralty in rem and in personam; Admiralty Court at High Court Mombasa; arrest of ships; bottomry; salvage; collision.
-Or.49 — contempt (supplementary).
-Or.50 — miscellaneous applications.
-Or.51 — general: Or.51 r.7 — overriding objective: just, expeditious, proportionate resolution of disputes.
-Limitation: Limitation of Actions Act (Cap.22) — s.4(1)(a) contract 6 years; s.4(1)(b) tort 3 years; s.7 land 12 years; s.4(2) defamation 12 months; s.26 fraud — time runs from discovery; s.27 disability — time runs when ends; s.28 acknowledgment — fresh accrual; s.29 part payment — fresh accrual. Cannot be shortened by contract — Gabriel Mutava v KPA [2016].
-Costs: Advocates (Remuneration) Order L.N.64/1962 (amended L.N.35/2014, L.N.45/2014) — Schedule 6 (HC), Schedule 7 (Magistrates), Schedule 1 (conveyancing); party-and-party vs advocate-and-client; taxation (Registrar); wasted costs against advocates (s.27A CPA).
-Evidence: Evidence Act (Cap.80) — admissibility (relevance s.5), burden of proof (civil — balance of probabilities; criminal — beyond reasonable doubt s.107), hearsay exceptions (dying declaration s.33(a), business records s.34, bankers' books), confessions (s.25 CPC — voluntary; civil admissions Or.13), documentary evidence (primary — originals; secondary — copies s.67), electronic evidence (KICA Cap.411A s.106A-106I — admissible if integrity/reliability conditions met), opinion evidence (expert — s.49 EA), judicial notice (s.59-60).
-
-════════════════════════════════════════
-COURT OF APPEAL, SUPREME COURT & APPEALS
-════════════════════════════════════════
-Court of Appeal: Appellate Jurisdiction Act (Cap.9), Court of Appeal Rules 2010 (amended 2020). Appeals from HC, ELC, ELRC (law/procedure only). Appeal as of right from final decrees (s.66(1) CPA); interlocutory — leave required (s.66(2)); second appeals — leave. Notice of appeal — r.75 — within 30 days; record of appeal — r.85 — within 60 days; security for costs — r.112. Grounds — specific; no new grounds without leave. Bench of 3 JAs (Art.164(2)). Full Court (5 JAs) — constitutional questions. Stays — Butt v Rent Restriction Tribunal test (nugatory, balance of convenience). Registries — Nairobi, Mombasa, Kisumu, Malindi, Nakuru, Nyeri.
-Supreme Court: Supreme Court Act 2011, Supreme Court Rules 2020. Jurisdiction: Art.163(3)(a) — presidential election petitions (14/21 days); Art.163(3)(b) — appeals from CoA (general public importance); Art.163(3)(c) — advisory opinions; Art.163(4)(a) — constitutional interpretation; Art.163(4)(b) — certified appeals. Certification — Gatirau Peter Munya v Githinji [2014] — not a second bite. Notice of appeal — r.23 — within 14 days. Bench — 5 or 7 Justices. Advisory opinions — binding on all state organs.
-
-════════════════════════════════════════
-JUDICIAL REVIEW & ADMINISTRATIVE LAW
-════════════════════════════════════════
-Judicial review: Law Reform Act (Cap.26), Or.53 CPR. Grounds — illegality, irrationality (Wednesbury), procedural impropriety (audi alteram partem; nemo judex in sua causa), proportionality (Judicial Service Commission v Mbalu Mutuku [2013]). Relief — certiorari, mandamus, prohibition, declaration, injunction, habeas corpus. Or.53 procedure — leave (ex parte — arguable case, within 6 months — Or.53 r.2); substantive hearing (inter partes). Fair Administrative Action Act 2015 (FAAA 2015) — Art.47 CoK — written reasons (s.4(3)); internal review; external review; court review (s.7 — unlawful, unreasonable, irrational, procedurally unfair, bias, disproportionate). Constitutional petitions — Art.22 CoK (locus standi — any person), Art.258, Art.165(3)(b); Constitutional Litigation (Practice and Procedure) Rules 2013; supporting affidavit; notify AG/DPP; remedies: declaration, injunction, compensation, structural interdict.
-
-════════════════════════════════════════
-ADR — ARBITRATION, MEDIATION & KADHIS
-════════════════════════════════════════
-Arbitration Act (Cap.49): Full UNCITRAL Model Law adoption. Arbitration agreement — s.4 (writing, electronic counts). Stay — s.6 (mandatory — Telkom Kenya v Orange SA [2021]). Competence-competence — s.17. Interim measures — s.18 (court or tribunal). Award — s.32 (writing, signed, reasons, date, seat). Setting aside — s.35 (limited grounds: incapacity; invalid agreement; no notice; beyond scope; irregular composition; non-arbitrable; public policy). Enforcement — s.36 (HC leave; equivalent to court judgment). Confidentiality — s.31B. NCIA — NCIA Act 2013, NCIA Rules 2020. Pathological arbitration clauses — Esso (Kenya) Ltd v MV Saruji [1994].
-Mediation: High Court (Mediation (Pilot) Rules 2015 — some divisions mandatory); ELC (mandatory); ELRC (mandatory — ELRC Mediation Rules 2016). Settlement agreement — binding as contract; may be registered as consent judgment. Kadhis' Courts: Kadhis' Courts Act (Cap.11) — personal status, marriage, divorce, inheritance — Muslims only; appeal to HC; Art.170 CoK.
-Traditional dispute resolution: Art.159(2)(c) CoK.
-
-════════════════════════════════════════
-ENVIRONMENT & NATURAL RESOURCES
-════════════════════════════════════════
-EMCA 1999: NEMA — licensing, enforcement. EIA — Second Schedule projects (EMCA EIA Regulations L.N.101/2003) — project report, study, public participation, NEMA approval. National Environment Tribunal (NET) — appeals from NEMA. Polluter pays principle.
-Climate Change Act 2016: National Climate Change Action Plan, County Plans. Kenya NDC under Paris Agreement. Energy Act 2019 — EPRA licensing, renewable energy, PPAs.
-Water: Water Act 2016, WASREB, WRMA. Water abstraction licences.
-Mining: Mining Act 2016 — prospecting, mining, retention licences. Royalties. Community development agreements.
-Wildlife: Wildlife Conservation and Management Act 2013 — KWS, CITES (Appendix I banned, II regulated).
-Forestry: Forest Conservation and Management Act 2016 — KFS, forest reserves, REDD+.
-Fisheries: Fisheries Management and Development Act 2016 — licences, EEZ (200nm — UNCLOS).
-Natural resources: Natural Resources (Transactions Subject to Ratification) Act 2016.
-
-════════════════════════════════════════
-PUBLIC PROCUREMENT
-════════════════════════════════════════
-PPADA 2015: Open tender threshold (goods/services >KES 3,000,000; works >KES 6,000,000). Methods — open tender (s.88), restricted (s.97), direct procurement (s.103), RFP professional services (s.107), RFQ below threshold (s.110), low-value (s.113 — below KES 50,000). Preference — s.157 — 30% youth/women/PWDs. Exclusion — s.36 (corruption, tax non-compliance, poor performance, conflict of interest). Evaluation — technical (pass/fail) then financial (lowest evaluated responsive). Variations — up to 15% without re-tender. PPRA — oversight, standard documents. PPARB — review board (s.167 — complaint within 14 days; automatic 5-day standstill — s.135; hearing within 21 days); appeal — HC within 14 days of PPARB decision.
-
-════════════════════════════════════════
-IMMIGRATION & CITIZENSHIP
-════════════════════════════════════════
-Kenya Citizenship and Immigration Act 2011, Immigration Act (Cap.172): e-visa portal, class G work permit (specific employer), class G2 (investor — USD 100,000 minimum), class I (dependent), class D (student), EAC East African Pass. Deportation — s.26 — procedural safeguards. Citizenship — by birth (Art.14), registration (Art.15), naturalisation (17 years residence or 3 years married to citizen + 7 years). Dual citizenship — permitted (Art.16).
-
-════════════════════════════════════════
-INTERNATIONAL LAW — ALL FRAMEWORKS
-════════════════════════════════════════
-Public international law: Art.38 ICJ Statute (treaties, custom, general principles, judicial decisions). Art.2(6) CoK — ratified treaties form part of Kenyan law (courts: not self-executing without legislation — apply with caution). VCLT 1969 — pacta sunt servanda (Art.26), interpretation (Art.31 — ordinary meaning in context + object/purpose).
-EAC: EAC Treaty 1999 (as amended) — Kenya, Uganda, Tanzania, Rwanda, Burundi, South Sudan, DRC (2023). EAC Common Market Protocol 2010 — free movement (goods, persons, labour, services, capital). EAC Customs Union Protocol 2005 — CET. EACJ — First Instance + Appellate Divisions; jurisdiction — interpretation/application of EAC Treaty; 2-month time limit; CMC Aviation v Uganda Airlines [2018] — EAC Treaty prevails over domestic law.
-COMESA: COMESA Treaty 1994 (19 states). Free trade area (zero tariffs within FTA). Competition — COMESA Competition Regulations. COMESA Court of Justice.
-AfCFTA: AfCFTA Agreement 2018 (in force 2019 — Kenya ratified). Protocols — goods, services, IP, competition, investment, digital trade. Tariff liberalisation — 90% tariff lines over 5 years. Dispute settlement — AfCFTA DSB.
-WTO/GATT: Kenya founding member 1995. GATT 1994, GATS, TRIPS, SPS, TBT. Doha Declaration 2001 — compulsory licences for public health (TRIPS Art.31).
-AGOA: US unilateral duty-free access for qualifying products — Kenya major beneficiary (garments, cut flowers). EU-EAC EPA — in force for Kenya and Rwanda — duty-free/quota-free access to EU.
-Investment treaties: ICSID Convention 1965 (Kenya member). BITs in force — UK (2000), Netherlands (1979), Germany (1996), Switzerland (2007), France (2007), Italy (1999), China (2001), UAE (2014), Mauritius (2014), Kuwait (2012), Qatar (2014), Singapore (2006). MFN, FET, expropriation (Art.40 CoK — public purpose, prompt full compensation), free transfer of funds.
-Arbitration: UNCITRAL Model Law 1985 (2006 amendments — adopted by Kenya). New York Convention 1958 (Kenya acceded 1989) — recognition/enforcement — grounds for refusal Art.V. ICSID — awards self-enforcing in member states (Art.54) — no appeal to national courts.
-Human rights treaties: ICCPR (1966, Kenya 1972); ICCPR Optional Protocol (individual communications to HRC); ICESCR (1966, Kenya 1976); CEDAW (1979, Kenya 1984 — no reservations); CRC (1989, Kenya 1990 — Art.3 best interests, Art.12 participation); CRPD (2006, Kenya 2008 — optional protocol); CAT (1984, Kenya 1997); CERD (Kenya 2001); Banjul Charter (1981, Kenya 1992 — individual + peoples' rights + duties); Maputo Protocol (2003, Kenya 2010); ACRWC (1990, Kenya 2000). AHRC — individual petitions (Kenya has not made declaration — only state referrals available).
-Labour: ILO — Kenya member. Core conventions: C29 Forced Labour (Kenya 1964), C87 Freedom of Association (1964), C98 Collective Bargaining (1964), C100 Equal Remuneration (1964), C105 Abolition of Forced Labour (1964), C111 Discrimination (1964), C138 Minimum Age (1979), C182 Worst Forms of Child Labour (2001). MLC 2006 — Maritime Labour Convention.
-Environment: Paris Agreement 2015 (Kenya ratified) — NDCs, carbon markets (Art.6), loss and damage. CBD 1992 (Kenya 1994) — Nagoya Protocol on ABS (Kenya 2015). Basel Convention (Kenya 1994). Rotterdam Convention (Kenya 2004). Stockholm Convention — POPs (Kenya 2004). UNCLOS 1982 (Kenya 2004) — EEZ 200nm, continental shelf, ITLOS, Annex VII arbitration. Ramsar (Kenya 1990). CITES (Kenya 1978).
-Maritime: SOLAS, MARPOL (IMO — Kenya member). Merchant Shipping Act 2009. Admiralty — Admiralty Court at HC Mombasa.
-Diplomatic & consular: VCDR 1961 (Kenya 1965) — diplomatic immunity (Art.31; inviolability of mission); VCCR 1963 (Kenya 1965) — consular immunity (more limited). Diplomatic Immunities and Privileges Act (Cap.179). International Organisations — Privileges and Immunities Act (Cap.179A) — UN, AU, IOs hosted in Nairobi (UNEP, UN-Habitat).
-Trade instruments: INCOTERMS 2020 (ICC) — EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF. UCP 600 (ICC — letters of credit). CISG (not ratified — persuasive where counterparty is CISG state). UNIDROIT Principles 2016 — gap-filling (Triton Petroleum v Pan Ocean [2017]). UNCITRAL Model Law on Electronic Commerce.
-
-════════════════════════════════════════
-LEAD KENYAN PRECEDENTS (COMPREHENSIVE)
-════════════════════════════════════════
-Constitutional: Samuel Kamau Macharia v KCB [2012] SCK — SC jurisdiction Art.163(4)(a); Mumo Matemu v Trusted Society [2013] CoA — constitutional petition requirements; JSC v Mbalu Mutuku [2013] HC — proportionality in judicial review; Communications Commission of Kenya v Royal Media [2014] SCK — public interest broadcasting.
-Land: Kenya Railways Corporation v Nyutu Agrovet [2016] CoA — compulsory acquisition compensation; Joseph Ombogi v Thomas Nyaboga [2017] ELC — adverse possession under LRA 2012.
-Contract: Hashi Energy Ltd v KRA [2019] HC — Art.2(4) public policy/foreign law; Gabriel Mutava v KPA [2016] CoA — limitation non-waivable; Cooper Motor Corporation v Nyoike [2015] CoA — penalty clause test.
-Employment: Mwangi v Securex [2020] ELRC — non-compete two-stage test; Kenya Hotels v Karanja [2019] CoA — unfair termination procedure; Peter Makau v Barclays Bank [2017] ELRC — redundancy criteria; Amos Kamanga v Dallington [2018] ELRC — constructive dismissal.
-Data: Republic v Safaricom (ODPC) [2023] HC — DPA 2019 purpose limitation.
-IP: Kenya Breweries v Longhorn Publishers [2016] CoA — IP assignment future works; Proctor & Gamble v Doshi International [2015] HC — trade mark/passing off.
-Civil procedure: Owners of MV Lillian S v Caltex Oil [1989] CoA — jurisdiction threshold; Savings & Loan Kenya v Mwangi [2004] CoA — setting aside default judgment; Macharia Mwangi v Robert Maina [2014] CoA — summary judgment test; Mombasa Hardware v Al Abdulla [2021] HC — garnishee; Esso (Kenya) v MV Saruji [1994] CoA — mandatory arbitration stay.
-Arbitration: Telkom Kenya v Orange SA [2021] HC — s.6 mandatory stay; Kenya Pipeline Company v Yomar [2019] HC — award enforcement; Christ for All Nations v Apollo Insurance [2002] HC — NY Convention enforcement.
-Administrative: Republic v IEBC ex parte NASA [2017] CoA — judicial review grounds; Giella v Cassman Brown [1973] HC — injunction test (serious question, balance of convenience, status quo).
-International: CMC Aviation v Uganda Airlines [2018] EACJ — EAC Treaty prevails; Triton Petroleum v Pan Ocean [2017] HC — UNIDROIT gap-filling.
-
-════════════════════════════════════════
-RESPONSE STYLE
-════════════════════════════════════════
-- Use [KE] before Kenyan law/case references; [INT] before international references; [WARN] before risk flags.
-- MAINTAIN CONVERSATION MEMORY: Read entire history before every response. Never repeat. Build on prior exchanges — reference earlier points, update analysis when new facts emerge, ask one targeted follow-up if key facts are missing.
-- Be practitioner-focused: step-by-step actionable advice — filing deadlines, forms, correct court/registry, costs exposure, limitation periods, regulatory clearances.
-- Proactively flag: correct court and pecuniary jurisdiction; exact limitation period; procedural steps; stamp duty; ODPC/KRA/CMA/CAK/NEMA/PPRA clearances required.
-- Never request or expose client-identifying information.
-- Format: **bold** for key points; numbered lists for steps; never truncate when precision matters.`;
-
-// ── Conversation history store ──
-let chatHistory = [];  // [{role:'user'|'assistant', content:string}]
-let chatBusy=false,typingEl=null;
-
-function addMsg(role,html,rawText){
+// CHAT_SYS replaced by CHAT_SYS_BASE + retrieveLegalContext() — see knowledge base above
+function addMsg(role,html){
   const c=document.getElementById('msgs');
-  const d=document.createElement('div');d.className='msg '+(role==='ai'?'':'user');
+  const d=document.createElement('div');
+  d.className='msg '+(role==='ai'?'':'user');
   d.innerHTML=`<div class="av ${role==='ai'?'ai':'user'}">${role==='ai'?'⚖':'ME'}</div><div class="bub">${html}</div>`;
   c.appendChild(d);c.scrollTop=c.scrollHeight;
 }
+// ── Chat state ──
+let chatHistory = [];
+let chatBusy = false;
+let typingEl = null;
+
 function showTyping(){chatBusy=true;const c=document.getElementById('msgs');typingEl=document.createElement('div');typingEl.className='msg';typingEl.innerHTML='<div class="av ai">⚖</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>';c.appendChild(typingEl);c.scrollTop=c.scrollHeight;}
 function rmTyping(){chatBusy=false;if(typingEl){typingEl.remove();typingEl=null;}}
 
-async function callAIWithHistory(userMsg, systemPrompt, maxTokens=900){
-  if(!API_KEY||API_KEY.includes('YOUR_')) throw new Error('No API key set.');
-  // Anonymise if needed
+async function callAIWithHistory(userMsg, systemPrompt, maxTokens=700){
   const hasSensitive=/\b([A-Z][a-z]+ [A-Z][a-z]+)\b/.test(userMsg)||/case no/i.test(userMsg);
   let query=hasSensitive?userMsg.replace(/\b([A-Z][a-z]+ [A-Z][a-z]+)\b/g,(_,m,i)=>['[Person A]','[Person B]','[Person C]'][i%3]||'[Person A]'):userMsg;
   if(hasSensitive){const bar=document.getElementById('anon-bar');if(bar){document.getElementById('anon-txt').textContent='Sensitive data anonymised: '+query.substring(0,70)+'…';bar.classList.add('show');setTimeout(()=>bar.classList.remove('show'),5000);}}
 
-  // Build messages array with full history
+  // Inject relevant legal context into system prompt
+  const legalCtx = retrieveLegalContext(query);
+  const fullSys = (systemPrompt || CHAT_SYS_BASE) + '\n\nRELEVANT LEGAL KNOWLEDGE:\n' + legalCtx;
   const messages=[...chatHistory,{role:'user',content:query}];
-
-  if(API_PROVIDER==='groq'){
-    const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
-      body:JSON.stringify({model:MODELS.groq,max_tokens:maxTokens,temperature:0.25,
-        messages:[{role:'system',content:systemPrompt},...messages]})
-    });
-    const d=await r.json();
-    if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
-    return d.choices?.[0]?.message?.content||'';
-  }
-  if(API_PROVIDER==='gemini'){
-    // For Gemini, prepend system prompt to first user message
-    const gemMsgs=messages.map((m,i)=>({
-      role:m.role==='assistant'?'model':'user',
-      parts:[{text:i===0?systemPrompt+'\n\n'+m.content:m.content}]
-    }));
-    const url=`https://generativelanguage.googleapis.com/v1beta/models/${MODELS.gemini}:generateContent?key=${API_KEY}`;
-    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:gemMsgs,generationConfig:{maxOutputTokens:maxTokens,temperature:0.25}})});
-    const d=await r.json();
-    if(d.error)throw new Error(d.error.message);
-    return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
-  }
-  if(API_PROVIDER==='openrouter'){
-    const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY,'HTTP-Referer':'https://lexai.kenya','X-Title':'DKM Advocate'},
-      body:JSON.stringify({model:MODELS.openrouter,max_tokens:maxTokens,
-        messages:[{role:'system',content:systemPrompt},...messages]})
-    });
-    const d=await r.json();
-    if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
-    return d.choices?.[0]?.message?.content||'';
-  }
-  throw new Error('Unknown API_PROVIDER');
+  return groqCall([{role:'system',content:fullSys},...messages], maxTokens);
 }
 
 async function sendChat(){
@@ -1518,18 +1364,29 @@ For each clause, your analysis must apply these Kenyan and international law fra
 
 Each JSON item must have: {type, extracted_text(max 150 chars), risk_level("low"|"medium"|"high"), kenyan_law_note(max 80 chars with statute/section), international_law_note(max 80 chars), analysis(max 200 chars — specific, actionable), missing_element(max 80 chars — what is absent that Kenyan law requires or best practice demands, or null)}`;
   try{
-    const raw=await callAI(`Extract all legal clauses from this contract text and return ONLY JSON array:\n\n${txt.substring(0,2500)}`,sys,1000);
-    let clauses;
-    try{clauses=JSON.parse(raw.replace(/```json|```/g,'').trim());}
-    catch{clauses=[{type:'General clause',extracted_text:txt.substring(0,100),risk_level:'medium',kenyan_law_note:'Review under Law of Contract Act (Cap. 23)',international_law_note:'Consider UNIDROIT Principles',analysis:'Unable to parse structured response — review manually.'}];}
+    const raw=await groqCall([{role:'system',content:sys},{role:'user',content:txt}],1200);
+    let json=raw.replace(/```json|```/g,'').trim();
+    const clauses=JSON.parse(json);
     res.innerHTML='';
-    if(!Array.isArray(clauses))clauses=[clauses];
+    if(!clauses.length){res.innerHTML='<div style="font-size:13px;color:var(--text2);padding:8px">No distinct clauses found.</div>';return;}
     clauses.forEach(cl=>{
-      const rl=(cl.risk_level||'medium').toLowerCase();
-      const bc=rl==='low'?'risk-low':rl==='high'?'risk-high':'risk-med';
-      const card=document.createElement('div');card.className='clause-card';
-      const missingHtml=cl.missing_element?`<div style="margin-top:6px;font-size:11px;background:var(--warn-bg);color:var(--warn-text);border-left:3px solid #fac775;padding:5px 8px;border-radius:0 4px 4px 0"><strong>Missing:</strong> ${cl.missing_element}</div>`:'';
-      card.innerHTML=`<div class="cc-head"><span class="cc-type">${cl.type||'Clause'}</span><span class="risk-badge ${bc}">${rl} risk</span></div><div class="cc-body"><div class="cc-quote">"${(cl.extracted_text||'').substring(0,180)}…"</div><div class="cc-analysis">${cl.analysis||''}</div><div class="cc-laws">${cl.kenyan_law_note?`<span class="law-ke">KE: ${cl.kenyan_law_note}</span>`:''} ${cl.international_law_note?`<span class="law-int">INT: ${cl.international_law_note}</span>`:''}</div>${missingHtml}</div>`;
+      const rl=cl.risk_level==='high'?'risk-high':cl.risk_level==='medium'?'risk-med':'risk-low';
+      const card=document.createElement('div');
+      card.className='clause-card';
+      card.innerHTML=`
+        <div class="cc-head">
+          <span class="cc-type">${cl.type||'Clause'}</span>
+          <span class="risk-badge ${rl}">${(cl.risk_level||'low').charAt(0).toUpperCase()+(cl.risk_level||'low').slice(1)} risk</span>
+        </div>
+        <div class="cc-body">
+          <div class="cc-quote">${cl.extracted_text||''}</div>
+          <div class="cc-analysis">${cl.analysis||''}</div>
+          <div class="cc-laws">
+            ${cl.kenyan_law_note?`<span class="law-ke">${cl.kenyan_law_note}</span>`:''}
+            ${cl.international_law_note?`<span class="law-int">${cl.international_law_note}</span>`:''}
+            ${cl.missing_element?`<span class="law-warn">Missing: ${cl.missing_element}</span>`:''}
+          </div>
+        </div>`;
       res.appendChild(card);
     });
   }catch(e){res.innerHTML=`<div style="font-size:13px;color:var(--danger-text);padding:8px">Error: ${e.message}</div>`;}
@@ -1612,13 +1469,26 @@ KENYA_SCORE: X/100 on its own line
 INTL_SCORE: Y/100 on its own line  
 Then: clear structured analysis with specific statute sections cited, practical remediation steps, and enforcement risk level (High/Medium/Low).`;
   try{
-    const r=await callAI(`Compliance check: "${txt}"`,sys,600);
-    const ke=(r.match(/KENYA_SCORE:\s*(\d+)/i)||[])[1];
-    const it=(r.match(/INTL_SCORE:\s*(\d+)/i)||[])[1];
-    const sc=n=>parseInt(n)>=80?'s-ok':parseInt(n)>=60?'s-warn':'s-bad';
-    const scores=(ke&&it)?`<div class="score-row"><div class="score-card ${sc(ke)}"><div class="score-num">${ke}/100</div><div class="score-lbl">Kenya compliance</div></div><div class="score-card ${sc(it)}"><div class="score-num">${it}/100</div><div class="score-lbl">International compliance</div></div></div>`:'';
-    res.innerHTML=scores+'<div style="font-size:13px;line-height:1.8">'+fmt(r.replace(/KENYA_SCORE:[^\n]*/i,'').replace(/INTL_SCORE:[^\n]*/i,'').trim())+'</div>';
-  }catch(e){res.innerHTML=`<div style="color:var(--danger-text);font-size:13px">Error: ${e.message}</div>`;}
+    const r=await groqCall([{role:'system',content:sys},{role:'user',content:txt}],800);
+    // Parse scores
+    const keM=r.match(/KENYA_SCORE:\s*(\d+)/);
+    const intM=r.match(/INTL_SCORE:\s*(\d+)/);
+    const keScore=keM?parseInt(keM[1]):null;
+    const intScore=intM?parseInt(intM[1]):null;
+    const scoreClass=s=>s===null?'':s>=75?'s-ok':s>=50?'s-warn':'s-bad';
+    let html='';
+    if(keScore!==null||intScore!==null){
+      html+=`<div class="score-row">`;
+      if(keScore!==null) html+=`<div class="score-card ${scoreClass(keScore)}"><div class="score-num">${keScore}</div><div class="score-lbl">Kenya compliance /100</div></div>`;
+      if(intScore!==null) html+=`<div class="score-card ${scoreClass(intScore)}"><div class="score-num">${intScore}</div><div class="score-lbl">Intl compliance /100</div></div>`;
+      html+=`</div>`;
+    }
+    const body=r.replace(/KENYA_SCORE:\s*\d+\/?\d*\n?/,'').replace(/INTL_SCORE:\s*\d+\/?\d*\n?/,'');
+    html+=`<div style="font-size:13px;line-height:1.75;color:var(--text)">${fmt(body)}</div>`;
+    res.innerHTML=html;
+  }catch(e){
+    res.innerHTML=`<div style="font-size:13px;color:var(--danger-text)">Error: ${e.message}</div>`;
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -1757,13 +1627,12 @@ MANDATORY KENYAN DOCUMENT FORMATTING RULES:
 
 Generate the COMPLETE document text exactly as it should appear when printed. No commentary, no preamble, no markdown.`;
   try{
-    const raw=await callAI(prompt,sys,1500);
-    generatedText=raw;
-    renderDocPreview(raw,d);
-    document.getElementById('btn-copy').style.display='inline-block';
-    document.getElementById('btn-print').style.display='inline-block';
+    const r=await groqCall([{role:'system',content:sys},{role:'user',content:prompt}],2000);
+    generatedText=r;
+    renderDocPreview(r,d);
+    document.getElementById('dg-actions').style.display='flex';
   }catch(e){
-    document.getElementById('dg-preview').innerHTML=`<div style="padding:20px;font-size:13px;color:var(--danger-text)">Error: ${e.message}<br><br>Please ensure your API key is set correctly in the HTML file.</div>`;
+    document.getElementById('dg-preview').innerHTML=`<div style="font-size:13px;color:var(--danger-text);padding:12px">Error generating document: ${e.message}</div>`;
   }
   btn.disabled=false;btn.textContent='Regenerate document';
 }
@@ -1817,187 +1686,281 @@ function printDoc(){
 
 function fmtKES(n){return'KES '+Math.round(n).toLocaleString('en-KE');}
 
-// ── Schedule 1: Sales & Purchases of Land ──
+// ══════════════════════════════════════════════
+// FEE CALCULATOR — Unified
+// ══════════════════════════════════════════════
+function fmtKES(n){return 'KES '+Math.round(n).toLocaleString('en-KE');}
+
+// ── Scale helpers ──
 function scheduleOneSaleFee(v){
-  // Cumulative bands per L.N.35/2014
   let fee=0;
-  const b1=Math.min(v,5000000);
-  fee=Math.max(b1*0.02,35000);
-  if(v>5000000){const b2=Math.min(v,100000000)-5000000;fee+=(b2*0.015);}
-  if(v>100000000){const b3=Math.min(v,250000000)-100000000;fee+=(b3*0.0125);}
-  if(v>250000000){const b4=Math.min(v,1000000000)-250000000;fee+=(b4*0.01);}
-  if(v>1000000000){fee+=((v-1000000000)*0.001);}
+  fee=Math.max(Math.min(v,5000000)*0.02,35000);
+  if(v>5000000)fee+=(Math.min(v,100000000)-5000000)*0.015;
+  if(v>100000000)fee+=(Math.min(v,250000000)-100000000)*0.0125;
+  if(v>250000000)fee+=(Math.min(v,1000000000)-250000000)*0.01;
+  if(v>1000000000)fee+=(v-1000000000)*0.001;
   return fee;
 }
-
-function calcS1(){
-  const v=parseFloat(document.getElementById('s1-val').value)||0;
-  const role=document.getElementById('s1-role').value;
-  const agr=document.getElementById('s1-agr').value;
-  if(!v){document.getElementById('s1-result').classList.remove('show');return;}
-  const base=scheduleOneSaleFee(v);
-  let vFee=base,pFee=base,total=0;
-  if(agr==='no')vFee=vFee*(2/3);
-  let rows='';
-  if(role==='vendor'||role==='both'){rows+=`<div class="fee-br-row"><span>Vendor's advocate fee</span><span>${fmtKES(vFee)}</span></div>`;total+=vFee;}
-  if(role==='purchaser'||role==='both'){rows+=`<div class="fee-br-row"><span>Purchaser's advocate fee</span><span>${fmtKES(pFee)}</span></div>`;total+=pFee;}
-  if(role==='both')rows+=`<div class="fee-br-row total"><span>Total (both sides)</span><span>${fmtKES(total)}</span></div>`;
-  else total=role==='vendor'?vFee:pFee;
-  document.getElementById('s1-main').textContent=fmtKES(total);
-  document.getElementById('s1-bd').innerHTML=rows;
-  document.getElementById('s1-result').classList.add('show');
+function scheduleTwoLeaseFee(r){
+  if(r<=500000)return Math.max(r*0.15,20000);
+  if(r<=3000000)return Math.max(500000*0.15,20000)+(r-500000)*0.03;
+  return Math.max(500000*0.15,20000)+(3000000-500000)*0.03+(r-3000000)*0.01;
 }
-
-// ── Schedule 2: Leases ──
-function scheduleTwoLeaseFee(annualRent){
-  // NOT cumulative per Note 4, Schedule 2
-  if(annualRent<=500000)return Math.max(annualRent*0.15,20000);
-  if(annualRent<=3000000)return Math.max(500000*0.15,20000)+(annualRent-500000)*0.03;
-  return Math.max(500000*0.15,20000)+(3000000-500000)*0.03+(annualRent-3000000)*0.01;
-}
-
-function calcS2(){
-  const rent=parseFloat(document.getElementById('s2-rent').value)||0;
-  const role=document.getElementById('s2-role').value;
-  if(!rent){document.getElementById('s2-result').classList.remove('show');return;}
-  const base=scheduleTwoLeaseFee(rent);
-  const fee=role==='lessee'?base*0.5:base;
-  const rows=`<div class="fee-br-row"><span>${role==='lessor'?'Lessor (preparing)':'Lessee (perusing)'} — annual rent</span><span>${fmtKES(rent)}</span></div>`
-    +`<div class="fee-br-row"><span>Scale fee (${role==='lessee'?'50% of lessor fee':'full'})</span><span>${fmtKES(fee)}</span></div>`;
-  document.getElementById('s2-main').textContent=fmtKES(fee);
-  document.getElementById('s2-bd').innerHTML=rows;
-  document.getElementById('s2-result').classList.add('show');
-}
-
-// ── Schedule 1 (2nd Scale): Mortgages & Charges ──
 function scheduleMortgageFee(v){
-  let fee=0;
-  const b1=Math.min(v,2500000);fee=Math.max(b1*0.02,28000);
-  if(v>2500000){fee+=(Math.min(v,5000000)-2500000)*0.0175;}
-  if(v>5000000){fee+=(Math.min(v,100000000)-5000000)*0.01;}
-  if(v>100000000){fee+=(Math.min(v,250000000)-100000000)*0.0075;}
-  if(v>250000000){fee+=(Math.min(v,1000000000)-250000000)*0.0015;}
-  if(v>1000000000){fee+=((v-1000000000)*0.001);}
+  let fee=Math.max(Math.min(v,2500000)*0.02,28000);
+  if(v>2500000)fee+=(Math.min(v,5000000)-2500000)*0.0175;
+  if(v>5000000)fee+=(Math.min(v,100000000)-5000000)*0.01;
+  if(v>100000000)fee+=(Math.min(v,250000000)-100000000)*0.0075;
+  if(v>250000000)fee+=(Math.min(v,1000000000)-250000000)*0.0015;
+  if(v>1000000000)fee+=(v-1000000000)*0.001;
   return fee;
 }
-
-function calcS1b(){
-  const v=parseFloat(document.getElementById('s1b-val').value)||0;
-  const role=document.getElementById('s1b-role').value;
-  if(!v){document.getElementById('s1b-result').classList.remove('show');return;}
-  const granteeFee=scheduleMortgageFee(v);
-  const grantorFee=granteeFee*0.5;
-  let total=0,rows='';
-  if(role==='grantee'){total=granteeFee;rows=`<div class="fee-br-row"><span>Grantee's (lender's) advocate fee</span><span>${fmtKES(granteeFee)}</span></div>`;}
-  else if(role==='grantor'){total=grantorFee;rows=`<div class="fee-br-row"><span>Grantor's (borrower's) advocate fee</span><span>${fmtKES(grantorFee)}</span></div>`;}
-  else{total=granteeFee+grantorFee;rows=`<div class="fee-br-row"><span>Grantee's advocate fee</span><span>${fmtKES(granteeFee)}</span></div><div class="fee-br-row"><span>Grantor's advocate fee (50%)</span><span>${fmtKES(grantorFee)}</span></div><div class="fee-br-row total"><span>Total (both sides)</span><span>${fmtKES(total)}</span></div>`;}
-  document.getElementById('s1b-main').textContent=fmtKES(total);
-  document.getElementById('s1b-bd').innerHTML=rows;
-  document.getElementById('s1b-result').classList.add('show');
-}
-
-// ── Schedule 6: High Court (L.N.35/2014 rates) ──
 function schedSixBase_1a(v){
-  if(v<=500000)return 45000;
-  if(v<=750000)return 65000;
-  if(v<=1000000)return 75000;
+  if(v<=500000)return 45000;if(v<=750000)return 65000;if(v<=1000000)return 75000;
   if(v<=20000000)return 75000+(v-1000000)*0.0175;
   return 75000+(20000000-1000000)*0.0175+(v-20000000)*0.015;
 }
 function schedSixBase_1b(v){
-  if(v<=500000)return 75000;
-  if(v<=750000)return 90000;
-  if(v<=1000000)return 120000;
+  if(v<=500000)return 75000;if(v<=750000)return 90000;if(v<=1000000)return 120000;
   if(v<=20000000)return 120000+(v-1000000)*0.02;
   return 120000+(20000000-1000000)*0.02+(v-20000000)*0.015;
 }
-function calcS6(){
-  const v=parseFloat(document.getElementById('s6-val').value)||0;
-  const type=document.getElementById('s6-type').value;
-  const basis=document.getElementById('s6-basis').value;
-  if(!v){document.getElementById('s6-result').classList.remove('show');return;}
-  let base=schedSixBase_1b(v),label='',pct='';
-  if(type==='undefended'){base=schedSixBase_1b(v)*0.65;label='Undefended';pct='65% of scale 1b';}
-  else if(type==='summary'){base=schedSixBase_1b(v)*0.75;label='Summary determination';pct='75% of scale 1b';}
-  else if(type==='settled_pre'){base=schedSixBase_1b(v)*0.85;label='Settled pre-hearing';pct='85% of scale 1b';}
-  else if(type==='uncontested'){base=schedSixBase_1a(v);label='Uncontested (no defence)';pct='Scale 1a';}
-  else{base=schedSixBase_1b(v);label='Fully contested';pct='Scale 1b';}
-  const fee=basis==='ac'?base*1.5:base;
-  const rows=`<div class="fee-br-row"><span>${label} (${pct})</span><span>${fmtKES(base)}</span></div>`
-    +(basis==='ac'?`<div class="fee-br-row"><span>Advocate &amp; client uplift (+50%)</span><span>${fmtKES(base*0.5)}</span></div><div class="fee-br-row total"><span>A&amp;C instruction fee</span><span>${fmtKES(fee)}</span></div>`:'');
-  document.getElementById('s6-main').textContent=fmtKES(fee);
-  document.getElementById('s6-bd').innerHTML=rows;
-  document.getElementById('s6-result').classList.add('show');
+function calcS7fee(v,scale){
+  const bands=[[0,50000,10000,15000],[50000,100000,15000,30000],[100000,200000,30000,40000],
+    [200000,500000,45000,65000],[500000,1000000,65000,90000],[1000000,2000000,90000,120000]];
+  for(const[lo,hi,low,high] of bands){if(v>lo&&v<=hi)return scale==='lower'?low:high;}
+  if(v>2000000)return(scale==='lower'?120000:120000)+(v-2000000)*0.25;
+  return scale==='lower'?10000:15000;
 }
 
-// ── Schedule 7: Magistrates Court (L.N.45/2014 rates) ──
-function calcS7(){
-  const v=parseFloat(document.getElementById('s7-val').value)||0;
-  const scale=document.getElementById('s7-scale').value;
-  if(!v){document.getElementById('s7-result').classList.remove('show');return;}
-  // L.N.45/2014 table
-  const bands=[
-    [0,50000,10000,15000],
-    [50000,100000,15000,30000],
-    [100000,200000,30000,40000],
-    [200000,500000,45000,65000],
-    [500000,1000000,65000,90000],
-    [1000000,2000000,90000,120000]
-  ];
-  let fee=0,bandLabel='';
-  for(const[lo,hi,low,high] of bands){
-    if(v>lo&&v<=hi){fee=scale==='lower'?low:high;bandLabel=`${fmtKES(lo)}–${fmtKES(hi)}`;break;}
-  }
-  if(v>2000000){
-    const base2m=scale==='lower'?120000:120000; // at 2m
-    const excess=v-2000000;
-    fee=(scale==='lower'?120000:120000)+excess*0.25;
-    bandLabel='Over KES 2,000,000';
-  }
-  const rows=`<div class="fee-br-row"><span>Claim band: ${bandLabel}</span><span></span></div>`
-    +`<div class="fee-br-row"><span>${scale==='lower'?'Lower':'Higher'} scale fee</span><span>${fmtKES(fee)}</span></div>`;
-  document.getElementById('s7-main').textContent=fmtKES(fee);
-  document.getElementById('s7-bd').innerHTML=rows;
-  document.getElementById('s7-result').classList.add('show');
+// ── Show/hide panels on category change ──
+function feeShowPanel(){
+  const cat=document.getElementById('fc-cat').value;
+  document.querySelectorAll('.fee-panel').forEach(p=>p.style.display='none');
+  const panel=document.getElementById('fp-'+cat);
+  if(panel)panel.style.display='flex';
+  document.getElementById('fc-result').classList.remove('show');
+  calcFee();
 }
 
-// ── Schedule 10: Probate & Administration ──
-function calcS10(){
-  const v=parseFloat(document.getElementById('s10-val').value)||0;
-  const type=document.getElementById('s10-type').value;
-  if(!v){document.getElementById('s10-result').classList.remove('show');return;}
-  // Schedule 10 uses Schedule 1 (Sale) rates as a guide for estate value
-  // Full admin = Schedule 1 sale fee on estate value (standard practice in Kenya)
-  // Grant only ≈ 60% of full admin
-  const full=scheduleOneSaleFee(v);
-  const grant=full*0.6;
-  const fee=type==='admin'?full:grant;
-  const label=type==='admin'?'Full administration (Schedule 10)':'Grant only (approx. 60% of full admin)';
-  const rows=`<div class="fee-br-row"><span>${label}</span><span>${fmtKES(fee)}</span></div>`;
-  document.getElementById('s10-main').textContent=fmtKES(fee);
-  document.getElementById('s10-bd').innerHTML=rows;
-  document.getElementById('s10-result').classList.add('show');
+// ── Unified calculator ──
+function calcFee(){
+  const cat=document.getElementById('fc-cat').value;
+  const res=document.getElementById('fc-result');
+  const g=id=>{const el=document.getElementById(id);return el?el.value:null;};
+  const gn=id=>{const v=parseFloat(document.getElementById(id)?.value);return isNaN(v)?0:v;};
+
+  let fee=0,rows='',note='',label='Minimum Scale Fee';
+
+  try{
+    if(cat==='sale'){
+      const v=gn('s1-val'); if(!v){res.classList.remove('show');return;}
+      const role=g('s1-role'),agr=g('s1-agr');
+      const base=scheduleOneSaleFee(v);
+      let vFee=agr==='no'?base*(2/3):base,pFee=base,total=0;
+      if(role==='vendor'||role==='both'){rows+=row('Vendor advocate fee',vFee);total+=vFee;}
+      if(role==='purchaser'||role==='both'){rows+=row('Purchaser advocate fee',pFee);total+=pFee;}
+      if(role==='both')rows+=rowTotal('Total (both sides)',total);
+      else total=role==='vendor'?vFee:pFee;
+      fee=total;
+      note='Excl. VAT (16%), stamp duty (4% residential/2% commercial), Land Registry fees & searches.';
+    }
+    else if(cat==='lease'){
+      const r=gn('s2-rent'); if(!r){res.classList.remove('show');return;}
+      const role=g('s2-role');
+      const base=scheduleTwoLeaseFee(r);
+      fee=role==='lessee'?base*0.5:base;
+      rows=row(role==='lessor'?'Lessor (preparing)':'Lessee (perusing — 50%)',fee);
+      note='Stamp duty on leases + registration fees are separate. VAT 16% applies.';
+    }
+    else if(cat==='mortgage'){
+      const v=gn('s1b-val'); if(!v){res.classList.remove('show');return;}
+      const role=g('s1b-role');
+      const grantee=scheduleMortgageFee(v),grantor=grantee*0.5;
+      if(role==='grantee'){fee=grantee;rows=row("Lender's advocate (full scale)",grantee);}
+      else if(role==='grantor'){fee=grantor;rows=row("Borrower's advocate (50%)",grantor);}
+      else{fee=grantee+grantor;rows=row("Lender's advocate",grantee)+row("Borrower's advocate (50%)",grantor)+rowTotal('Total',fee);}
+      note='Grantor typically pays both sides (para 9, Sch. 1). VAT 16% applies.';
+    }
+    else if(cat==='hc'){
+      const v=gn('s6-val'); if(!v){res.classList.remove('show');return;}
+      const type=g('s6-type'),basis=g('s6-basis');
+      const map={contested:[schedSixBase_1b(v),'Fully contested (scale 1b)'],
+        uncontested:[schedSixBase_1a(v),'Uncontested — no defence (scale 1a)'],
+        settled_pre:[schedSixBase_1b(v)*0.85,'Settled before 1st hearing (85% 1b)'],
+        summary:[schedSixBase_1b(v)*0.75,'Summary determination (75% 1b)'],
+        undefended:[schedSixBase_1b(v)*0.65,'Undefended (65% 1b)']};
+      const[base,lbl]=map[type]||map.contested;
+      fee=basis==='ac'?base*1.5:base;
+      rows=row(lbl,base)+(basis==='ac'?row('A&C uplift (+50%)',base*0.5)+rowTotal('A&C fee',fee):'');
+      label='Minimum Instruction Fee';
+      note='Add: drawing KES 250/folio, perusing KES 70/folio, attendances KES 1,000/15 min, letters KES 300. SC certificate +50%.';
+    }
+    else if(cat==='mc'){
+      const v=gn('s7-val'); if(!v){res.classList.remove('show');return;}
+      fee=calcS7fee(v,g('s7-scale'));
+      rows=row(g('s7-scale')==='lower'?'Lower scale':'Higher scale',fee);
+      label='Minimum Instruction Fee';
+      note='For amounts over KES 2,000,000: fee as for KES 2m + 25% of excess. VAT 16% applies.';
+    }
+    else if(cat==='elrc'){
+      const v=gn('selrc-val'); if(!v){res.classList.remove('show');return;}
+      const court=g('selrc-court'),type=g('selrc-type');
+      let base=schedSixBase_1b(v);
+      if(type==='settled_pre')base*=0.85;
+      else if(type==='uncontested')base=schedSixBase_1a(v);
+      fee=base;
+      rows=row((court==='elrc'?'ELRC':'ELC')+' — '+{contested:'Contested',uncontested:'Uncontested',settled_pre:'Settled pre-hearing'}[type],fee);
+      label='Minimum Instruction Fee';
+      note='ELRC exclusive jurisdiction over employment disputes (ELRC Act 2011). ELC over land/environment. Mandatory mediation before trial. 3-year limitation (s.90 EA).';
+    }
+    else if(cat==='divorce'){
+      const v=gn('sdiv-val'),type=g('sdiv-type');
+      const base={uncontested:75000,contested:150000,judicial_sep:100000,nullity:120000}[type]||75000;
+      fee=v>0?Math.max(base,schedSixBase_1b(v)*0.5):base;
+      rows=row({uncontested:'Uncontested divorce (consent)',contested:'Contested divorce',judicial_sep:'Judicial separation',nullity:'Nullity petition'}[type],fee);
+      if(v>0)rows+=row('Property division component',schedSixBase_1b(v)*0.5);
+      note='Marriage Act 2014. Contested divorces heard in High Court Family Division. Property division governed by Matrimonial Property Act 2013. Kadhis Court for Muslim marriages. Separate court filing fees apply.';
+    }
+    else if(cat==='custody'){
+      const v=gn('scust-val'),type=g('scust-type');
+      const annual=v*12;
+      const base={custody_consent:50000,custody_contested:120000,maintenance:Math.max(annual*0.15,40000),
+        adoption:120000,guardianship:80000,variation:50000}[type]||50000;
+      fee=base;
+      rows=row({custody_consent:'Custody order (consent)',custody_contested:'Custody (contested)',maintenance:'Maintenance order',adoption:'Adoption (Children Act 2022)',guardianship:'Guardianship order',variation:'Variation of order'}[type],fee);
+      if(type==='maintenance'&&v>0)rows+=row('Based on monthly maintenance × 12 × 15%',fee);
+      note='Children Act 2022 — best interests of the child paramount (s.4). ELRC has jurisdiction over parental responsibility disputes. Adoption requires High Court approval.';
+    }
+    else if(cat==='matrimonial'){
+      const v=gn('smat-val'); if(!v){res.classList.remove('show');return;}
+      const type=g('smat-type');
+      const base=type==='antenuptial'?45000:type==='consent'?scheduleOneSaleFee(v)*0.5:schedSixBase_1b(v);
+      fee=base;
+      rows=row({consent:'Consent settlement (out of court)',contested:'Contested division (High Court)',antenuptial:'Antenuptial contract (drafting)'}[type],fee);
+      note='Matrimonial Property Act 2013 — equal contribution presumption (s.7/8). Antenuptial contracts must be registered (s.6 MPA). Spousal consent required to deal with matrimonial home (s.12).';
+    }
+    else if(cat==='probate'){
+      const v=gn('s10-val'); if(!v){res.classList.remove('show');return;}
+      const type=g('s10-type');
+      if(type==='small'){fee=15000;rows=row('Small estate summary procedure (s.73 LSA ≤ KES 100k)',fee);}
+      else{const full=scheduleOneSaleFee(v);fee=type==='admin'?full:full*0.6;rows=row(type==='admin'?'Full estate administration':'Grant only (probate/L of A — approx. 60%)',fee);}
+      note='Law of Succession Act (Cap. 160). Court filing fees, HC advertisement, stamp duty on assents are disbursements. Muslim succession — Kadhis Court.';
+    }
+    else if(cat==='succession_dispute'){
+      const v=gn('ssucc-val'); if(!v){res.classList.remove('show');return;}
+      const type=g('ssucc-type');
+      fee=type==='settled'?schedSixBase_1b(v)*0.85:schedSixBase_1b(v);
+      rows=row(type==='settled'?'Consent orders / settled succession':'Contested succession (High Court Family Division)',fee);
+      note='High Court Family Division has exclusive jurisdiction over contested succession matters. Schedule 6 instruction fee principles apply.';
+    }
+    else if(cat==='debt'){
+      const v=gn('s5-val'); if(!v){res.classList.remove('show');return;}
+      const stage=g('s5-stage');
+      let base=v<=100000?v*0.10:v<=500000?10000+(v-100000)*0.05:v<=2000000?50000+(v-500000)*0.03:100000+(v-2000000)*0.015;
+      fee=stage==='demand'?Math.max(base*0.5,1000):base;
+      rows=row(stage==='demand'?'Demand letter only (50%, min KES 1,000)':'Full non-contentious recovery',fee);
+      note='If court proceedings commence, Schedule 5 inclusive scale no longer applies — revert to Sch. 6/7.';
+    }
+    else if(cat==='company'){
+      const map={company_local:['Company incorporation (private ltd, Sch. 3)',60000],company_foreign:['Foreign company registration (Sch. 3)',60000],llp:['LLP registration',45000],amendment:['Amendment of M&A / change of directors',25000]};
+      const[lbl,f]=map[g('s3-type')]||map.company_local;
+      fee=f;rows=row(lbl,fee);
+      note='BRS e-Citizen filing fees, KRA PIN, and government levies are separate. VAT 16% applies.';
+    }
+    else if(cat==='trademark'){
+      const map={tm_one:['TM application — 1 mark, 1 class (Sch. 4)',42000],tm_two:['TM — 2nd mark, same proprietor',29000],tm_renew:['TM renewal — 1 class',25000],tm_assign:['TM assignment — 1 mark',25000],patent:['Patent application (Industrial Property Act 2001)',55000],copyright:['Copyright registration / assignment',30000]};
+      const[lbl,f]=map[g('s4-type')]||map.tm_one;
+      fee=f;rows=row(lbl,fee);
+      note='KIPI government fees (application, search, registration) are separate disbursements. Madrid Protocol filing fees apply for international TM applications.';
+    }
+    else if(cat==='arbitration'){
+      const v=gn('sarb-val'); if(!v){res.classList.remove('show');return;}
+      const type=g('sarb-type');
+      const base=type==='enforcement'?Math.max(schedSixBase_1b(v)*0.5,50000):type==='international'?Math.max(schedSixBase_1b(v)*1.25,150000):schedSixBase_1b(v);
+      fee=base;
+      rows=row({domestic:'Domestic arbitration (NCIA / ad hoc)',international:'International arbitration',enforcement:'Enforcement of award (s.36 Arb. Act)'}[type],fee);
+      note='Arbitration Act (Cap. 49) — UNCITRAL Model Law adopted. NCIA institutional fees are separate. Arbitrator fees, hearing room costs are disbursements.';
+    }
+    else if(cat==='criminal_hc'){
+      const type=g('scrihc-type'),stage=g('scrihc-stage');
+      const baseFees={murder:{full_trial:200000,plea:100000,bail:30000,appeal:100000},
+        robbery:{full_trial:150000,plea:80000,bail:25000,appeal:80000},
+        sexual:{full_trial:150000,plea:80000,bail:25000,appeal:80000},
+        corruption:{full_trial:180000,plea:90000,bail:30000,appeal:100000},
+        other_hc:{full_trial:120000,plea:70000,bail:20000,appeal:75000}};
+      fee=(baseFees[type]||baseFees.other_hc)[stage]||120000;
+      rows=row({murder:'Murder/manslaughter',robbery:'Robbery with violence',sexual:'Sexual offence (SOA 2006)',corruption:'Corruption/POCAMLA',other_hc:'Other HC criminal'}[type]+' — '+{full_trial:'Full trial',plea:'Guilty plea',bail:'Bail application',appeal:'Criminal appeal'}[stage],fee);
+      note='Criminal fees are based on established practice and Schedule 6 principles. Bail — Schedule 1 offences (robbery s.296(2)) can only be bailed by HC. Murder — no bail as of right.';
+    }
+    else if(cat==='criminal_mc'){
+      const type=g('scrimc-type'),stage=g('scrimc-stage');
+      const baseFees={traffic:{full_trial:20000,plea:10000,bail:8000},
+        theft:{full_trial:50000,plea:25000,bail:12000},
+        assault:{full_trial:40000,plea:20000,bail:10000},
+        other_mc:{full_trial:45000,plea:22000,bail:10000}};
+      fee=(baseFees[type]||baseFees.other_mc)[stage]||30000;
+      rows=row({traffic:'Traffic/minor',theft:'Theft/false pretences',assault:'Assault/affray',other_mc:'Other MC criminal'}[type]+' — '+{full_trial:'Full trial',plea:'Guilty plea',bail:'Bail application'}[stage],fee);
+      note='Schedule 7 principles apply. Magistrates Court has jurisdiction for most non-capital offences. Appeals lie to the High Court.';
+    }
+    else if(cat==='misc_app'){
+      const v=gn('smisc-val');
+      const appFees={chamber_summons:30000,originating_summons:35000,notice_motion:40000,
+        statutory_demand:25000,garnishee:35000,execution:30000,default_judgment:25000,review:35000};
+      const type=g('smisc-type');
+      let base=appFees[type]||30000;
+      if(v>500000)base=Math.max(base,schedSixBase_1b(v)*0.3);
+      fee=base;
+      rows=row({chamber_summons:'Chamber summons (Or. 40 CPR)',originating_summons:'Originating summons (Or. 36)',notice_motion:'Notice of motion',statutory_demand:'Statutory demand (Insolvency Act)',garnishee:'Garnishee proceedings (Or. 23)',execution:'Execution / attachment',default_judgment:'Default judgment',review:'Review / setting aside'}[type],fee);
+      note='Miscellaneous application fees are based on practice. Court filing fees (HC — KES 5,000+; MC — KES 500–2,000) are separate disbursements.';
+    }
+    else if(cat==='injunction'){
+      const v=gn('sinj-val');
+      const type=g('sinj-type');
+      const base={interlocutory:50000,mareva:75000,anton_piller:80000,conservatory:60000,stay:35000}[type]||50000;
+      fee=v>0?Math.max(base,schedSixBase_1b(v)*0.35):base;
+      rows=row({interlocutory:'Interlocutory injunction (Or. 26 CPR)',mareva:'Mareva / freezing order',anton_piller:'Anton Piller / search order',conservatory:'Conservatory order (constitutional)',stay:'Stay of execution'}[type],fee);
+      note='Giella v Cassman Brown [1973] test: prima facie case, balance of convenience, status quo. Undertaking in damages required. Additional hearing fees apply if contested.';
+    }
+    else if(cat==='judicial_review'){
+      const type=g('sjr-type');
+      const fees={judicial_review:100000,constitutional_petition:120000,coa_appeal:100000,sc_appeal:150000};
+      fee=fees[type]||100000;
+      rows=row({judicial_review:'Judicial review (Or. 53 / FAAA 2015)',constitutional_petition:'Constitutional petition (Art. 22 CoK)',coa_appeal:'Court of Appeal (CoA Rules 2010)',sc_appeal:'Supreme Court (SC Rules 2020)'}[type],fee);
+      note='JR — leave required (ex parte, arguable case, within 6 months, Or. 53 r.2). Constitutional petition — any person has locus standi (Art. 22 CoK). SC — certification required for most appeals (Art. 163(4)(b)).';
+    }
+    else if(cat==='stamping'){
+      const v=gn('sstamp-val'); if(!v){res.classList.remove('show');return;}
+      const type=g('sstamp-type');
+      const rates={conveyance:0.04,lease_stamp:0.01,share_transfer:0.01,debenture:0.001};
+      const labels={conveyance:'Conveyance / transfer (4%)',lease_stamp:'Lease — stamp duty (1% of annual rent × term, capped)',share_transfer:'Share transfer (1%)',debenture:'Debenture (0.1%)'};
+      fee=v*(rates[type]||0.04);
+      rows=row(labels[type],fee);
+      label='Stamp Duty Payable';
+      note='Stamp Duty Act (Cap. 480). Adjudicated by Commissioner of Domestic Taxes (KRA). Must be stamped before instrument is admissible in evidence. Exemptions under s.105 for certain transfers.';
+    }
+
+    if(fee>0){
+      document.getElementById('fc-main').textContent=fmtKES(fee);
+      document.getElementById('fc-bd').innerHTML=rows;
+      document.getElementById('fc-note').textContent=note;
+      document.getElementById('fc-result-label').textContent=label;
+      res.classList.add('show');
+    } else {
+      res.classList.remove('show');
+    }
+  }catch(e){res.classList.remove('show');}
 }
 
-// ── Schedule 5: Debt Collection ──
-function calcS5(){
-  const v=parseFloat(document.getElementById('s5-val').value)||0;
-  const stage=document.getElementById('s5-stage').value;
-  if(!v){document.getElementById('s5-result').classList.remove('show');return;}
-  let fee=0;
-  if(v<=100000){fee=v*0.10;}
-  else if(v<=500000){fee=10000+(v-100000)*0.05;}
-  else if(v<=2000000){fee=50000+(v-500000)*0.03;}
-  else{fee=100000+(v-2000000)*0.015;}
-  if(stage==='demand'){fee=Math.max(fee*0.5,1000);}
-  const rows=`<div class="fee-br-row"><span>Debt amount</span><span>${fmtKES(v)}</span></div>`
-    +`<div class="fee-br-row"><span>${stage==='demand'?'Demand letter only (50% of scale, min KES 1,000)':'Full non-contentious recovery'}</span><span>${fmtKES(fee)}</span></div>`;
-  document.getElementById('s5-main').textContent=fmtKES(fee);
-  document.getElementById('s5-bd').innerHTML=rows;
-  document.getElementById('s5-result').classList.add('show');
-}
+function row(label,amt){return `<div class="fee-br-row"><span>${label}</span><span>${fmtKES(amt)}</span></div>`;}
+function rowTotal(label,amt){return `<div class="fee-br-row total"><span>${label}</span><span>${fmtKES(amt)}</span></div>`;}
 
-// ── Schedule 3/4: Company & Trademark ──
+// Keep old individual calc functions as aliases so any stray calls don't crash
+function calcS1(){calcFee();}function calcS2(){calcFee();}function calcS1b(){calcFee();}
+function calcS6(){calcFee();}function calcS7(){calcFee();}function calcS10(){calcFee();}
+function calcS5(){calcFee();}function calcS3(){calcFee();}
+
+// Schedule 3/4 lookup kept for legacy reference
 const S3_FEES={
   company_local:{label:'Company incorporation (Schedule 3)',fee:60000},
   company_foreign:{label:'Foreign company registration (Schedule 3)',fee:60000},
@@ -2006,14 +1969,8 @@ const S3_FEES={
   tm_renew:{label:'Trademark renewal — 1 class (Schedule 4)',fee:25000},
   tm_assign:{label:'Trademark assignment — 1 mark (Schedule 4)',fee:25000}
 };
-function calcS3(){
-  const type=document.getElementById('s3-type').value;
-  const d=S3_FEES[type];
-  document.getElementById('s3-main').textContent=fmtKES(d.fee);
-  document.getElementById('s3-bd').innerHTML=`<div class="fee-br-row"><span>${d.label}</span><span>${fmtKES(d.fee)}</span></div>`;
-}
 // init
-calcS3();
+document.addEventListener('DOMContentLoaded', () => { try{ feeShowPanel(); }catch(e){} });
 
 
 // ══════════════════════════════════════════════
@@ -2610,225 +2567,36 @@ YOUR JOB:
 - Reference the conversation history — if the user is asking a follow-up question, build on prior analysis rather than starting fresh
 Use [KE] before Kenyan law citations, [INT] before international citations, [WARN] before risk flags. Bold key risks with **...**. Cite specific sections.`;
 
-// ── ANONYMISATION ENGINE ─────────────────────
-function anonymiseText(text){
-  let out = text;
-  const map = {};
-  let personCount=0, idCount=0, addrCount=0,
-      caseCount=0, contactCount=0, orgCount=0,
-      amountCount=0, regCount=0;
-
-  // Kenyan National ID (7-8 digits)
-  out = out.replace(/\b(\d{7,8})\b/g, m => {
-    idCount++;
-    const tok='[ID-'+String(idCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Passport numbers
-  out = out.replace(/\b([A-Z]{1,2}\d{6,8})\b/g, m => {
-    idCount++;
-    const tok='[PASS-'+String(idCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // KRA PIN
-  out = out.replace(/\b([AP]\d{9}[A-Z])\b/g, m => {
-    regCount++;
-    const tok='[KRA-'+String(regCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Case numbers
-  out = out.replace(/\b((?:Civil|Criminal|Petition|Cause|Misc|ELC|Constitutional)\s+(?:Case|Application|Petition|Appeal|Suit)\s+No\.?\s*\d+\s+of\s+\d{4})\b/gi, m => {
-    caseCount++;
-    const tok='[CASE-'+String(caseCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Phone numbers
-  out = out.replace(/(\+?254|0)?[17]\d{8}\b/g, m => {
-    contactCount++;
-    const tok='[PHONE-'+String(contactCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Email
-  out = out.replace(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g, m => {
-    contactCount++;
-    const tok='[EMAIL-'+String(contactCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // KES amounts
-  out = out.replace(/(?:KES|Ksh|KSh|Kenya Shillings?)\s*[\d,]+(?:\.\d{2})?/gi, m => {
-    amountCount++;
-    const tok='[AMOUNT-'+String(amountCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Land/title numbers
-  out = out.replace(/\b(?:LR|Title|L\.R\.)\s*No\.?\s*[\d\/\w]+/gi, m => {
-    regCount++;
-    const tok='[TITLE-'+String(regCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Company reg numbers
-  out = out.replace(/\b(?:PVT|CPR|BN)\/?\d+\/?\d*\b/gi, m => {
-    regCount++;
-    const tok='[REGNO-'+String(regCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Named persons with title
-  out = out.replace(/\b(?:Mr|Mrs|Ms|Miss|Dr|Prof|Hon|Advocate|Adv|Eng|Arch)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\b/g, m => {
-    personCount++;
-    const tok='[PERSON-'+String(personCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // Two/three capitalised words (likely names)
-  const legalTerms = new Set(['High Court','Court Appeal','Supreme Court','Labour Court',
-    'Magistrates Court','Land Court','Constitution Kenya','Laws Kenya','Kenyan Law',
-    'Kenyan Government','Cabinet Secretary','County Government','Attorney General',
-    'Director Public','Public Prosecution','Kenya Revenue','Revenue Authority',
-    'National Hospital','Insurance Authority','Central Bank','Law Society']);
-  out = out.replace(/\b([A-Z][a-zA-Z]{1,20})\s+([A-Z][a-zA-Z]{1,20}(?:\s+[A-Z][a-zA-Z]{1,20})?)\b/g, m => {
-    if(legalTerms.has(m)||m.startsWith('[')||m===m.toUpperCase()) return m;
-    if(/\b(Nairobi|Mombasa|Kisumu|Nakuru|Eldoret|Thika|Nyeri|Kakamega|Meru|Kitale)\b/i.test(m)) return m;
-    personCount++;
-    const tok='[PERSON-'+String(personCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-  // P.O. Box addresses
-  out = out.replace(/P\.?\s*O\.?\s*Box\s+[\d\-]+(?:\s*[-–]\s*[\d]+)?(?:,\s*[A-Z][a-z]+)?/gi, m => {
-    addrCount++;
-    const tok='[ADDR-'+String(addrCount).padStart(3,'0')+']';
-    map[tok]=m; return tok;
-  });
-
-  return { anonymised: out, map };
-}
-
-// ── OCR ──────────────────────────────────────
-async function loadTesseract(){
-  if(window.Tesseract) return;
-  await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js');
-}
-
 function updateOcrStatus(msg, docId){
   const el = document.getElementById('ocr-status-'+docId);
   if(el) el.textContent = msg;
 }
 
-async function ocrImageFile(file, docId){
-  await loadTesseract();
-  const url = URL.createObjectURL(file);
-  updateOcrStatus('Running OCR…', docId);
-  const result = await Tesseract.recognize(url, 'eng', {
-    logger: m => {
-      if(m.status==='recognizing text')
-        updateOcrStatus('OCR: '+Math.round(m.progress*100)+'%', docId);
-    }
-  });
-  URL.revokeObjectURL(url);
-  return result.data.text;
-}
+async function handleReviewFiles(files){
+  if(!files||!files.length) return;
+  const docsList = document.getElementById('review-docs-list');
+  docsList.style.display = 'flex';
+  document.getElementById('review-dropzone').style.display = 'none';
+  document.getElementById('review-clear-btn').style.display = '';
 
-async function ocrPDF(file, docId){
-  await loadTesseract();
-  if(!window.pdfjsLib){
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  }
-  const ab  = await file.arrayBuffer();
-  const pdf = await window.pdfjsLib.getDocument({data: ab}).promise;
-  const totalPages = Math.min(pdf.numPages, 20);
-  let fullText = '';
-
-  // Detect digital vs scanned
-  updateOcrStatus('Checking PDF…', docId);
-  let hasTextLayer = false;
-  for(let i=1; i<=Math.min(3,totalPages); i++){
-    const page    = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    if(content.items.map(s=>s.str).join(' ').trim().length > 50){ hasTextLayer=true; break; }
-  }
-
-  if(hasTextLayer){
-    updateOcrStatus('Extracting text…', docId);
-    for(let i=1; i<=totalPages; i++){
-      const page    = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      fullText += content.items.map(s=>s.str).join(' ') + '\n';
-      updateOcrStatus('Page '+i+'/'+totalPages, docId);
-    }
-  } else {
-    updateOcrStatus('Scanned — local OCR starting…', docId);
-    const canvas = document.createElement('canvas');
-    const ctx    = canvas.getContext('2d');
-    for(let i=1; i<=totalPages; i++){
-      updateOcrStatus('OCR page '+i+'/'+totalPages, docId);
-      const page     = await pdf.getPage(i);
-      const viewport = page.getViewport({scale:2.0});
-      canvas.width=viewport.width; canvas.height=viewport.height;
-      await page.render({canvasContext:ctx, viewport}).promise;
-      const blob = await new Promise(r=>canvas.toBlob(r,'image/png'));
-      const url  = URL.createObjectURL(blob);
-      const res  = await Tesseract.recognize(url, 'eng', {
-        logger: m => {
-          if(m.status==='recognizing text')
-            updateOcrStatus('OCR p'+i+'/'+totalPages+': '+Math.round(m.progress*100)+'%', docId);
-        }
-      });
-      URL.revokeObjectURL(url);
-      fullText += res.data.text + '\n';
-    }
-  }
-  return fullText;
-}
-
-// ── FILE HANDLING ─────────────────────────────
-function handleReviewDrop(e){
-  e.preventDefault();
-  document.getElementById('review-dropzone').style.borderColor='var(--border2)';
-  handleReviewFiles(e.dataTransfer.files);
-}
-
-async function handleReviewFiles(fileList){
-  const files = Array.from(fileList);
-  if(!files.length) return;
-
-  if(reviewDocs.length + files.length > MAX_DOCS){
-    alert('Maximum '+MAX_DOCS+' documents allowed. Remove some first.');
-    return;
-  }
-
-  const allowed = ['pdf','docx','txt','doc','jpg','jpeg','png','bmp','tiff','tif','webp'];
-
-  for(const file of files){
-    const ext = file.name.split('.').pop().toLowerCase();
-    if(!allowed.includes(ext)){
-      addReviewMsg('ai','⚠️ Skipped <strong>'+file.name+'</strong> — unsupported file type.');
-      continue;
+  for(const file of Array.from(files)){
+    if(reviewDocs.length >= MAX_DOCS){
+      addReviewMsg('ai', `⚠️ Maximum of ${MAX_DOCS} documents reached. Remove a document before adding more.`);
+      break;
     }
     if(file.size > MAX_SIZE){
-      addReviewMsg('ai','⚠️ Skipped <strong>'+file.name+'</strong> — file exceeds 10MB limit.');
+      addReviewMsg('ai', `⚠️ <strong>${file.name}</strong> exceeds the 10MB limit and was skipped.`);
       continue;
     }
-    await processOneFile(file);
-  }
-}
+    const ext = file.name.split('.').pop().toLowerCase();
+    const docId = 'doc_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
 
-async function processOneFile(file){
-  const docId = 'doc-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
-  const ext   = file.name.split('.').pop().toLowerCase();
-
-  // Hide dropzone, show doc list
-  document.getElementById('review-dropzone').style.display = 'none';
-  document.getElementById('review-docs-list').style.display = 'flex';
-  document.getElementById('review-clear-btn').style.display = 'block';
-
-  // Add a loading card to the list
-  const docsList = document.getElementById('review-docs-list');
-  const card = document.createElement('div');
-  card.id = 'card-'+docId;
-  card.style.cssText = 'background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:4px 10px 4px 8px;display:inline-flex;align-items:center;gap:6px;max-width:180px;';
-  card.innerHTML = `
-    <svg class="spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
-    <span id="ocr-status-${docId}" style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px" title="${file.name}">${file.name.length>18?file.name.slice(0,16)+'…':file.name}</span>`;
+    // Create a loading card
+    const card = document.createElement('div');
+    card.id = 'card-' + docId;
+    card.style.cssText = 'display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--bg2);max-width:160px;min-width:100px';
+    const shortName = file.name.length > 18 ? file.name.slice(0,16)+'…' : file.name;
+    card.innerHTML = `<svg class="spin" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg><span id="ocr-status-${docId}" style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px" title="${file.name}">Reading ${shortName}…</span>`;
   docsList.appendChild(card);
 
   try{
@@ -2889,7 +2657,8 @@ async function processOneFile(file){
       <span style="font-size:11px;color:var(--danger-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px" title="${e.message}">${file.name.length>14?file.name.slice(0,12)+'…':file.name}: failed</span>
       <button onclick="this.closest('div').remove()" style="border:none;background:none;cursor:pointer;color:var(--danger-text);opacity:.7;padding:0 2px;font-size:13px;line-height:1;flex-shrink:0">✕</button>`;
   }
-}
+  } // end for loop
+} // end handleReviewFiles
 
 function removeDoc(docId){
   reviewDocs = reviewDocs.filter(d => d.id !== docId);
@@ -2902,6 +2671,98 @@ function removeDoc(docId){
     document.getElementById('review-clear-btn').style.display = 'none';
   }
   addReviewMsg('ai', '🗑 Document removed. '+reviewDocs.length+' document(s) remaining.');
+}
+
+function handleReviewDrop(e){
+  e.preventDefault();
+  const dz = document.getElementById('review-dropzone');
+  if(dz) dz.style.borderColor = 'var(--border2)';
+  const files = e.dataTransfer?.files;
+  if(files && files.length) handleReviewFiles(files);
+}
+
+function anonymiseText(text){
+  const map = {};
+  let counter = { person:0, id:0, addr:0, phone:0, email:0, company:0, account:0 };
+  // Emails
+  text = text.replace(/\b[\w.+-]+@[\w-]+\.[a-z]{2,}\b/gi, m => {
+    const k = '[EMAIL-'+(++counter.email).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  // Phone numbers (Kenyan formats)
+  text = text.replace(/(\+?254|0)[17]\d{8}\b/g, m => {
+    const k = '[PHONE-'+(++counter.phone).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  // National ID / passport numbers
+  text = text.replace(/\b(ID\s*[Nn]o\.?\s*|Passport\s*[Nn]o\.?\s*|I\.D\.\s*)(\d{6,9})\b/g, (m,prefix,num) => {
+    const k = '[ID-'+(++counter.id).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  text = text.replace(/\b\d{7,8}\b/g, m => {
+    const k = '[ID-'+(++counter.id).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  // Bank account numbers
+  text = text.replace(/\b\d{10,16}\b/g, m => {
+    const k = '[ACCOUNT-'+(++counter.account).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  // Capitalised full names (2-3 words)
+  text = text.replace(/\b([A-Z][a-z]{1,20})(\s[A-Z][a-z]{1,20}){1,2}\b/g, m => {
+    // Skip common legal terms
+    if(/^(This Agreement|The Company|The Parties|The Vendor|The Purchaser|The Tenant|The Landlord|The Employer|The Employee|High Court|Supreme Court|Court of Appeal|Land Court|Labour Court|Nairobi County|Mombasa County|Republic of|Laws of|Government of)/.test(m)) return m;
+    const k = '[PERSON-'+(++counter.person).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  // Physical addresses
+  text = text.replace(/\bP\.?\s*O\.?\s*Box\s+\d+[\w\s,-]*/gi, m => {
+    const k = '[ADDR-'+(++counter.addr).toString().padStart(3,'0')+']';
+    map[k]=m; return k;
+  });
+  const tokenCount = Object.keys(map).length;
+  return { anonymised: text, map, tokenCount };
+}
+
+async function ocrPDF(file, docId){
+  updateOcrStatus('Loading PDF library…', docId);
+  if(!window.pdfjsLib){
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  const ab = await file.arrayBuffer();
+  const pdf = await window.pdfjsLib.getDocument({data: ab}).promise;
+  let fullText = '';
+  for(let p = 1; p <= pdf.numPages; p++){
+    updateOcrStatus(`Reading page ${p}/${pdf.numPages}…`, docId);
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    fullText += content.items.map(i => i.str).join(' ') + '\n';
+  }
+  // If PDF had no selectable text, fall back to image OCR on first page
+  if(fullText.trim().length < 50){
+    updateOcrStatus('Scanned PDF — running OCR…', docId);
+    const page = await pdf.getPage(1);
+    const vp = page.getViewport({scale:2});
+    const canvas = document.createElement('canvas');
+    canvas.width = vp.width; canvas.height = vp.height;
+    await page.render({canvasContext: canvas.getContext('2d'), viewport: vp}).promise;
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    const imgFile = new File([blob], 'page.png', {type:'image/png'});
+    fullText = await ocrImageFile(imgFile, docId);
+  }
+  return fullText;
+}
+
+async function ocrImageFile(file, docId){
+  updateOcrStatus('Loading OCR engine…', docId);
+  if(!window.Tesseract)
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js');
+  updateOcrStatus('Running OCR (this may take a moment)…', docId);
+  const worker = await window.Tesseract.createWorker('eng');
+  const { data: { text } } = await worker.recognize(file);
+  await worker.terminate();
+  return text;
 }
 
 async function readDOCX(file, docId){
@@ -3026,23 +2887,9 @@ async function sendReviewChat(){
     // Build messages with history
     const messages = [...reviewHistory, {role:'user', content: userContent}];
 
-    // Call AI with full conversation history
+    // Call AI with full conversation history via Groq
     let response;
-    if(API_PROVIDER==='groq'){
-      const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
-        body:JSON.stringify({model:MODELS.groq, max_tokens:1000, temperature:0.25,
-          messages:[{role:'system',content:REVIEW_SYS},...messages]})
-      });
-      const d=await r.json();
-      if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));
-      response=d.choices?.[0]?.message?.content||'';
-    } else {
-      // Fallback for other providers via callAI
-      const prompt = `You have ${reviewDocs.length} document(s) to review.\n\n${docsContext}\n\n---\nADVOCATE'S QUESTION: ${question}`;
-      response = await callAI(prompt, REVIEW_SYS, 1000);
-    }
+    response = await groqCall([{role:'system',content:REVIEW_SYS},...messages], 800);
 
     // Store in history
     reviewHistory.push({role:'user', content: userContent});
